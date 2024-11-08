@@ -7,15 +7,21 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mt-5 mb-5"> CAMBIA LA URL </h1>
+        <h1 class="text-center mt-5 mb-5"> APP API-REST Python - Flask - MongoDB </h1>
     </div>
     <div class="container">
         <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
             <div class="col-md-6 mb-3">
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="text-center">CAMBIA LA URL</h5>
+                        <h5 class="text-center">Añadir película</h5>
                     </div>
+                    <div class="card-body">
+                        <form action="/movies/addMovie" method="POST">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control mb-3" name="name">
+                            <button class="btn btn-primary" type="submit"> Guardar </button>
+                        </form>
                     </div>
                 </div>
             </div>

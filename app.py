@@ -1,6 +1,7 @@
 import database as dbase
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from movie import Movie
+from category import Category
 
 db = dbase.conexionMongoDB()
 
@@ -9,14 +10,17 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    movies = db['Movies']
+    return render_template('index.html')
+
+@app.route('/movies')
+def movies():
+    movies = db['movies']
     moviesReceived = movies.find()
-    return render_template('index.html', movies=moviesReceived)
+    return render_template('Movie.html', movies=moviesReceived)
 
-
-@app.route('/movies', methods=['POST'])
+@app.route('/movies/addMovie', methods=['POST'])
 def addMovie():
-    movies = db['Movies']
+    movies = db['movies']
     name = request.form['name']
 
     if name:
@@ -26,21 +30,21 @@ def addMovie():
         })
         movies.insert_one(movie.toDBCollection())
 
-        return redirect(url_for('home'))
+        return redirect(url_for('movies'))
     else:
         return notFound()
 
 
 @app.route('/movies/delete/<string:movies_name>', methods=['DELETE'])
 def deleteMovie(movie_name):
-    movies = db['Movies']
+    movies = db['movies']
     movies.delete_one({'name': movie_name})
     return redirect(url_for('home'))
 
 
 @app.route('/movies/put/<string:movies_name>', methods=['PUT'])
 def putMovie(movie_name):
-    movies = db['Movies']
+    movies = db['movies']
     name = request.form['name']
 
     if name:
@@ -50,6 +54,29 @@ def putMovie(movie_name):
     else:
         return notFound()
 
+
+
+@app.route('/categories')
+def categories():
+    categories = db['categories']
+    categoriesReceived = categories.find()
+    return render_template('Category.html', categories=categoriesReceived)
+
+@app.route('/categories/addCategory', methods=['POST'])
+def addCategory():
+    categories = db['categories']
+    name = request.form['name']
+
+    if name:
+        category = Category(name)
+        response = jsonify({
+            'name': name
+        })
+        categories.insert_one(category.toDBCollection())
+
+        return redirect(url_for('categories'))
+    else:
+        return notFound()
 
 @app.errorhandler(404)
 def notFound(error=None):
@@ -61,6 +88,6 @@ def notFound(error=None):
     response.status_code = 404
     return response
 
-
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
+
