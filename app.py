@@ -20,26 +20,12 @@ def movies():
 
 @app.route('/movies/addMovie', methods=['POST'])
 def addMovie():
-    movies = db['movies']
-    name = request.form['name']
-
-    if name:
-        movie = Movie(name)
-        response = jsonify({
-            'name': name
-        })
-        movies.insert_one(movie.toDBCollection())
-
-        return redirect(url_for('movies'))
-    else:
-        return notFound()
+    return Movie.addMovie(db['movies'])
 
 
-@app.route('/movies/delete/<string:movies_name>', methods=['DELETE'])
-def deleteMovie(movie_name):
-    movies = db['movies']
-    movies.delete_one({'name': movie_name})
-    return redirect(url_for('home'))
+@app.route('/movies/deleteMovie', methods=['POST']) # Si el método es "DELETE" da error
+def deleteMovie():
+    return Movie.delete_movie(db['movies'])
 
 
 @app.route('/movies/put/<string:movies_name>', methods=['PUT'])
@@ -90,4 +76,3 @@ def notFound(error=None):
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
-
