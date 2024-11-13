@@ -2,15 +2,17 @@ import database as dbase
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from movie import Movie
 from category import Category
+from participant import Participant
 
 db = dbase.conexionMongoDB()
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def home():
     return render_template('index.html')
+
+
 
 @app.route('/movies')
 def movies():
@@ -34,13 +36,11 @@ def addMovie():
     else:
         return notFound()
 
-
 @app.route('/movies/delete/<string:movies_name>', methods=['DELETE'])
 def deleteMovie(movie_name):
     movies = db['movies']
     movies.delete_one({'name': movie_name})
     return redirect(url_for('home'))
-
 
 @app.route('/movies/put/<string:movies_name>', methods=['PUT'])
 def putMovie(movie_name):
@@ -78,6 +78,35 @@ def addCategory():
     else:
         return notFound()
 
+
+
+@app.route('/participants')
+def participants():
+    participants = db['participants']
+    participantsReceived = participants.find()
+    return render_template('Participant.html', participants=participantsReceived)
+
+@app.route('/participants/addParticipant', methods=['POST'])
+def addParticipant():
+    participants = db['participants']
+    name = request.form['name']
+    surname = request.form['surname']
+    age = request.form['age']
+    nationality = request.form['nationality']
+
+    if name:
+        participant = Participant(name, surname, age, nationality)
+        response = jsonify({
+            'name': name
+        })
+        participants.insert_one(participant.toDBCollection())
+
+        return redirect(url_for('participants'))
+    else:
+        return notFound()
+
+
+
 @app.errorhandler(404)
 def notFound(error=None):
     message = {
@@ -90,4 +119,3 @@ def notFound(error=None):
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
-
