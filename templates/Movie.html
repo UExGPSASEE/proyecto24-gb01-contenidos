@@ -24,6 +24,21 @@
                         </form>
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="text-center">Eliminar película</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="/movies/deleteMovie" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control mb-3" name="name">
+                            <button class="btn btn-primary" type="submit">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

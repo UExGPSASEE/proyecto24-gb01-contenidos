@@ -12,8 +12,6 @@ app = Flask(__name__)
 def home():
     return render_template('index.html')
 
-
-
 @app.route('/movies')
 def movies():
     movies = db['movies']
@@ -22,26 +20,12 @@ def movies():
 
 @app.route('/movies/addMovie', methods=['POST'])
 def addMovie():
-    movies = db['movies']
-    name = request.form['name']
+    return Movie.addMovie(db['movies'])
 
-    if name:
-        movie = Movie(name)
-        response = jsonify({
-            'name': name
-        })
-        movies.insert_one(movie.toDBCollection())
-
-        return redirect(url_for('movies'))
-    else:
-        return notFound()
-
-@app.route('/movies/delete/<string:movies_name>', methods=['DELETE'])
-def deleteMovie(movie_name):
-    movies = db['movies']
-    movies.delete_one({'name': movie_name})
-    return redirect(url_for('home'))
-
+@app.route('/movies/deleteMovie', methods=['POST']) # Si el método es "DELETE" da error
+def deleteMovie():
+    return Movie.delete_movie(db['movies'])
+  
 @app.route('/movies/put/<string:movies_name>', methods=['PUT'])
 def putMovie(movie_name):
     movies = db['movies']
@@ -53,8 +37,6 @@ def putMovie(movie_name):
         return redirect(url_for('home'))
     else:
         return notFound()
-
-
 
 @app.route('/categories')
 def categories():
@@ -77,8 +59,6 @@ def addCategory():
         return redirect(url_for('categories'))
     else:
         return notFound()
-
-
 
 @app.route('/participants')
 def participants():
