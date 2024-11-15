@@ -1,7 +1,7 @@
 import database as dbase
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from controllers.movie_ctrl import MovieCtrl
-from category import Category
+from controllers.category_ctrl import CategoryCtrl
 from participant import Participant
 
 db = dbase.conexionMongoDB()
@@ -29,7 +29,7 @@ def deleteMovie():
 @app.route('/movies/movieFound', methods=['GET'])
 def getMovieById():
     return MovieCtrl.getMovieById(db['movies'])
-# -------------------------------------------------------------------------------------------------------
+
 @app.route('/movies/put/<string:movies_name>', methods=['PUT'])
 def putMovie(movie_name):
     movies = db['movies']
@@ -42,27 +42,27 @@ def putMovie(movie_name):
     else:
         return notFound()
 
+# -------------------------------------------------------------------------------------------------------
+
 @app.route('/categories')
 def categories():
     categories = db['categories']
     categoriesReceived = categories.find()
     return render_template('Category.html', categories=categoriesReceived)
 
-@app.route('/categories/addCategory', methods=['POST'])
+@app.route('/categories/categoryAdded', methods=['POST'])
 def addCategory():
-    categories = db['categories']
-    name = request.form['name']
+    return CategoryCtrl.addCategory(db['categories'])
 
-    if name:
-        category = Category(name)
-        response = jsonify({
-            'name': name
-        })
-        categories.insert_one(category.toDBCollection())
+@app.route('/categories/categoriesListed', methods=['GET'])
+def getAllCategories():
+    return CategoryCtrl.getAllCategories(db['categories'])
 
-        return redirect(url_for('categories'))
-    else:
-        return notFound()
+@app.route('/categories/categoryFound', methods=['GET'])
+def getCategoryById():
+    return CategoryCtrl.getCategoryById(db['categories'])
+
+# -------------------------------------------------------------------------------------------------------
 
 @app.route('/participants')
 def participants():
