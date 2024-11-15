@@ -18,9 +18,50 @@
                     </div>
                     <div class="card-body">
                         <form action="/movies/addMovie" method="POST">
-                            <label>Nombre</label>
-                            <input type="text" class="form-control mb-3" name="name">
-                            <button class="btn btn-primary" type="submit"> Guardar </button>
+                            <label>¿Cúal es el título de la Movie?</label>
+                            <input type="text" class="form-control mb-3" name="title" required>
+                            <br></br>
+                            <label>¿Cúal es la URL de la Movie?</label>
+                            <input type="url" class="form-control mb-3" name="urlVideo" required>
+                            <br></br>
+                            <label>¿Cúal es la URL de la portada de la Movie? (Opcional)</label>
+                            <input type="url" class="form-control mb-3" name="urlTitlePage">
+                            <br></br>
+                            <label>¿Cúal es la fecha de estreno (Opcional)?</label>
+                            <input type="date" class="form-control mb-3" name="releaseDate">
+                            <br></br>
+                            <label>¿Cúal es la sinopsis de la Movie (Opcional)?</label>
+                            <input type="text" class="form-control mb-3" name="synopsis">
+                            <br></br>
+                            <label>¿Cúal es la descripción de la Movie? (Opcional)</label>
+                            <input type="text" class="form-control mb-3" name="description">
+                            <br></br>
+                            <label>¿Cuál es la duración de la película?(En minutos)</label>
+                            <input type="number" class="form-control mb-3" name="duration" required>
+                            <br></br>
+                            <label>¿Para qué idiomas está disponible?</label>
+                            <input type="number" name="language[]" placeholder="idLanguage 1" required><br>
+                            <input type="number" name="language[]" placeholder="idLanguage 2 (Opcional)"><br>
+                            <input type="number" name="language[]" placeholder="idLanguage 3 (Opcional)"><br>
+                            <br></br>
+                            <label>¿Qué categorías tiene asociadas?</label>
+                            <input type="number" name="category[]" placeholder="idCategory 1" required><br>
+                            <input type="number" name="category[]" placeholder="idCategory 2 (Opcional)"><br>
+                            <br></br>
+                            <label>¿Qué personajes principales forman parte de la película?</label>
+                            <input type="number" name="character[]" placeholder="idCharacter 1" required><br>
+                            <input type="number" name="character[]" placeholder="idCharacter 2" required><br>
+                            <input type="number" name="character[]" placeholder="idCharacter 3" required><br>
+                            <br></br>
+                            <label>¿Quiénes son sus intérpretes?</label>
+                            <input type="number" name="participant[]" placeholder="idParticipant 1" required><br>
+                            <input type="number" name="participant[]" placeholder="idParticipant 2" required><br>
+                            <input type="number" name="participant[]" placeholder="idParticipant 3" required><br>
+                            <br></br>
+                            <label>¿Qué trailer se adjunta?</label>
+                            <input type="number" name="trailer" required><br>
+                            <br></br>
+                            <button class="btn btn-primary" type="submit"> Añadir </button>
                         </form>
                     </div>
                 </div>
@@ -38,7 +79,13 @@
                         </form>
                     </div>
                 </div>
-
+                <div class="card-body">
+                    <form action="/movies/movieFound" method="GET">
+                        <label>¿Qué película deseas buscar?</label>
+                        <input type="number" class="form-control mb-3" name="idMovie" required>
+                        <button class="btn btn-primary" type="submit"> Buscar </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
