@@ -1,17 +1,17 @@
 import database as dbase
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from movie import Movie
+from controllers.movie_ctrl import MovieCtrl
 from category import Category
 from participant import Participant
 
 db = dbase.conexionMongoDB()
 
 app = Flask(__name__)
-
+# -------------------------------------------------------------------------------------------------------
 @app.route('/')
 def home():
     return render_template('index.html')
-
+# -------------------------------------------------------------------------------------------------------
 @app.route('/movies')
 def movies():
     movies = db['movies']
@@ -20,12 +20,16 @@ def movies():
 
 @app.route('/movies/addMovie', methods=['POST'])
 def addMovie():
-    return Movie.addMovie(db['movies'])
+    return MovieCtrl.addMovie(db['movies'])
 
-@app.route('/movies/deleteMovie', methods=['POST']) # Si el método es "DELETE" da error
+@app.route('/movies/deleteMovie', methods=['POST'])
 def deleteMovie():
-    return Movie.delete_movie(db['movies'])
-  
+    return MovieCtrl.delete_movie(db['movies'])
+
+@app.route('/movies/movieFound', methods=['GET'])
+def getMovieById():
+    return MovieCtrl.getMovieById(db['movies'])
+# -------------------------------------------------------------------------------------------------------
 @app.route('/movies/put/<string:movies_name>', methods=['PUT'])
 def putMovie(movie_name):
     movies = db['movies']
@@ -98,4 +102,4 @@ def notFound(error=None):
     return response
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=8082)
