@@ -2,7 +2,6 @@ import database as dbase
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from movie import Movie
 from category import Category
-
 db = dbase.conexionMongoDB()
 
 app = Flask(__name__)
@@ -20,39 +19,15 @@ def movies():
 
 @app.route('/movies/addMovie', methods=['POST'])
 def addMovie():
-    movies = db['movies']
-    name = request.form['name']
+    return Movie.addMovie(db['movies'])
 
-    if name:
-        movie = Movie(name)
-        response = jsonify({
-            'name': name
-        })
-        movies.insert_one(movie.toDBCollection())
-
-        return redirect(url_for('movies'))
-    else:
-        return notFound()
-
-
-@app.route('/movies/delete/<string:movies_name>', methods=['DELETE'])
-def deleteMovie(movie_name):
-    movies = db['movies']
-    movies.delete_one({'name': movie_name})
-    return redirect(url_for('home'))
-
-
-@app.route('/movies/put/<string:movies_name>', methods=['PUT'])
-def putMovie(movie_name):
-    movies = db['movies']
-    name = request.form['name']
-
-    if name:
-        movies.update_one({'name': movie_name}, {'$set': {'name': name}})
-        response = jsonify({'message': 'Movie' + movie_name + 'updated.'})
-        return redirect(url_for('home'))
-    else:
-        return notFound()
+@app.route('/movies/deleteMovie', methods=['POST']) # Si el método es "DELETE" da error
+def deleteMovie():
+    return Movie.delete_movie(db['movies'])
+  
+@app.route('/movies/updateMovie', methods=['POST'])
+def putMovie():
+    return Movie.put_movie(db['movies'])
 
 
 
@@ -77,6 +52,33 @@ def addCategory():
         return redirect(url_for('categories'))
     else:
         return notFound()
+
+@app.route('/participants')
+def participants():
+    participants = db['participants']
+    participantsReceived = participants.find()
+    return render_template('Participant.html', participants=participantsReceived)
+
+@app.route('/participants/addParticipant', methods=['POST'])
+def addParticipant():
+    participants = db['participants']
+    name = request.form['name']
+    surname = request.form['surname']
+    age = request.form['age']
+    nationality = request.form['nationality']
+
+    if name:
+        participant = Participant(name, surname, age, nationality)
+        response = jsonify({
+            'name': name
+        })
+        participants.insert_one(participant.toDBCollection())
+
+        return redirect(url_for('participants'))
+    else:
+        return notFound()
+
+
 
 @app.errorhandler(404)
 def notFound(error=None):

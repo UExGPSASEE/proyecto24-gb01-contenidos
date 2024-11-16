@@ -13,17 +13,46 @@
         <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
             <div class="col-md-6 mb-3">
                 <div class="card">
-                    <div class="card-header">
-                        <h5 class="text-center">Añadir película</h5>
-                    </div>
+                    <h5 class="text-center">Añadir película</h5>
                     <div class="card-body">
                         <form action="/movies/addMovie" method="POST">
                             <label>Nombre</label>
                             <input type="text" class="form-control mb-3" name="name">
+                            <label>Duración</label>
+                            <input type="text" class="form-control mb-3" name="duration">
                             <button class="btn btn-primary" type="submit"> Guardar </button>
                         </form>
                     </div>
                 </div>
+
+                <div class="card">
+                    <h5 class="text-center">Modificar película</h5>
+                    <div class="card-body">
+                        <form action="/movies/updateMovie" method="POST">
+                            <input type="hidden" name="_method" value="PUT">
+                            <label>ID</label>
+                            <input type="text" class="form-control mb-3" name="id">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control mb-3" name="name">
+                            <label>Duración</label>
+                            <input type="text" class="form-control mb-3" name="duration">
+                            <button class="btn btn-primary" type="submit"> Modificar </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h5 class="text-center">Eliminar película</h5>
+                    <div class="card-body">
+                        <form action="/movies/deleteMovie" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <label>ID</label>
+                            <input type="text" class="form-control mb-3" name="id">
+                            <button class="btn btn-primary" type="submit">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
