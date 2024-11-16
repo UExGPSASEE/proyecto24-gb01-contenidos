@@ -1,19 +1,17 @@
 import database as dbase
 from flask import Flask, render_template, request, jsonify, redirect, url_for
-from movie import Movie
-from category import Category
+from controllers.movie_ctrl import MovieCtrl
+from controllers.category_ctrl import CategoryCtrl
 from participant import Participant
 
 db = dbase.conexionMongoDB()
 
 app = Flask(__name__)
-
+# -------------------------------------------------------------------------------------------------------
 @app.route('/')
 def home():
     return render_template('index.html')
-
-
-
+# -------------------------------------------------------------------------------------------------------
 @app.route('/movies')
 def movies():
     movies = db['movies']
@@ -22,25 +20,15 @@ def movies():
 
 @app.route('/movies/addMovie', methods=['POST'])
 def addMovie():
-    movies = db['movies']
-    name = request.form['name']
+    return MovieCtrl.addMovie(db['movies'])
 
-    if name:
-        movie = Movie(name)
-        response = jsonify({
-            'name': name
-        })
-        movies.insert_one(movie.toDBCollection())
+@app.route('/movies/deleteMovie', methods=['POST'])
+def deleteMovie():
+    return MovieCtrl.delete_movie(db['movies'])
 
-        return redirect(url_for('movies'))
-    else:
-        return notFound()
-
-@app.route('/movies/delete/<string:movies_name>', methods=['DELETE'])
-def deleteMovie(movie_name):
-    movies = db['movies']
-    movies.delete_one({'name': movie_name})
-    return redirect(url_for('home'))
+@app.route('/movies/movieFound', methods=['GET'])
+def getMovieById():
+    return MovieCtrl.getMovieById(db['movies'])
 
 @app.route('/movies/put/<string:movies_name>', methods=['PUT'])
 def putMovie(movie_name):
@@ -54,7 +42,7 @@ def putMovie(movie_name):
     else:
         return notFound()
 
-
+# -------------------------------------------------------------------------------------------------------
 
 @app.route('/categories')
 def categories():
@@ -62,23 +50,19 @@ def categories():
     categoriesReceived = categories.find()
     return render_template('Category.html', categories=categoriesReceived)
 
-@app.route('/categories/addCategory', methods=['POST'])
+@app.route('/categories/categoryAdded', methods=['POST'])
 def addCategory():
-    categories = db['categories']
-    name = request.form['name']
+    return CategoryCtrl.addCategory(db['categories'])
 
-    if name:
-        category = Category(name)
-        response = jsonify({
-            'name': name
-        })
-        categories.insert_one(category.toDBCollection())
+@app.route('/categories/categoriesListed', methods=['GET'])
+def getAllCategories():
+    return CategoryCtrl.getAllCategories(db['categories'])
 
-        return redirect(url_for('categories'))
-    else:
-        return notFound()
+@app.route('/categories/categoryFound', methods=['GET'])
+def getCategoryById():
+    return CategoryCtrl.getCategoryById(db['categories'])
 
-
+# -------------------------------------------------------------------------------------------------------
 
 def get_next_sequence_value(sequence_name):
     counter = db.participants_id.find_one_and_update(
@@ -231,4 +215,4 @@ def notFound(error=None):
     return response
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=8082)
