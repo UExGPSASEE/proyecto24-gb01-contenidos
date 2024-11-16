@@ -64,6 +64,14 @@ def getCategoryById():
 
 # -------------------------------------------------------------------------------------------------------
 
+def get_next_sequence_value(sequence_name):
+    counter = db.participants_id.find_one_and_update(
+        {"_id": sequence_name},
+        {"$inc": {"sequence_value": 1}},
+        return_document=True
+    )
+    return counter["sequence_value"]
+
 @app.route('/participants')
 def participants():
     participants = db['participants']
@@ -78,8 +86,10 @@ def addParticipant():
     age = request.form['age']
     nationality = request.form['nationality']
 
+    unique_id = get_next_sequence_value("participant_id")
+
     if name:
-        participant = Participant(name, surname, age, nationality)
+        participant = Participant(unique_id, name, surname, age, nationality)
         response = jsonify({
             'name': name
         })
@@ -88,6 +98,109 @@ def addParticipant():
         return redirect(url_for('participants'))
     else:
         return notFound()
+
+@app.route('/participants/getParticipantByName', methods=['GET'])
+def getParticipantByName():
+    participants = db['participants']
+    name = request.args.get('name')
+
+    if name:
+        matching_participants = participants.find({'name': name})
+
+        participants_list = [
+            {
+                'name': participant.get('name'),
+                'surname': participant.get('surname'),
+                'age': participant.get('age'),
+                'nationality': participant.get('nationality')
+            }
+            for participant in matching_participants
+        ]
+
+        return jsonify(participants_list), 200
+    else:
+        return jsonify({'error': 'Nombre no proporcionado'}), 400
+
+@app.route('/participants/getParticipantBySurname', methods=['GET'])
+def getParticipantBySurname():
+    participants = db['participants']
+    surname = request.args.get('surname')
+
+    if surname:
+        matching_participants = participants.find({'surname': surname})
+
+        participants_list = [
+            {
+                'name': participant.get('name'),
+                'surname': participant.get('surname'),
+                'age': participant.get('age'),
+                'nationality': participant.get('nationality')
+            }
+            for participant in matching_participants
+        ]
+
+        return jsonify(participants_list), 200
+    else:
+        return jsonify({'error': 'Apellido/s no proporcionados'}), 400
+
+@app.route('/participants/getParticipantByAge', methods=['GET'])
+def getParticipantByAge():
+    participants = db['participants']
+    age = request.args.get('age')
+
+    if age:
+        matching_participants = participants.find({'age': age})
+
+        participants_list = [
+            {
+                'name': participant.get('name'),
+                'surname': participant.get('surname'),
+                'age': participant.get('age'),
+                'nationality': participant.get('nationality')
+            }
+            for participant in matching_participants
+        ]
+
+        return jsonify(participants_list), 200
+    else:
+        return jsonify({'error': 'Edad no proporcionada'}), 400
+
+@app.route('/participants/getParticipantByNationality', methods=['GET'])
+def getParticipantByNationality():
+    participants = db['participants']
+    nationality = request.args.get('nationality')
+
+    if nationality:
+        matching_participants = participants.find({'nationality': nationality})
+
+        participants_list = [
+            {
+                'name': participant.get('name'),
+                'surname': participant.get('surname'),
+                'age': participant.get('age'),
+                'nationality': participant.get('nationality')
+            }
+            for participant in matching_participants
+        ]
+
+        return jsonify(participants_list), 200
+    else:
+        return jsonify({'error': 'Nacionalidad no proporcionada'}), 400
+
+@app.route('/participants/getAllParticipants', methods=['GET'])
+def getAllParticipants():
+    participants = db['participants']
+    allParticipants = participants.find()
+    participants_list = [
+        {
+            'name': participant.get('name'),
+            'surname': participant.get('surname'),
+            'age': participant.get('age'),
+            'nationality': participant.get('nationality')
+        }
+        for participant in allParticipants
+    ]
+    return jsonify(participants_list), 200
 
 
 
