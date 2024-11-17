@@ -2,8 +2,8 @@ import database as dbase
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from controllers.movie_ctrl import MovieCtrl
 from controllers.category_ctrl import CategoryCtrl
+from controllers.participant_ctrl import ParticipantCtrl
 from controllers.trailer_ctrl import TrailerCtrl
-from participant import Participant
 
 db = dbase.conexionMongoDB()
 
@@ -58,9 +58,7 @@ def putTrailer():
 
 @app.route('/categories')
 def categories():
-    categories = db['categories']
-    categoriesReceived = categories.find()
-    return render_template('Category.html', categories=categoriesReceived)
+    return CategoryCtrl.render_template(db['categories'])
 
 @app.route('/categories/categoryAdded', methods=['POST'])
 def addCategory():
@@ -76,155 +74,33 @@ def getCategoryById():
 
 # -------------------------------------------------------------------------------------------------------
 
-def get_next_sequence_value(sequence_name):
-    counter = db.participants_id.find_one_and_update(
-        {"_id": sequence_name},
-        {"$inc": {"sequence_value": 1}},
-        return_document=True
-    )
-    return counter["sequence_value"]
-
 @app.route('/participants')
 def participants():
-    participants = db['participants']
-    participantsReceived = participants.find()
-    return render_template('Participant.html', participants=participantsReceived)
+    return ParticipantCtrl.render_template(db['participants'])
 
 @app.route('/participants/addParticipant', methods=['POST'])
 def addParticipant():
-    participants = db['participants']
-    name = request.form['name']
-    surname = request.form['surname']
-    age = request.form['age']
-    nationality = request.form['nationality']
-
-    unique_id = get_next_sequence_value("participant_id")
-
-    if name:
-        participant = Participant(unique_id, name, surname, age, nationality)
-        response = jsonify({
-            'name': name
-        })
-        participants.insert_one(participant.toDBCollection())
-
-        return redirect(url_for('participants'))
-    else:
-        return notFound()
+    return ParticipantCtrl.addParticipant(db['participants'])
 
 @app.route('/participants/getParticipantByName', methods=['GET'])
 def getParticipantByName():
-    participants = db['participants']
-    name = request.args.get('name')
-
-    if name:
-        matching_participants = participants.find({'name': name})
-
-        participants_list = [
-            {
-                'name': participant.get('name'),
-                'surname': participant.get('surname'),
-                'age': participant.get('age'),
-                'nationality': participant.get('nationality')
-            }
-            for participant in matching_participants
-        ]
-
-        return jsonify(participants_list), 200
-    else:
-        return jsonify({'error': 'Nombre no proporcionado'}), 400
+    return ParticipantCtrl.getParticipantByName(db['participants'])
 
 @app.route('/participants/getParticipantBySurname', methods=['GET'])
 def getParticipantBySurname():
-    participants = db['participants']
-    surname = request.args.get('surname')
-
-    if surname:
-        matching_participants = participants.find({'surname': surname})
-
-        participants_list = [
-            {
-                'name': participant.get('name'),
-                'surname': participant.get('surname'),
-                'age': participant.get('age'),
-                'nationality': participant.get('nationality')
-            }
-            for participant in matching_participants
-        ]
-
-        return jsonify(participants_list), 200
-    else:
-        return jsonify({'error': 'Apellido/s no proporcionados'}), 400
+    return ParticipantCtrl.getParticipantBySurname(db['participants'])
 
 @app.route('/participants/getParticipantByAge', methods=['GET'])
 def getParticipantByAge():
-    participants = db['participants']
-    age = request.args.get('age')
-
-    if age:
-        matching_participants = participants.find({'age': age})
-
-        participants_list = [
-            {
-                'name': participant.get('name'),
-                'surname': participant.get('surname'),
-                'age': participant.get('age'),
-                'nationality': participant.get('nationality')
-            }
-            for participant in matching_participants
-        ]
-
-        return jsonify(participants_list), 200
-    else:
-        return jsonify({'error': 'Edad no proporcionada'}), 400
+    return ParticipantCtrl.getParticipantByAge(db['participants'])
 
 @app.route('/participants/getParticipantByNationality', methods=['GET'])
 def getParticipantByNationality():
-    participants = db['participants']
-    nationality = request.args.get('nationality')
-
-    if nationality:
-        matching_participants = participants.find({'nationality': nationality})
-
-        participants_list = [
-            {
-                'name': participant.get('name'),
-                'surname': participant.get('surname'),
-                'age': participant.get('age'),
-                'nationality': participant.get('nationality')
-            }
-            for participant in matching_participants
-        ]
-
-        return jsonify(participants_list), 200
-    else:
-        return jsonify({'error': 'Nacionalidad no proporcionada'}), 400
+    return ParticipantCtrl.getParticipantByNationality(db['participants'])
 
 @app.route('/participants/getAllParticipants', methods=['GET'])
 def getAllParticipants():
-    participants = db['participants']
-    allParticipants = participants.find()
-    participants_list = [
-        {
-            'name': participant.get('name'),
-            'surname': participant.get('surname'),
-            'age': participant.get('age'),
-            'nationality': participant.get('nationality')
-        }
-        for participant in allParticipants
-    ]
-    return jsonify(participants_list), 200
-
-
-
-@app.errorhandler(404)
-def notFound(error=None):
-    message = {
-        'message': 'No encontrado' + request.url,
-        'status': '404 Not Found'
-    }
-    response = jsonify(message)
-    response.status_code = 404
-    return response
+    return ParticipantCtrl.getAllParticipants(db['participants'])
 
 if __name__ == '__main__':
     app.run(debug=True, port=8082)
