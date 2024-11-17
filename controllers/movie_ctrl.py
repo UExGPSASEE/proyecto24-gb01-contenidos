@@ -1,5 +1,6 @@
 from flask import render_template, request, jsonify, redirect, url_for
 from database import get_next_sequence_value as get_next_sequence_value
+from datetime import datetime
 from pymongo.collection import Collection
 from models.movie import Movie
 
@@ -66,6 +67,100 @@ class MovieCtrl:
                 return jsonify({'error': 'Movie not found', 'status': '404 Not Found'}), 404
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# ---------------------------------------------------------
+
+    @staticmethod
+    def getMovieByTitle(db: Collection):
+        title = request.args.get('title')
+        if title:
+            matching_movie = db.find({'title': title})
+            if matching_movie:
+                movieFound = [
+                {
+                    'idMovie' : movie.get('idMovie'),
+                    'title' : movie.get('title'),
+                    'urlVideo' : movie.get('urlVideo'),
+                    'urlTitlePage' : movie.get('urlTitlePage'),
+                    'releaseDate' : movie.get('releaseDate'),
+                    'synopsis' : movie.get('synopsis'),
+                    'description' : movie.get('description'),
+                    'isSuscription' : movie.get('isSuscription'),
+                    'duration' : movie.get('duration'),
+                    'language' : movie.get('language'),
+                    'category' : movie.get('category'),
+                    'character' : movie.get('character'),
+                    'participant' : movie.get('participant'),
+                    'trailer' : movie.get('trailer'),
+                }
+                for movie in matching_movie
+                ]
+                return jsonify(movieFound), 200
+            else:
+                return jsonify({'error': 'Movie not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# ---------------------------------------------------------
+
+    @staticmethod
+    def getMovieByReleaseDate(db: Collection):
+        releaseDate_str = request.args.get('releaseDate')
+        if releaseDate_str:
+            releaseDate = datetime.strptime(releaseDate_str, '%Y-%m-%d').date()
+            # Busca películas que coincidan con el releaseDate
+            matching_movies = db.find({'releaseDate': str(releaseDate)})  # Asegúrate de que el formato coincida con el almacenado en la DB
+            if matching_movies:
+                movieFound = [
+                {
+                    'idMovie' : movie.get('idMovie'),
+                    'title' : movie.get('title'),
+                    'urlVideo' : movie.get('urlVideo'),
+                    'urlTitlePage' : movie.get('urlTitlePage'),
+                    'releaseDate' : movie.get('releaseDate'),
+                    'synopsis' : movie.get('synopsis'),
+                    'description' : movie.get('description'),
+                    'isSuscription' : movie.get('isSuscription'),
+                    'duration' : movie.get('duration'),
+                    'language' : movie.get('language'),
+                    'category' : movie.get('category'),
+                    'character' : movie.get('character'),
+                    'participant' : movie.get('participant'),
+                    'trailer' : movie.get('trailer'),
+                }
+                for movie in matching_movies
+                ]
+                return jsonify(movieFound), 200
+            else:
+                return jsonify({'error': 'Movie not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# ---------------------------------------------------------
+
+    @staticmethod
+    def getAllMovies(db: Collection):
+        allMovies = db.find()
+        movies_list = [
+            {
+                'idMovie' : movie.get('idMovie'),
+                'title' : movie.get('title'),
+                'urlVideo' : movie.get('urlVideo'),
+                'urlTitlePage' : movie.get('urlTitlePage'),
+                'releaseDate' : movie.get('releaseDate'),
+                'synopsis' : movie.get('synopsis'),
+                'description' : movie.get('description'),
+                'isSuscription' : movie.get('isSuscription'),
+                'duration' : movie.get('duration'),
+                'language' : movie.get('language'),
+                'category' : movie.get('category'),
+                'character' : movie.get('character'),
+                'participant' : movie.get('participant'),
+                'trailer' : movie.get('trailer'),
+            }
+            for movie in allMovies
+        ]
+        return jsonify(movies_list), 200
 
 # ---------------------------------------------------------
 
