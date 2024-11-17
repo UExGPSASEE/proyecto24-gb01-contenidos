@@ -1,4 +1,5 @@
 from flask import render_template, request, jsonify, redirect, url_for
+from database import get_next_sequence_value as get_next_sequence_value
 from pymongo.collection import Collection
 from models.category import Category
 
@@ -8,27 +9,11 @@ class CategoryCtrl:
     def render_template(db: Collection):
         categoriesReceived = db.find()
         return render_template('Category.html', categories=categoriesReceived)
-
-    @staticmethod        
-    def get_next_sequence_value(db: Collection, sequence_name):        
-        counter = db.find_one({"_id": sequence_name})
-
-        if counter is None:       
-            db.insert_one({"_id": sequence_name, "sequence_value": 1})
-            return 1
-        
-        updated_counter = db.find_one_and_update(
-            {"_id": sequence_name},
-            {"$inc": {"sequence_value": 1}},
-            return_document=True
-        )
-        return updated_counter["sequence_value"]
-    
 # ---------------------------------------------------------
 
     @staticmethod
     def addCategory(db: Collection):
-        idCategory = CategoryCtrl.get_next_sequence_value(db,"idCategory")
+        idCategory = get_next_sequence_value(db,"idCategory")
         name = request.form['name']
 
         if idCategory:
@@ -37,6 +22,8 @@ class CategoryCtrl:
             return redirect(url_for('categories'))
         else:
             return jsonify({'error': 'Category not found or not added', 'status':'404 Not Found'}), 404
+
+# ---------------------------------------------------------
 
     @staticmethod
     def getAllCategories(db: Collection):
@@ -49,7 +36,9 @@ class CategoryCtrl:
             for category in allCategories
         ]
         return jsonify(category_list), 200
-        
+
+# ---------------------------------------------------------
+
     @staticmethod
     def getCategoryById(db: Collection):
         idCategory = int(request.args.get('idCategory'))
