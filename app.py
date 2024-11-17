@@ -64,10 +64,10 @@ def chapters():
 def addChapter():
     return ChapterCtrl.addChapter(db['chapters'])
 
-# @app.route('/chapters/deleteChapter', methods=['POST'])
-# def deleteChapter():
-#     return ChapterCtrl.delete_chapter(db['chapters'])
-#
+@app.route('/chapters/deleteChapter', methods=['POST'])
+def deleteChapter():
+    return ChapterCtrl.delete_chapter(db['chapters'])
+    
 @app.route('/chapters/updateChapter', methods=['POST'])
 def putChapter():
     return ChapterCtrl.put_chapter(db['chapters'])
