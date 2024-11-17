@@ -99,13 +99,13 @@ def seasons():
 def addSeason():
     return SeasonCtrl.addSeason(db['seasons'])
 
-@app.route('/seasons/deleteSeason', methods=['POST'])
-def deleteSeason():
-    return SeasonCtrl.delete_season(db['seasons'])
-
 @app.route('/seasons/updateSeason', methods=['POST'])
 def putSeason():
     return SeasonCtrl.put_season(db['seasons'])
+
+# @app.route('/seasons/deleteSeason', methods=['POST'])
+# def deleteSeason():
+#     return SeasonCtrl.delete_season(db['seasons'])
 
 # @app.route('/seasons/seasonFound', methods=['GET'])
 # def getSeasonById():
