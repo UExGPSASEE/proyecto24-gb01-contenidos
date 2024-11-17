@@ -5,6 +5,7 @@ from controllers.category_ctrl import CategoryCtrl
 from controllers.participant_ctrl import ParticipantCtrl
 from controllers.trailer_ctrl import TrailerCtrl
 from controllers.chapter_ctrl import ChapterCtrl
+from controllers.serie_ctrl import SerieCtrl
 from controllers.season_ctrl import SeasonCtrl
 
 db = dbase.conexionMongoDB()
@@ -170,6 +171,16 @@ def updateParticipant():
 @app.route('/participants/deleteParticipant', methods=['POST'])
 def deletePerticipant():
     return ParticipantCtrl.deleteParticipant(db['participants'])
+
+# -------------------------------------------------------------------------------------------------------
+
+@app.route('/series')
+def series():
+    return SerieCtrl.render_template(db['series'])
+
+@app.route('/series/addSerie', methods=['POST'])
+def addSerie():
+    return SerieCtrl.addSerie(db['series'])
 
 if __name__ == '__main__':
     app.run(debug=True, port=8082)
