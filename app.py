@@ -98,6 +98,10 @@ def getParticipantByAge():
 def getParticipantByNationality():
     return ParticipantCtrl.getParticipantByNationality(db['participants'])
 
+@app.route('/participants/getParticipantById', methods=['GET'])
+def getParticipantById():
+    return ParticipantCtrl.getParticipantById(db['participants'])
+
 @app.route('/participants/getAllParticipants', methods=['GET'])
 def getAllParticipants():
     return ParticipantCtrl.getAllParticipants(db['participants'])

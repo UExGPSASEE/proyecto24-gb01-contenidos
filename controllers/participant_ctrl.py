@@ -109,6 +109,27 @@ class ParticipantCtrl:
         else:
             return jsonify({'error': 'Nacionalidad no proporcionada'}), 400
 
+    @staticmethod
+    def getParticipantById(db: Collection):
+        id = request.args.get('participant_id')
+        participant_id = int(id)
+        print(id)
+        if id:
+            matching_participant = db.find({'participant_id': participant_id})
+            participants_list = [
+                {
+                    'participant_id': participant.get('participant_id'),
+                    'name': participant.get('name'),
+                    'surname': participant.get('surname'),
+                    'age': participant.get('age'),
+                    'nationality': participant.get('nationality')
+                }
+                for participant in matching_participant
+            ]
+            return jsonify(participants_list), 200
+        else:
+            return jsonify({'error': 'Id no proporcionado'}), 400
+
 
     @staticmethod
     def getAllParticipants(db: Collection):
