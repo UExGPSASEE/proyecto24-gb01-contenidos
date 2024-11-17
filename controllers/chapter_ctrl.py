@@ -48,9 +48,9 @@ class ChapterCtrl:
         try:
             chapter_id = int(request.form.get('id'))
             chapter_title = request.form.get('title')
-            duration = int(request.form.get('duration'))
+            duration = request.form.get('duration')
             urlVideo = request.form.get('urlVideo')
-            chapterNumber = int(request.form.get('chapterNumber'))
+            chapterNumber = request.form.get('chapterNumber')
 
             if not chapter_id:
                 return jsonify({'error': 'ID de tráiler requerido', 'status': '400 Bad Request'}), 400
@@ -62,11 +62,11 @@ class ChapterCtrl:
             if chapter_title:
                 update_fields['title'] = chapter_title
             if duration:
-                update_fields['duration'] = int(duration)  # Convertir a entero si aplica
+                update_fields['duration'] = int(duration)
             if urlVideo:
                 update_fields['urlVideo'] = urlVideo
             if chapterNumber:
-                update_fields['chapterNumber'] = chapterNumber
+                update_fields['chapterNumber'] = int(chapterNumber)
 
             change = {'$set': update_fields}
 
