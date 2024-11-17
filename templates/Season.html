@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-5 mb-5"> APP API-REST Python - Flask - MongoDB </h1>
+    </div>
+    <div class="container">
+        <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
+            <div class="col-md-6 mb-3">
+                <div class="card-body">
+                    <form action="/seasons/seasonFound" method="GET">
+                        <label>¿Qué temporada deseas buscar?</label>
+                        <input type="number" class="form-control mb-3" name="idSeason" required>
+                        <button class="btn btn-primary" type="submit"> Buscar </button>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h5 class="text-center">Añadir temporada</h5>
+                    <div class="card-body">
+                        <form action="/seasons/addSeason" method="POST">
+                             <label>¿A qué serie pertenece?</label>
+                            <input type="number" name="idSeries"><br>
+                            <br></br>
+                            <label>¿Cuál es el título de la temporada?</label>
+                            <input type="text" class="form-control mb-3" name="title" required>
+                            <br></br>
+                            <label>¿Cuál es el número de la temporada en la serie?</label>
+                            <input type="number" class="form-control mb-3" name="seasonNumber" required>
+                            <br></br>
+                            <label>¿Cuántos capítulos tiene la temporada?</label>
+                            <input type="number" class="form-control mb-3" name="totalChapters" required>
+                            <br></br>
+                             <label>¿Cuáles son los capítulos de la temporada?</label>
+                            <input type="number" name="chapterList[]" placeholder="idChapter 1"><br>
+                            <input type="number" name="chapterList[]" placeholder="idChapter 2"><br>
+                            <input type="number" name="chapterList[]" placeholder="idChapter 3"><br>
+                            <br></br>
+                            <label>¿Qué tráiler se adjunta?</label>
+                            <input type="number" name="trailer"><br>
+                            <br></br>
+                            <button class="btn btn-primary" type="submit"> Añadir </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h5 class="text-center">Eliminar temporada</h5>
+                    <div class="card-body">
+                        <form action="/seasons/deleteSeason" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <label>ID</label>
+                            <input type="text" class="form-control mb-3" name="id" required>
+                            <button class="btn btn-primary" type="submit">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h5 class="text-center">Modificar temporada</h5>
+                    <div class="card-body">
+                        <form action="/seasons/updateSeason" method="POST">
+                            <input type="hidden" name="_method" value="PUT">
+                            <label>ID</label>
+                            <input type="text" class="form-control mb-3" required name="id">
+                            <br></br>
+                             <label>¿A qué serie pertenece?</label>
+                            <input type="number" name="idSeries"><br>
+                            <br></br>
+                            <label>¿Cuál es el título de la temporada?</label>
+                            <input type="text" class="form-control mb-3" name="title">
+                            <br></br>
+                            <label>¿Cuál es el número de la temporada en la serie?</label>
+                            <input type="number" class="form-control mb-3" name="seasonNumber">
+                            <br></br>
+                            <label>¿Cuántos capítulos tiene la temporada?</label>
+                            <input type="number" class="form-control mb-3" name="totalChapters">
+                            <br></br>
+                             <label>¿Cuáles son los capítulos de la temporada?</label>
+                            <input type="number" name="chapterList[]" placeholder="idChapter 1"><br>
+                            <input type="number" name="chapterList[]" placeholder="idChapter 2"><br>
+                            <input type="number" name="chapterList[]" placeholder="idChapter 3"><br>
+                            <br></br>
+                            <label>¿Qué tráiler se adjunta?</label>
+                            <input type="number" name="trailer"><br>
+                            <br></br>
+                            <button class="btn btn-primary" type="submit">Modificar</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

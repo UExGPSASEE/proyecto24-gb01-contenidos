@@ -6,6 +6,7 @@ from controllers.participant_ctrl import ParticipantCtrl
 from controllers.trailer_ctrl import TrailerCtrl
 from controllers.chapter_ctrl import ChapterCtrl
 from controllers.serie_ctrl import SerieCtrl
+from controllers.season_ctrl import SeasonCtrl
 
 db = dbase.conexionMongoDB()
 
@@ -91,6 +92,28 @@ def putChapter():
 
 # -------------------------------------------------------------------------------------------------------
 
+@app.route('/seasons')
+def seasons():
+    return SeasonCtrl.render_template(db['seasons'])
+
+@app.route('/seasons/addSeason', methods=['POST'])
+def addSeason():
+    return SeasonCtrl.addSeason(db['seasons'])
+
+@app.route('/seasons/updateSeason', methods=['POST'])
+def putSeason():
+    return SeasonCtrl.put_season(db['seasons'])
+
+@app.route('/seasons/deleteSeason', methods=['POST'])
+def deleteSeason():
+    return SeasonCtrl.delete_season(db['seasons'])
+
+# @app.route('/seasons/seasonFound', methods=['GET'])
+# def getSeasonById():
+#     return SeasonCtrl.getSeasonById(db['seasons'])
+
+# -------------------------------------------------------------------------------------------------------
+
 @app.route('/categories')
 def categories():
     return CategoryCtrl.render_template(db['categories'])
@@ -140,6 +163,10 @@ def getParticipantById():
 @app.route('/participants/getAllParticipants', methods=['GET'])
 def getAllParticipants():
     return ParticipantCtrl.getAllParticipants(db['participants'])
+
+@app.route('/participants/updateParticipant', methods=['POST'])
+def updateParticipant():
+    return ParticipantCtrl.updateParticipant(db['participants'])
 
 @app.route('/participants/deleteParticipant', methods=['POST'])
 def deletePerticipant():
