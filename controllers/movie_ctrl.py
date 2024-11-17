@@ -1,4 +1,5 @@
 from flask import render_template, request, jsonify, redirect, url_for
+from database import get_next_sequence_value as get_next_sequence_value
 from pymongo.collection import Collection
 from models.movie import Movie
 
@@ -8,26 +9,11 @@ class MovieCtrl:
         moviesReceived = db.find()
         return render_template('Movie.html', movies=moviesReceived)
 
-    @staticmethod        
-    def get_next_sequence_value(db: Collection, sequence_name):        
-        counter = db.find_one({"_id": sequence_name})
-
-        if counter is None:       
-            db.insert_one({"_id": sequence_name, "sequence_value": 1})
-            return 1
-        
-        updated_counter = db.find_one_and_update(
-            {"_id": sequence_name},
-            {"$inc": {"sequence_value": 1}},
-            return_document=True
-        )
-        return updated_counter["sequence_value"]
-    
 # ---------------------------------------------------------
 
     @staticmethod
     def addMovie(db: Collection):
-        idMovie = MovieCtrl.get_next_sequence_value(db,"idMovie")
+        idMovie = get_next_sequence_value(db,"idMovie")
         title = request.form['title']
         urlVideo = request.form['urlVideo']
         urlTitlePage = request.form['urlTitlePage']
