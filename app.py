@@ -67,7 +67,7 @@ def addChapter():
 @app.route('/chapters/deleteChapter', methods=['POST'])
 def deleteChapter():
     return ChapterCtrl.delete_chapter(db['chapters'])
-    
+
 @app.route('/chapters/updateChapter', methods=['POST'])
 def putChapter():
     return ChapterCtrl.put_chapter(db['chapters'])
@@ -127,6 +127,10 @@ def getParticipantById():
 @app.route('/participants/getAllParticipants', methods=['GET'])
 def getAllParticipants():
     return ParticipantCtrl.getAllParticipants(db['participants'])
+
+@app.route('/participants/deleteParticipant', methods=['POST'])
+def deletePerticipant():
+    return ParticipantCtrl.deleteParticipant(db['participants'])
 
 if __name__ == '__main__':
     app.run(debug=True, port=8082)
