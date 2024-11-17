@@ -1,7 +1,7 @@
 class Trailer:
-    def __init__(self, idMovie, title, urlVideo,
+    def __init__(self, idTrailer, title, urlVideo,
                  duration, language, category, character, participant):
-        self.idMovie = idMovie
+        self.idTrailer = idTrailer
         self.title = title
         self.urlVideo = urlVideo
         self.duration = duration
@@ -12,7 +12,7 @@ class Trailer:
 
     def toDBCollection(self):
         return {
-            'idMovie': self.idMovie,
+            'idTrailer': self.idTrailer,
             'title': self.title,
             'urlVideo': self.urlVideo,
             'duration': self.duration,
