@@ -30,17 +30,9 @@ def deleteMovie():
 def getMovieById():
     return MovieCtrl.getMovieById(db['movies'])
 
-@app.route('/movies/put/<string:movies_name>', methods=['PUT'])
-def putMovie(movie_name):
-    movies = db['movies']
-    name = request.form['name']
-
-    if name:
-        movies.update_one({'name': movie_name}, {'$set': {'name': name}})
-        response = jsonify({'message': 'Movie' + movie_name + 'updated.'})
-        return redirect(url_for('home'))
-    else:
-        return notFound()
+@app.route('/movies/updateMovie', methods=['POST'])
+def putMovie():
+    return MovieCtrl.put_movie(db['movies'])
 
 # -------------------------------------------------------------------------------------------------------
 
