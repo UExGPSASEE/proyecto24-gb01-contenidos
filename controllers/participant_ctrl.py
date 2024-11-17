@@ -163,20 +163,25 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def put_participant(db: Collection):
+    def updateParticipant(db: Collection):
         if request.form.get('_method') != 'PUT':
             return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
         try:
-            participant_id = int(request.form.get('id'))
+            participant_id = int(request.form.get('participant_id'))
             name = request.form.get('name')
             surname = request.form.get('surname')
-            age = int(request.form.get('age'))
+            age_value = str(request.form.get('age'))
+            if age_value:
+                age = int(age_value)
+                print(age)
+            else:
+                age = None  # O simplemente ignóralo si no necesitas asignarlo
             nationality = request.form.get('nationality')
 
             if not participant_id:
                 return jsonify({'error': 'ID de participante requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'idParticipant': participant_id}
+            filter = {'participant_id': participant_id}
 
             update_fields = {}
 
@@ -197,7 +202,6 @@ class ParticipantCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'El participante ya está actualizado', 'status': '200 OK'}), 200
 
-            # Redirigir a la lista de participantes
             return redirect(url_for('participants'))
 
         except ValueError:

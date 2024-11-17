@@ -140,6 +140,10 @@ def getParticipantById():
 def getAllParticipants():
     return ParticipantCtrl.getAllParticipants(db['participants'])
 
+@app.route('/participants/updateParticipant', methods=['POST'])
+def updateParticipant():
+    return ParticipantCtrl.updateParticipant(db['participants'])
+
 @app.route('/participants/deleteParticipant', methods=['POST'])
 def deletePerticipant():
     return ParticipantCtrl.deleteParticipant(db['participants'])
