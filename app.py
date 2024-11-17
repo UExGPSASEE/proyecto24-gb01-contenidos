@@ -140,5 +140,9 @@ def getParticipantById():
 def getAllParticipants():
     return ParticipantCtrl.getAllParticipants(db['participants'])
 
+@app.route('/participants/deleteParticipant', methods=['POST'])
+def deletePerticipant():
+    return ParticipantCtrl.deleteParticipant(db['participants'])
+
 if __name__ == '__main__':
     app.run(debug=True, port=8082)

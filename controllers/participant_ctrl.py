@@ -71,7 +71,7 @@ class ParticipantCtrl:
 
     @staticmethod
     def getParticipantByAge(db: Collection):
-        age = request.args.get('age')
+        age = int(request.args.get('age'))
 
         if age:
             matching_participants = db.find({'age': age})
@@ -147,13 +147,11 @@ class ParticipantCtrl:
 
     # ---------------------------------------------------------
 
-
-
     @staticmethod
-    def delete_participant(db: Collection):
+    def deleteParticipant(db: Collection):
         if request.form.get('_method') == 'DELETE':
-            participant_id = int(request.form['id'])
-            if participant_id and db.delete_one({'idParticipant': participant_id}):
+            participant_id = int(request.form['participant_id'])
+            if participant_id and db.delete_one({'participant_id': participant_id}):
                 print("Delete ok")
                 return redirect(url_for('participants'))
             else:
