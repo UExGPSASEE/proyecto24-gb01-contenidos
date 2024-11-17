@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Series</title>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-5 mb-5"> Gestión de series </h1>
+    </div>
+    <div class="container">
+        <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
+            <div class="col-md-6 mb-3">
+                <div class="card">
+
+                    <div class="card-header">
+                        <h3 class="text-center">Añadir serie</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <form action="/series/addSerie" method="POST">
+                            <label>Título</label>
+                            <input type="text" class="form-control mb-3" name="title" required>
+                            <br></br>
+                            <label>Duración (en minutos)</label>
+                            <input type="number" class="form-control mb-3" name="duration" required>
+                            <br></br>
+
+                            <!--Por arreglar-->
+                            <label>Temporadas</label>
+                            <input type="number" name="seasons[]" placeholder="idSeason 1"><br>
+                            <input type="number" name="seasons[]" placeholder="idSeason 2"><br>
+                            <input type="number" name="seasons[]" placeholder="idSeason 3"><br>
+                            <br></br>
+
+
+                            <label>URL de la portada de la película (Opcional)</label>
+                            <input type="url" class="form-control mb-3" name="urlTitlePage">
+                            <br></br>
+                            <label>Fecha de estreno (Opcional)</label>
+                            <input type="date" class="form-control mb-3" name="releaseDate">
+                            <br></br>
+                            <label>Sinopsis de la película (Opcional)</label>
+                            <input type="text" class="form-control mb-3" name="synopsis">
+                            <br></br>
+                            <label>Descripción de la película (Opcional)</label>
+                            <input type="text" class="form-control mb-3" name="description">
+                            <br></br>
+                            <label>Idiomas disponibles</label>
+                            <input type="number" name="language[]" placeholder="idLanguage 1"><br>
+                            <input type="number" name="language[]" placeholder="idLanguage 2"><br>
+                            <input type="number" name="language[]" placeholder="idLanguage 3"><br>
+                            <br></br>
+                            <label>Categorías asociadas</label>
+                            <input type="number" name="category[]" placeholder="idCategory 1"><br>
+                            <input type="number" name="category[]" placeholder="idCategory 2"><br>
+                            <br></br>
+                            <label>Personajes</label>
+                            <input type="number" name="character[]" placeholder="idCharacter 1"><br>
+                            <input type="number" name="character[]" placeholder="idCharacter 2"><br>
+                            <input type="number" name="character[]" placeholder="idCharacter 3"><br>
+                            <br></br>
+                            <label>Intérpretes</label>
+                            <input type="number" name="participant[]" placeholder="idParticipant 1"><br>
+                            <input type="number" name="participant[]" placeholder="idParticipant 2"><br>
+                            <input type="number" name="participant[]" placeholder="idParticipant 3"><br>
+                            <br></br>
+                            <label>Tráiler</label>
+                            <input type="number" name="trailer"><br>
+                            <br></br>
+                            <button class="btn btn-primary" type="submit"> Añadir </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
