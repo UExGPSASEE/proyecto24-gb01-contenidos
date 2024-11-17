@@ -14,20 +14,20 @@ class MovieCtrl:
     @staticmethod
     def addMovie(db: Collection):
         idMovie = get_next_sequence_value(db,"idMovie")
-        title = request.form['title']
-        duration = request.form['duration']
-        urlVideo = request.form['urlVideo']
-        urlTitlePage = request.form['urlTitlePage']
-        releaseDate = request.form['releaseDate']
-        synopsis = request.form['synopsis']
-        description = request.form['description']
+        movie_title = request.form.get('title')
+        duration = request.form.get('duration')
+        urlVideo = request.form.get('urlVideo')
+        urlTitlePage = request.form.get('urlTitlePage')
+        releaseDate = request.form.get('releaseDate')
+        synopsis = request.form.get('synopsis')
+        description = request.form.get('description')
         language = request.form.getlist('language[]')
         category = request.form.getlist('category[]')
         character = request.form.getlist('character[]')
         participant = request.form.getlist('participant[]')
-        trailer = request.form['trailer']
+        trailer = request.form.get('trailer')
         if idMovie:
-            movie = Movie(idMovie, title, urlVideo, urlTitlePage, releaseDate, synopsis, description,
+            movie = Movie(idMovie, movie_title, urlVideo, urlTitlePage, releaseDate, synopsis, description,
                           None, duration, language, category, character, participant, trailer)
             db.insert_one(movie.toDBCollection())
             return redirect(url_for('movies'))

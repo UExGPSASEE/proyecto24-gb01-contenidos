@@ -2,6 +2,7 @@ import database as dbase
 from flask import Flask, render_template, request, jsonify, redirect, url_for
 from controllers.movie_ctrl import MovieCtrl
 from controllers.category_ctrl import CategoryCtrl
+from controllers.trailer_ctrl import TrailerCtrl
 from participant import Participant
 
 db = dbase.conexionMongoDB()
@@ -14,9 +15,7 @@ def home():
 # -------------------------------------------------------------------------------------------------------
 @app.route('/movies')
 def movies():
-    movies = db['movies']
-    moviesReceived = movies.find()
-    return render_template('Movie.html', movies=moviesReceived)
+    return MovieCtrl.render_template(db['movies'])
 
 @app.route('/movies/addMovie', methods=['POST'])
 def addMovie():
@@ -33,6 +32,27 @@ def getMovieById():
 @app.route('/movies/updateMovie', methods=['POST'])
 def putMovie():
     return MovieCtrl.put_movie(db['movies'])
+
+# -------------------------------------------------------------------------------------------------------
+@app.route('/trailers')
+def trailers():
+    return TrailerCtrl.render_template(db['trailers'])
+
+@app.route('/trailers/addTrailer', methods=['POST'])
+def addTrailer():
+    return TrailerCtrl.addTrailer(db['trailers'])
+
+@app.route('/trailers/deleteTrailer', methods=['POST'])
+def deleteTrailer():
+    return TrailerCtrl.delete_trailer(db['trailers'])
+
+# @app.route('/trailers/trailerFound', methods=['GET'])
+# def getTrailerById():
+#     return TrailerCtrl.getTrailerById(db['trailers'])
+
+@app.route('/trailers/updateTrailer', methods=['POST'])
+def putTrailer():
+    return TrailerCtrl.put_trailer(db['trailers'])
 
 # -------------------------------------------------------------------------------------------------------
 
