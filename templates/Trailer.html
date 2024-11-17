@@ -63,7 +63,7 @@
                         <form action="/trailers/deleteTrailer" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="id">
+                            <input type="text" class="form-control mb-3" name="id" required>
                             <button class="btn btn-primary" type="submit">Eliminar</button>
                         </form>
                     </div>
@@ -75,7 +75,7 @@
                         <form action="/trailers/updateTrailer" method="POST">
                             <input type="hidden" name="_method" value="PUT">
                             <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="id">
+                            <input type="text" class="form-control mb-3" required name="id">
                             <br></br>
                             <label>¿Cuál es el título del tráiler?</label>
                             <input type="text" class="form-control mb-3" name="title">
@@ -105,7 +105,7 @@
                             <input type="number" name="participant[]" placeholder="idParticipant 2"><br>
                             <input type="number" name="participant[]" placeholder="idParticipant 3"><br>
                             <br></br>
-                            <button class="btn btn-primary" type="submit"> Modificar </button>
+                            <button class="btn btn-primary" type="submit">Modificar</button>
                         </form>
                     </div>
                 </div>

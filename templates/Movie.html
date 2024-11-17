@@ -79,7 +79,7 @@
                         <form action="/movies/deleteMovie" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="id">
+                            <input type="text" class="form-control mb-3" name="id" required>
                             <button class="btn btn-primary" type="submit">Eliminar</button>
                         </form>
                     </div>
@@ -91,7 +91,7 @@
                         <form action="/movies/updateMovie" method="POST">
                             <input type="hidden" name="_method" value="PUT">
                             <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="id">
+                            <input type="text" class="form-control mb-3" name="id" required>
                             <br></br>
                             <label>¿Cuál es el título de la película?</label>
                             <input type="text" class="form-control mb-3" name="title">
