@@ -73,6 +73,31 @@
                     </div>
                 </div>
 
+                <div class="card-body">
+                    <h5 class="text-center">Obtener todas las películas</h5>
+                    <form action="/movies/all" method="GET">
+                        <button class="btn btn-primary" type="submit"> Buscar </button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <h5 class="text-center">Obtener película por título</h5>
+                    <form action="/movies/title" method="GET">
+                        <label>Título</label>
+                        <input type="text" class="form-control mb-3" name="title" required>
+                        <button class="btn btn-primary" type="submit"> Buscar </button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <h5 class="text-center">Obtener película por fecha de salida</h5>
+                    <form action="/movies/release" method="GET">
+                        <label>Fecha</label>
+                        <input type="date" class="form-control mb-3" name="releaseDate" required>
+                        <button class="btn btn-primary" type="submit"> Buscar </button>
+                    </form>
+                </div>
+
                 <div class="card">
                     <h5 class="text-center">Eliminar película</h5>
                     <div class="card-body">

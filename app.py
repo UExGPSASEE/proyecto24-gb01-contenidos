@@ -30,6 +30,18 @@ def deleteMovie():
 def getMovieById():
     return MovieCtrl.getMovieById(db['movies'])
 
+@app.route('/movies/title', methods=['GET'])
+def getMovieByTitle():
+    return MovieCtrl.getMovieByTitle(db['movies'])
+
+@app.route('/movies/release', methods=['GET'])
+def getMovieByReleaseDate():
+    return MovieCtrl.getMovieByReleaseDate(db['movies'])
+
+@app.route('/movies/all', methods=['GET'])
+def getAllMovies():
+    return MovieCtrl.getAllMovies(db['movies'])
+
 @app.route('/movies/updateMovie', methods=['POST'])
 def putMovie():
     return MovieCtrl.put_movie(db['movies'])
@@ -67,7 +79,7 @@ def addChapter():
 @app.route('/chapters/deleteChapter', methods=['POST'])
 def deleteChapter():
     return ChapterCtrl.delete_chapter(db['chapters'])
-    
+
 @app.route('/chapters/updateChapter', methods=['POST'])
 def putChapter():
     return ChapterCtrl.put_chapter(db['chapters'])
