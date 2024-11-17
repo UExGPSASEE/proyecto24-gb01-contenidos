@@ -5,6 +5,7 @@ from controllers.category_ctrl import CategoryCtrl
 from controllers.participant_ctrl import ParticipantCtrl
 from controllers.trailer_ctrl import TrailerCtrl
 from controllers.chapter_ctrl import ChapterCtrl
+from controllers.season_ctrl import SeasonCtrl
 
 db = dbase.conexionMongoDB()
 
@@ -87,6 +88,28 @@ def putChapter():
 # @app.route('/chapters/chapterFound', methods=['GET'])
 # def getChapterById():
 #     return ChapterCtrl.getChapterById(db['chapters'])
+
+# -------------------------------------------------------------------------------------------------------
+
+@app.route('/seasons')
+def seasons():
+    return SeasonCtrl.render_template(db['seasons'])
+
+@app.route('/seasons/addSeason', methods=['POST'])
+def addSeason():
+    return SeasonCtrl.addSeason(db['seasons'])
+
+@app.route('/seasons/deleteSeason', methods=['POST'])
+def deleteSeason():
+    return SeasonCtrl.delete_season(db['seasons'])
+
+@app.route('/seasons/updateSeason', methods=['POST'])
+def putSeason():
+    return SeasonCtrl.put_season(db['seasons'])
+
+# @app.route('/seasons/seasonFound', methods=['GET'])
+# def getSeasonById():
+#     return SeasonCtrl.getSeasonById(db['seasons'])
 
 # -------------------------------------------------------------------------------------------------------
 

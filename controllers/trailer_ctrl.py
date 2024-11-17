@@ -84,9 +84,9 @@ class TrailerCtrl:
 
             result = db.update_one(filter, change)
             if result.matched_count == 0:
-                return jsonify({'error': 'Tráiler no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Tráiler no encontrado', 'status': '404 Not Found'}), 404
             elif result.modified_count == 0:
-                return jsonify({'message': 'La tráiler ya está actualizada', 'status': '200 OK'}), 200
+                return jsonify({'message': 'El tráiler ya está actualizado', 'status': '200 OK'}), 200
 
             # Redirigir a la lista de tráileres
             return redirect(url_for('trailers'))
