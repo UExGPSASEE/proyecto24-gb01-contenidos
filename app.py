@@ -4,6 +4,7 @@ from controllers.movie_ctrl import MovieCtrl
 from controllers.category_ctrl import CategoryCtrl
 from controllers.participant_ctrl import ParticipantCtrl
 from controllers.trailer_ctrl import TrailerCtrl
+from controllers.chapter_ctrl import ChapterCtrl
 
 db = dbase.conexionMongoDB()
 
@@ -46,13 +47,34 @@ def addTrailer():
 def deleteTrailer():
     return TrailerCtrl.delete_trailer(db['trailers'])
 
+@app.route('/trailers/updateTrailer', methods=['POST'])
+def putTrailer():
+    return TrailerCtrl.put_trailer(db['trailers'])
+
 # @app.route('/trailers/trailerFound', methods=['GET'])
 # def getTrailerById():
 #     return TrailerCtrl.getTrailerById(db['trailers'])
 
-@app.route('/trailers/updateTrailer', methods=['POST'])
-def putTrailer():
-    return TrailerCtrl.put_trailer(db['trailers'])
+# -------------------------------------------------------------------------------------------------------
+@app.route('/chapters')
+def chapters():
+    return ChapterCtrl.render_template(db['chapters'])
+
+@app.route('/chapters/addChapter', methods=['POST'])
+def addChapter():
+    return ChapterCtrl.addChapter(db['chapters'])
+
+# @app.route('/chapters/deleteChapter', methods=['POST'])
+# def deleteChapter():
+#     return ChapterCtrl.delete_chapter(db['chapters'])
+#
+# @app.route('/chapters/updateChapter', methods=['POST'])
+# def putChapter():
+#     return ChapterCtrl.put_chapter(db['chapters'])
+
+# @app.route('/chapters/chapterFound', methods=['GET'])
+# def getChapterById():
+#     return ChapterCtrl.getChapterById(db['chapters'])
 
 # -------------------------------------------------------------------------------------------------------
 
