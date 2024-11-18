@@ -76,7 +76,6 @@ class ChapterCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'La tráiler ya está actualizada', 'status': '200 OK'}), 200
 
-            # Redirigir a la lista de tráileres
             return redirect(url_for('chapters'))
 
         except ValueError:
@@ -88,3 +87,25 @@ class ChapterCtrl:
             ), 500
 
 # --------------------------------
+
+    @staticmethod
+    def getChapterById(db: Collection):
+        idChapter = int(request.args.get('idChapter'))
+        if idChapter:
+            matching_chapter = db.find({'idChapter': idChapter})
+            if matching_chapter:
+                chapterFound = [
+                {
+                    'idChapter' : chapter.get('idCategory'),
+                    'title' : chapter.get('title'),
+                    'urlVideo' : chapter.get('urlVideo'),
+                    'duration' : chapter.get('duration'),
+                    'chapterNumber' : chapter.get('chapterNumber')
+                }
+                for chapter in matching_chapter
+                ]
+                return jsonify(chapterFound), 200
+            else:
+                return jsonify({'error': 'Chapter not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
