@@ -9,7 +9,7 @@ class SeriesCtrl:
         seriesReceived = db.find()
         return render_template('Series.html', series=seriesReceived)
 
-    # ---------------------------------------------------------
+# --------------------------------------------------------------
 
     @staticmethod
     def addSeries(db: Collection):
@@ -33,3 +33,62 @@ class SeriesCtrl:
             return redirect(url_for('series'))
         else:
             return jsonify({'error': 'Series not found or not added', 'status':'404 Not Found'}), 404
+
+# --------------------------------------------------------------
+
+    @staticmethod
+    def getAllSeries(db: Collection):
+        allSeries = db.find()
+        series_list = [
+            {
+                'idSeries' : series.get('idSeries'),
+                'title' : series.get('title'),
+                'duration' : series.get('duration'),
+                'urlTitlePage' : series.get('urlTitlePage'),
+                'releaseDate' : series.get('releaseDate'),
+                'synopsis' : series.get('synopsis'),
+                'description' : series.get('description'),
+                'isSuscription' : series.get('isSuscription'), # OJO
+                'seasons': series.get('seasons'),
+                'language' : series.get('language'),
+                'category' : series.get('category'),
+                'character' : series.get('character'),
+                'participant' : series.get('participant'),
+                'trailer' : series.get('trailer')
+            }
+            for series in allSeries
+        ]
+        return jsonify(series_list), 200
+
+# --------------------------------------------------------------
+
+    @staticmethod
+    def getSeriesByTitle(db: Collection):
+        title = request.args.get('title')
+        if title:
+            matching_series = db.find({'title': title})
+            if matching_series:
+                seriesFound = [
+                {
+                    'idSeries' : series.get('idSeries'),
+                    'title' : series.get('title'),
+                    'duration' : series.get('duration'),
+                    'urlTitlePage' : series.get('urlTitlePage'),
+                    'releaseDate' : series.get('releaseDate'),
+                    'synopsis' : series.get('synopsis'),
+                    'description' : series.get('description'),
+                    'isSuscription' : series.get('isSuscription'), # OJO
+                    'seasons': series.get('seasons'),
+                    'language' : series.get('language'),
+                    'category' : series.get('category'),
+                    'character' : series.get('character'),
+                    'participant' : series.get('participant'),
+                    'trailer' : series.get('trailer')
+                }
+                for series in matching_series
+                ]
+                return jsonify(seriesFound), 200
+            else:
+                return jsonify({'error': 'Series not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
