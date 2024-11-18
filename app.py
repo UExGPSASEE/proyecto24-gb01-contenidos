@@ -214,5 +214,9 @@ def series():
 def addSeries():
     return SeriesCtrl.addSeries(db['series'])
 
+@app.route('/series/deleteSeries', methods=['POST'])
+def deleteSeries():
+    return SeriesCtrl.delete_series(db['series'])
+
 if __name__ == '__main__':
     app.run(debug=True, port=8082)

@@ -33,3 +33,16 @@ class SeriesCtrl:
             return redirect(url_for('series'))
         else:
             return jsonify({'error': 'Series not found or not added', 'status':'404 Not Found'}), 404
+
+    @staticmethod
+    def delete_series(db: Collection):
+        if request.form.get('_method') == 'DELETE':
+            idSeries = int(request.form['idSeries'])
+            if idSeries and db.delete_one({'idSeries': idSeries}):
+                print("Delete ok")
+                return redirect(url_for('series'))
+            else:
+                print("Delete failed")
+                return redirect(url_for('series'))
+        else:
+            return redirect(url_for('series'))
