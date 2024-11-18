@@ -102,3 +102,28 @@ class SeasonCtrl:
             ), 500
 
 # --------------------------------
+
+    @staticmethod
+    def getSeasonById(db: Collection):
+        idSeason = int(request.args.get('idSeason'))
+        if idSeason:
+            matching_season = db.find({'idSeason': idSeason})
+            if matching_season:
+                seasonFound = [
+                {
+                    'idSeason' : season.get('idSeason'),
+                    'idSeason' : season.get('idSeries'),
+                    'title' : season.get('title'),
+                    'seasonNumber' : season.get('seasonNumber'),
+                    'totalChapters' : season.get('totalChapters'),
+                    'chapterList' : season.get('chapterList'),
+                    'participants' : season.get('participants'),
+                    'trailer' : season.get('trailer')
+                }
+                for season in matching_season
+                ]
+                return jsonify(seasonFound), 200
+            else:
+                return jsonify({'error': 'Season not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
