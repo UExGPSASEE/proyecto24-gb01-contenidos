@@ -179,10 +179,10 @@ def characters():
 def addCharacter():
     return CharacterCtrl.addCharacter(db['characters'])
 
-# @app.route('/characters/updateCharacter', methods=['POST'])
-# def updateCharacter():
-#     return CharacterCtrl.updateCharacter(db['characters'])
-#
+@app.route('/characters/updateCharacter', methods=['POST'])
+def updateCharacter():
+    return CharacterCtrl.updateCharacter(db['characters'])
+
 # @app.route('/characters/deleteCharacter', methods=['POST'])
 # def deleteCharacter():
 #     return CharacterCtrl.deleteCharacter(db['characters'])
