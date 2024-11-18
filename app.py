@@ -7,6 +7,7 @@ from controllers.trailer_ctrl import TrailerCtrl
 from controllers.chapter_ctrl import ChapterCtrl
 from controllers.serie_ctrl import SerieCtrl
 from controllers.season_ctrl import SeasonCtrl
+from controllers.character_ctrl import CharacterCtrl
 
 db = dbase.conexionMongoDB()
 
@@ -140,6 +141,14 @@ def participants():
 def addParticipant():
     return ParticipantCtrl.addParticipant(db['participants'])
 
+@app.route('/participants/updateParticipant', methods=['POST'])
+def updateParticipant():
+    return ParticipantCtrl.updateParticipant(db['participants'])
+
+@app.route('/participants/deleteParticipant', methods=['POST'])
+def deleteParticipant():
+    return ParticipantCtrl.deleteParticipant(db['participants'])
+
 @app.route('/participants/getParticipantByName', methods=['GET'])
 def getParticipantByName():
     return ParticipantCtrl.getParticipantByName(db['participants'])
@@ -152,10 +161,6 @@ def getParticipantBySurname():
 def getParticipantByAge():
     return ParticipantCtrl.getParticipantByAge(db['participants'])
 
-@app.route('/participants/getParticipantByNationality', methods=['GET'])
-def getParticipantByNationality():
-    return ParticipantCtrl.getParticipantByNationality(db['participants'])
-
 @app.route('/participants/getParticipantById', methods=['GET'])
 def getParticipantById():
     return ParticipantCtrl.getParticipantById(db['participants'])
@@ -164,13 +169,40 @@ def getParticipantById():
 def getAllParticipants():
     return ParticipantCtrl.getAllParticipants(db['participants'])
 
-@app.route('/participants/updateParticipant', methods=['POST'])
-def updateParticipant():
-    return ParticipantCtrl.updateParticipant(db['participants'])
+# -------------------------------------------------------------------------------------------------------
 
-@app.route('/participants/deleteParticipant', methods=['POST'])
-def deletePerticipant():
-    return ParticipantCtrl.deleteParticipant(db['participants'])
+@app.route('/characters')
+def characters():
+    return CharacterCtrl.render_template(db['characters'])
+
+@app.route('/characters/addCharacter', methods=['POST'])
+def addCharacter():
+    return CharacterCtrl.addCharacter(db['characters'])
+
+# @app.route('/characters/updateCharacter', methods=['POST'])
+# def updateCharacter():
+#     return CharacterCtrl.updateCharacter(db['characters'])
+#
+# @app.route('/characters/deleteCharacter', methods=['POST'])
+# def deleteCharacter():
+#     return CharacterCtrl.deleteCharacter(db['characters'])
+
+
+@app.route('/characters/getCharacterByName', methods=['GET'])
+def getCharacterByName():
+    return CharacterCtrl.getCharacterByName(db['characters'])
+
+@app.route('/characters/getCharacterByAge', methods=['GET'])
+def getCharacterByAge():
+    return CharacterCtrl.getCharacterByAge(db['characters'])
+
+@app.route('/characters/getCharacterById', methods=['GET'])
+def getCharacterById():
+    return CharacterCtrl.getCharacterById(db['characters'])
+
+@app.route('/characters/getAllCharacters', methods=['GET'])
+def getAllCharacters():
+    return CharacterCtrl.getAllCharacters(db['characters'])
 
 # -------------------------------------------------------------------------------------------------------
 
