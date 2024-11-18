@@ -183,9 +183,9 @@ def addCharacter():
 def updateCharacter():
     return CharacterCtrl.updateCharacter(db['characters'])
 
-# @app.route('/characters/deleteCharacter', methods=['POST'])
-# def deleteCharacter():
-#     return CharacterCtrl.deleteCharacter(db['characters'])
+@app.route('/characters/deleteCharacter', methods=['POST'])
+def deleteCharacter():
+    return CharacterCtrl.deleteCharacter(db['characters'])
 
 
 @app.route('/characters/getCharacterByName', methods=['GET'])
