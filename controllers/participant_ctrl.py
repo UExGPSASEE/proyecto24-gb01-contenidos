@@ -111,14 +111,13 @@ class ParticipantCtrl:
 
     @staticmethod
     def getParticipantById(db: Collection):
-        id = request.args.get('participant_id')
-        participant_id = int(id)
-        print(id)
-        if id:
-            matching_participant = db.find({'participant_id': participant_id})
+        idParticipant = request.args.get('idParticipant')
+        if idParticipant:
+            idParticipant = int(idParticipant)
+            matching_participant = db.find({'idParticipant': idParticipant})
             participants_list = [
                 {
-                    'participant_id': participant.get('participant_id'),
+                    'idParticipant': participant.get('idParticipant'),
                     'name': participant.get('name'),
                     'surname': participant.get('surname'),
                     'age': participant.get('age'),
@@ -128,7 +127,7 @@ class ParticipantCtrl:
             ]
             return jsonify(participants_list), 200
         else:
-            return jsonify({'error': 'Id no proporcionado'}), 400
+            return jsonify({'error': 'ID no proporcionado'}), 400
 
 
     @staticmethod
@@ -150,8 +149,8 @@ class ParticipantCtrl:
     @staticmethod
     def deleteParticipant(db: Collection):
         if request.form.get('_method') == 'DELETE':
-            participant_id = int(request.form['participant_id'])
-            if participant_id and db.delete_one({'participant_id': participant_id}):
+            idParticipant = int(request.form['idParticipant'])
+            if idParticipant and db.delete_one({'idParticipant': idParticipant}):
                 print("Delete ok")
                 return redirect(url_for('participants'))
             else:
@@ -167,21 +166,17 @@ class ParticipantCtrl:
         if request.form.get('_method') != 'PUT':
             return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
         try:
-            participant_id = int(request.form.get('participant_id'))
+            idParticipant = int(request.form.get('idParticipant'))
             name = request.form.get('name')
             surname = request.form.get('surname')
-            age_value = str(request.form.get('age'))
-            if age_value:
-                age = int(age_value)
-                print(age)
-            else:
-                age = None  # O simplemente ignóralo si no necesitas asignarlo
+            age = request.form.get('age')
             nationality = request.form.get('nationality')
-
-            if not participant_id:
+            if age:
+                age = int(age)
+            if not idParticipant:
                 return jsonify({'error': 'ID de participante requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'participant_id': participant_id}
+            filter = {'idParticipant': idParticipant}
 
             update_fields = {}
 

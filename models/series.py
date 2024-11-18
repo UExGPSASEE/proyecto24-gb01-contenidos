@@ -1,7 +1,7 @@
-class Serie:
-    def __init__(self, idSerie, title, seasons, urlTitlePage, releaseDate, synopsis, description,
+class Series:
+    def __init__(self, idSeries, title, seasons, urlTitlePage, releaseDate, synopsis, description,
                  isSuscription, duration, language, category, character, participant, trailer):
-        self.idSerie = idSerie
+        self.idSeries = idSeries
         self.title = title
         self.seasons = seasons
         self.urlTitlePage = urlTitlePage
@@ -18,7 +18,7 @@ class Serie:
 
     def toDBCollection(self):
         return{
-            'idSerie' : self.idSerie,
+            'idSeries' : self.idSeries,
             'title' : self.title,
             'seasons' : self.seasons,
             'urlTitlePage' : self.urlTitlePage,

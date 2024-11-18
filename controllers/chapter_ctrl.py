@@ -29,7 +29,7 @@ class ChapterCtrl:
     @staticmethod
     def delete_chapter(db: Collection):
         if request.form.get('_method') == 'DELETE':
-            chapter_id = int(request.form['id'])
+            chapter_id = int(request.form['idChapter'])
             if chapter_id and db.delete_one({'idChapter': chapter_id}):
                 print("Delete ok")
                 return redirect(url_for('chapters'))
@@ -46,7 +46,7 @@ class ChapterCtrl:
         if request.form.get('_method') != 'PUT':
             return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
         try:
-            chapter_id = int(request.form.get('id'))
+            chapter_id = int(request.form.get('idChapter'))
             chapter_title = request.form.get('title')
             duration = request.form.get('duration')
             urlVideo = request.form.get('urlVideo')

@@ -34,8 +34,8 @@ class SeasonCtrl:
     @staticmethod
     def delete_season(db: Collection):
         if request.form.get('_method') == 'DELETE':
-            season_id = int(request.form['id'])
-            if season_id and db.delete_one({'idSeason': season_id}):
+            idSeason = int(request.form['idSeason'])
+            if idSeason and db.delete_one({'idSeason': idSeason}):
                 print("Delete ok")
                 return redirect(url_for('seasons'))
             else:
@@ -51,7 +51,7 @@ class SeasonCtrl:
         if request.form.get('_method') != 'PUT':
             return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
         try:
-            season_id = int(request.form.get('id'))
+            idSeason = int(request.form.get('idSeason'))
             idSeries = request.form.get('idSeries')
             season_title = request.form.get('title')
             seasonNumber = request.form.get('seasonNumber')
@@ -60,10 +60,10 @@ class SeasonCtrl:
             participants = request.form.getlist('participant[]')
             trailer = request.form.get('trailer')
 
-            if not season_id:
+            if not idSeason:
                 return jsonify({'error': 'ID de temporada requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'idSeason': season_id}
+            filter = {'idSeason': idSeason}
 
             update_fields = {}
 

@@ -89,7 +89,7 @@
                     <div class="card-body">
                         <form action="/participants/getParticipantById" method="GET">
                             <label>Identificador</label>
-                            <input type="number" min=0 class="form-control mb-3" name="participant_id" required>
+                            <input type="number" min=0 class="form-control mb-3" name="idParticipant" required>
                             <button class="btn btn-primary" type="submit"> Buscar </button>
                         </form>
                     </div>
@@ -101,7 +101,7 @@
                         <form action="/participants/updateParticipant" method="POST">
                             <input type="hidden" name="_method" value="PUT">
                             <label>Identificador</label>
-                            <input type="number" class="form-control mb-3" name="participant_id" required>
+                            <input type="number" class="form-control mb-3" name="idParticipant" required>
                             <label>Nombre</label>
                             <input type="text" class="form-control mb-3" name="name">
                             <label>Apellidos</label>
@@ -121,7 +121,7 @@
                         <form action="/participants/deleteParticipant" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <label>Identificador</label>
-                            <input type="number" min=0 class="form-control mb-3" name="participant_id" required>
+                            <input type="number" min=0 class="form-control mb-3" name="idParticipant" required>
                             <button class="btn btn-primary" type="submit"> Borrar </button>
                         </form>
                     </div>
