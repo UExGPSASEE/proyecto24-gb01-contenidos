@@ -226,5 +226,9 @@ def getSeriesByTitle():
 def deleteSeries():
     return SeriesCtrl.delete_series(db['series'])
 
+@app.route('/series/updateSeries', methods=['POST'])
+def updateSeries():
+    return SeriesCtrl.put_series(db['series'])
+
 if __name__ == '__main__':
     app.run(debug=True, port=8082)
