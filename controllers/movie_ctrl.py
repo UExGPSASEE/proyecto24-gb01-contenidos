@@ -15,7 +15,7 @@ class MovieCtrl:
     @staticmethod
     def addMovie(db: Collection):
         idMovie = get_next_sequence_value(db,"idMovie")
-        movie_title = request.form.get('title')
+        movieTitle = request.form.get('title')
         duration = request.form.get('duration')
         urlVideo = request.form.get('urlVideo')
         urlTitlePage = request.form.get('urlTitlePage')
@@ -28,7 +28,7 @@ class MovieCtrl:
         participant = request.form.getlist('participant[]')
         trailer = request.form.get('trailer')
         if idMovie:
-            movie = Movie(idMovie, movie_title, urlVideo, urlTitlePage, releaseDate, synopsis, description,
+            movie = Movie(idMovie, movieTitle, urlVideo, urlTitlePage, releaseDate, synopsis, description,
                           None, duration, language, category, character, participant, trailer)
             db.insert_one(movie.toDBCollection())
             return redirect(url_for('movies'))
@@ -167,8 +167,8 @@ class MovieCtrl:
     @staticmethod
     def delete_movie(db: Collection):
         if request.form.get('_method') == 'DELETE':
-            movie_id = int(request.form['id'])
-            if movie_id and db.delete_one({'idMovie': movie_id}):
+            idMovie = int(request.form['idMovie'])
+            if idMovie and db.delete_one({'idMovie': idMovie}):
                 print("Delete ok")
                 return redirect(url_for('movies'))
             else:
@@ -184,8 +184,8 @@ class MovieCtrl:
         if request.form.get('_method') != 'PUT':
             return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
         try:
-            movie_id = int(request.form.get('id'))
-            movie_title = request.form.get('title')
+            idMovie = int(request.form.get('idMovie'))
+            movieTitle = request.form.get('title')
             duration = request.form.get('duration')
             urlVideo = request.form.get('urlVideo')
             urlTitlePage = request.form.get('urlTitlePage')
@@ -198,15 +198,15 @@ class MovieCtrl:
             participant = request.form.getlist('participant[]')
             trailer = request.form.get('trailer')
 
-            if not movie_id:
+            if not idMovie:
                 return jsonify({'error': 'ID de película requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'idMovie': movie_id}
+            filter = {'idMovie': idMovie}
 
             update_fields = {}
 
-            if movie_title:
-                update_fields['title'] = movie_title
+            if movieTitle:
+                update_fields['title'] = movieTitle
             if duration:
                 update_fields['duration'] = int(duration)  # Convertir a entero si aplica
             if urlVideo:

@@ -36,9 +36,8 @@ class CharacterCtrl:
             characters_list = [
                 {
                     'name': character.get('name'),
-                    'surname': character.get('surname'),
-                    'age': character.get('age'),
-                    'nationality': character.get('nationality')
+                    'participant': character.get('participant'),
+                    'age': character.get('age')
                 }
                 for character in matching_characters
             ]
@@ -58,9 +57,8 @@ class CharacterCtrl:
             characters_list = [
                 {
                     'name': character.get('name'),
-                    'surname': character.get('surname'),
-                    'age': character.get('age'),
-                    'nationality': character.get('nationality')
+                    'participant': character.get('participant'),
+                    'age': character.get('age')
                 }
                 for character in matching_characters
             ]
@@ -79,9 +77,8 @@ class CharacterCtrl:
                 {
                     'idCharacter': character.get('idCharacter'),
                     'name': character.get('name'),
-                    'surname': character.get('surname'),
-                    'age': character.get('age'),
-                    'nationality': character.get('nationality')
+                    'participant': character.get('participant'),
+                    'age': character.get('age')
                 }
                 for character in matching_character
             ]
@@ -142,7 +139,7 @@ class CharacterCtrl:
             if name:
                 update_fields['name'] = name
             if participant:
-                update_fields['surname'] = participant
+                update_fields['participant'] = participant
             if age:
                 update_fields['age'] = age
 

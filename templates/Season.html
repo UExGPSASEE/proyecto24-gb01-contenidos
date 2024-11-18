@@ -55,7 +55,7 @@
                         <form action="/seasons/deleteSeason" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                             <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="id" required>
+                            <input type="text" class="form-control mb-3" name="idSeason" required>
                             <button class="btn btn-primary" type="submit">Eliminar</button>
                         </form>
                     </div>
@@ -67,7 +67,7 @@
                         <form action="/seasons/updateSeason" method="POST">
                             <input type="hidden" name="_method" value="PUT">
                             <label>ID</label>
-                            <input type="text" class="form-control mb-3" required name="id">
+                            <input type="text" class="form-control mb-3" required name="idSeason">
                             <br></br>
                              <label>¿A qué serie pertenece?</label>
                             <input type="number" name="idSeries"><br>
