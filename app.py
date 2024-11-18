@@ -86,9 +86,9 @@ def deleteChapter():
 def putChapter():
     return ChapterCtrl.put_chapter(db['chapters'])
 
-# @app.route('/chapters/chapterFound', methods=['GET'])
-# def getChapterById():
-#     return ChapterCtrl.getChapterById(db['chapters'])
+@app.route('/chapters/chapterFound', methods=['GET'])
+def getChapterById():
+    return ChapterCtrl.getChapterById(db['chapters'])
 
 # -------------------------------------------------------------------------------------------------------
 
