@@ -221,6 +221,10 @@ def getAllSeries():
 @app.route('/series/title', methods=['GET'])
 def getSeriesByTitle():
     return SeriesCtrl.getSeriesByTitle(db['series'])
+  
+@app.route('/series/deleteSeries', methods=['POST'])
+def deleteSeries():
+    return SeriesCtrl.delete_series(db['series'])
 
 if __name__ == '__main__':
     app.run(debug=True, port=8082)

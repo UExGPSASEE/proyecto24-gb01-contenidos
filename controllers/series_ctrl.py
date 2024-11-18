@@ -92,3 +92,17 @@ class SeriesCtrl:
                 return jsonify({'error': 'Series not found', 'status': '404 Not Found'}), 404
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def delete_series(db: Collection):
+        if request.form.get('_method') == 'DELETE':
+            idSeries = int(request.form['idSeries'])
+            if idSeries and db.delete_one({'idSeries': idSeries}):
+                print("Delete ok")
+                return redirect(url_for('series'))
+            else:
+                print("Delete failed")
+                return redirect(url_for('series'))
+        else:
+            return redirect(url_for('series'))
+
