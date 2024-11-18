@@ -26,9 +26,16 @@ class SeriesCtrl:
         participant = request.form.getlist('participant[]')
         seasons = request.form.getlist('seasons[]')
         trailer = request.form.get('trailer')
+        suscription = request.form.get('isSuscription')
+
+        if suscription:
+            if suscription == True:
+                isSuscription = True
+            else: isSuscription = False
+
         if idSeries:
             series = Series(idSeries, title, seasons, urlTitlePage, releaseDate, synopsis, description,
-                          None, duration, language, category, character, participant, trailer)
+                          isSuscription, duration, language, category, character, participant, trailer)
             db.insert_one(series.toDBCollection())
             return redirect(url_for('series'))
         else:
@@ -46,3 +53,78 @@ class SeriesCtrl:
                 return redirect(url_for('series'))
         else:
             return redirect(url_for('series'))
+
+    @staticmethod
+    def put_series(db: Collection):
+        if request.form.get('_method') != 'PUT':
+            return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
+        try:
+            idSeries = int(request.form.get('idSeries'))
+            title = request.form.get('title')
+            duration = request.form.get('duration')
+            seasons = request.form.get('seasons[]')
+            urlTitlePage = request.form.get('urlTitlePage')
+            releaseDate = request.form.get('releaseDate')
+            synopsis = request.form.get('synopsis')
+            description = request.form.get('description')
+            language = request.form.getlist('language[]')
+            category = request.form.getlist('category[]')
+            character = request.form.getlist('character[]')
+            participant = request.form.getlist('participant[]')
+            trailer = request.form.get('trailer')
+            isSuscription = request.form.get('isSuscription')
+
+            if not idSeries:
+                return jsonify({'error': 'ID de serie requerido', 'status': '400 Bad Request'}), 400
+
+            filter = {'idSeries': idSeries}
+
+            update_fields = {}
+
+            if title:
+                update_fields['title'] = title
+            if duration:
+                update_fields['duration'] = int(duration)  # Convertir a entero si aplica
+            if seasons:
+                update_fields['seasons'] = seasons
+            if urlTitlePage:
+                update_fields['urlTitlePage'] = urlTitlePage
+            if releaseDate:
+                update_fields['releaseDate'] = releaseDate
+            if synopsis:
+                update_fields['synopsis'] = synopsis
+            if description:
+                update_fields['description'] = description
+            if language:
+                update_fields['language'] = language
+            if category:
+                update_fields['category'] = category
+            if character:
+                update_fields['character'] = character
+            if participant:
+                update_fields['participant'] = participant
+            if trailer:
+                update_fields['trailer'] = trailer
+            if isSuscription:
+                if isSuscription == True:
+                    update_fields['isSuscription'] = True
+                else: update_fields['isSuscription'] = False
+
+            change = {'$set': update_fields}
+
+            result = db.update_one(filter, change)
+            if result.matched_count == 0:
+                return jsonify({'error': 'Serie no encontrada', 'status': '404 Not Found'}), 404
+            elif result.modified_count == 0:
+                return jsonify({'message': 'La serie ya está actualizada', 'status': '200 OK'}), 200
+
+            # Redirigir a la lista de películas
+            return redirect(url_for('series'))
+
+        except ValueError:
+            return jsonify({'error': 'Datos inválidos', 'status': '400 Bad Request'}), 400
+
+        except Exception as e:
+            return jsonify(
+                {'error': f'Error interno del servidor: {str(e)}', 'status': '500 Internal Server Error'}
+            ), 500
