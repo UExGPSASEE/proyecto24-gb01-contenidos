@@ -72,6 +72,18 @@
                         </form>
                     </div>
 
+                    <div class="card">
+                        <h3 class="text-center">Eliminar serie</h3>
+                        <div class="card-body">
+                            <form action="/series/deleteSeries" method="POST">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <label>ID</label>
+                                <input type="text" class="form-control mb-3" name="idSeries" required>
+                                <button class="btn btn-primary" type="submit">Eliminar</button>
+                            </form>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
