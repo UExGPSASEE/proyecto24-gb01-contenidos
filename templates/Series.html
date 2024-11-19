@@ -161,12 +161,24 @@
                     </div>
 
                     <div class="card-body">
-                        <h5 class="text-center">Obtener series por título</h5>
+                        <h3 class="text-center">Obtener series por título</h3>
                         <form action="/series/title" method="GET">
                             <label>Título</label>
                             <input type="text" class="form-control mb-3" name="title" required>
                             <button class="btn btn-primary" type="submit"> Buscar </button>
                         </form>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="text-center">Buscar serie por ID</h3>
+                        <div class="card-body">
+                            <form action="/series/seriesFound" method="GET">
+                                <label>ID</label>
+                                <input type="text" class="form-control mb-3" name="idSeries" required>
+                                <button class="btn btn-primary" type="submit">Buscar</button>
+                            </form>
+                        </div>
+                    </div>
 
                     <div class="card">
                         <h3 class="text-center">Eliminar serie</h3>
@@ -178,7 +190,6 @@
                                 <button class="btn btn-primary" type="submit">Eliminar</button>
                             </form>
                         </div>
-
                     </div>
 
                 </div>

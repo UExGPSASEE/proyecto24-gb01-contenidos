@@ -222,6 +222,10 @@ def getAllSeries():
 def getSeriesByTitle():
     return SeriesCtrl.getSeriesByTitle(db['series'])
 
+@app.route('/series/seriesFound', methods=['GET'])
+def getSeriesById():
+    return SeriesCtrl.getSeriesById(db['series'])
+
 @app.route('/series/deleteSeries', methods=['POST'])
 def deleteSeries():
     return SeriesCtrl.delete_series(db['series'])
