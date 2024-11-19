@@ -29,6 +29,34 @@ class TrailerCtrl:
             return jsonify({'error': 'Trailer not found or not added', 'status':'404 Not Found'}), 404
 
 # ---------------------------------------------------------
+
+    @staticmethod
+    def getTrailerById(db: Collection):
+        idTrailer = int(request.args.get('idTrailer'))
+        if idTrailer:
+            matching_trailer = db.find({'idTrailer': idTrailer})
+            if matching_trailer:
+                trailerFound = [
+                {
+                    'idTrailer' : trailer.get('idTrailer'),
+                    'title' : trailer.get('title'),
+                    'duration' : trailer.get('duration'),
+                    'urlVideo' : trailer.get('urlVideo'),
+                    'language' : trailer.get('language'),
+                    'category' : trailer.get('category'),
+                    'character' : trailer.get('character'),
+                    'participant' : trailer.get('participant'),
+                }
+                for trailer in matching_trailer
+                ]
+                return jsonify(trailerFound), 200
+            else:
+                return jsonify({'error': 'Trailer not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# ---------------------------------------------------------
+
     @staticmethod
     def delete_trailer(db: Collection):
         if request.form.get('_method') == 'DELETE':
