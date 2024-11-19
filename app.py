@@ -49,6 +49,14 @@ def getAllMovies():
 def putMovie():
     return MovieCtrl.put_movie(db['movies'])
 
+@app.route('/movies/characters', methods=['GET'])
+def getMovieCharacters():
+    return MovieCtrl.getMovieCharacters(db['movies'], db['characters'])
+
+@app.route('/movies/participants', methods=['GET'])
+def getMovieParticipants():
+    return MovieCtrl.getMovieParticipants(db['movies'], db['participants'])
+
 # -------------------------------------------------------------------------------------------------------
 @app.route('/trailers')
 def trailers():

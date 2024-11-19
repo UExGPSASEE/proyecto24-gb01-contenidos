@@ -71,6 +71,66 @@ class MovieCtrl:
 # ---------------------------------------------------------
 
     @staticmethod
+    def getMovieCharacters(movieCollection, characterCollection):
+        idMovie = int(request.args.get('idMovie'))
+        if idMovie:
+            matching_movie = movieCollection.find({'idMovie': idMovie})
+            if matching_movie:
+                characters_list = []
+                for movie in matching_movie:
+                    character_ids = movie.get('character', [])
+                    for character_id in character_ids:
+                        if character_id and character_id.strip().isdigit():
+                            character_id_int = int(character_id)
+                            matching_character = characterCollection.find({'idCharacter': character_id_int})
+                            for character in matching_character:
+                                characters_list.append({
+                                    'idCharacter': character.get('idCharacter'),
+                                    'name': character.get('name'),
+                                    'participant': character.get('participant'),
+                                    'age': character.get('age')
+                                })
+                        else:
+                            print(f"Invalid character_id found: {character_id}")
+                return jsonify(characters_list), 200
+            else:
+                return jsonify({'error': 'Movie not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# ---------------------------------------------------------
+
+    @staticmethod
+    def getMovieParticipants(movieCollection, participantsCollection):
+        idMovie = int(request.args.get('idMovie'))
+        if idMovie:
+            matching_movie = movieCollection.find({'idMovie': idMovie})
+            if matching_movie:
+                participants_list = []
+                for movie in matching_movie:
+                    participants_ids = movie.get('participants', [])
+                    for participant_id in participants_ids:
+                        if participant_id and participant_id.strip().isdigit():
+                            participant_id_int = int(participant_id)
+                            matching_participant = participantsCollection.find({'idParticipant': participant_id_int})
+                            for participant in matching_participant:
+                                participants_list.append({
+                                    'name': participant.get('name'),
+                                    'surname': participant.get('surname'),
+                                    'age': participant.get('age'),
+                                    'nationality': participant.get('nationality')
+                                })
+                        else:
+                            print(f"Invalid participant_id found: {participant_id}")
+                return jsonify(participants_list), 200
+            else:
+                return jsonify({'error': 'Movie not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# ---------------------------------------------------------
+
+    @staticmethod
     def getMovieByTitle(db: Collection):
         title = request.args.get('title')
         if title:
