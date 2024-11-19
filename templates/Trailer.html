@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prueba</title>
+    <title>Tráileres</title>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-center mt-5 mb-5"> APP API-REST Python - Flask - MongoDB </h1>
+        <h1 class="text-center mt-5 mb-5"> Gestión de tráileres </h1>
+        <p><a href="/">Volver al menú de gestión</a></p>
     </div>
     <div class="container">
         <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
@@ -21,7 +22,7 @@
                 </div>
 
                 <div class="card">
-                    <h5 class="text-center">Añadir tráiler</h5>
+                    <h3 class="text-center">Añadir tráiler</h3>
                     <div class="card-body">
                         <form action="/trailers/addTrailer" method="POST">
                             <label>¿Cuál es el título del tráiler?</label>
@@ -32,22 +33,22 @@
                             <br></br>
                             <label>¿Cuál es la URL del tráiler?</label>
                             <input type="url" class="form-control mb-3" name="urlVideo (Opcional)">
-                            <br></br>
-                            <label>¿Para qué idiomas está disponible?</label>
+
+                            <p>¿Para qué idiomas está disponible?</p>
                             <input type="number" name="language[]" placeholder="idLanguage 1 (Opcional)"><br>
                             <input type="number" name="language[]" placeholder="idLanguage 2 (Opcional)"><br>
                             <input type="number" name="language[]" placeholder="idLanguage 3 (Opcional)"><br>
-                            <br></br>
-                            <label>¿Qué categorías tiene asociadas?</label>
+
+                            <p>¿Qué categorías tiene asociadas?</p>
                             <input type="number" name="category[]" placeholder="idCategory 1 (Opcional)" ><br>
                             <input type="number" name="category[]" placeholder="idCategory 2 (Opcional)"><br>
-                            <br></br>
-                            <label>¿Qué personajes principales forman parte del tráiler?</label>
+
+                            <p>¿Qué personajes principales forman parte del tráiler?</p>
                             <input type="number" name="character[]" placeholder="idCharacter 1 (Opcional)"><br>
                             <input type="number" name="character[]" placeholder="idCharacter 2 (Opcional)"><br>
                             <input type="number" name="character[]" placeholder="idCharacter 3 (Opcional)"><br>
-                            <br></br>
-                            <label>¿Quiénes son sus intérpretes?</label>
+
+                            <p>¿Quiénes son sus intérpretes?</p>
                             <input type="number" name="participant[]" placeholder="idParticipant 1 (Opcional)"><br>
                             <input type="number" name="participant[]" placeholder="idParticipant 2 (Opcional)"><br>
                             <input type="number" name="participant[]" placeholder="idParticipant 3 (Opcional)"><br>
@@ -58,7 +59,7 @@
                 </div>
 
                 <div class="card">
-                    <h5 class="text-center">Eliminar tráiler</h5>
+                    <h3 class="text-center">Eliminar tráiler</h3>
                     <div class="card-body">
                         <form action="/trailers/deleteTrailer" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
@@ -70,7 +71,7 @@
                 </div>
 
                 <div class="card">
-                    <h5 class="text-center">Modificar tráiler</h5>
+                    <h3 class="text-center">Modificar tráiler</h3>
                     <div class="card-body">
                         <form action="/trailers/updateTrailer" method="POST">
                             <input type="hidden" name="_method" value="PUT">
@@ -85,22 +86,22 @@
                             <br></br>
                             <label>¿Cuál es la URL del tráiler?</label>
                             <input type="url" class="form-control mb-3" name="urlVideo">
-                            <br></br>
-                            <label>¿Para qué idiomas está disponible?</label>
+
+                            <p>¿Para qué idiomas está disponible?</p>
                             <input type="number" name="language[]" placeholder="idLanguage 1"><br>
                             <input type="number" name="language[]" placeholder="idLanguage 2"><br>
                             <input type="number" name="language[]" placeholder="idLanguage 3"><br>
-                            <br></br>
-                            <label>¿Qué categorías tiene asociadas?</label>
+
+                            <p>¿Qué categorías tiene asociadas?</p>
                             <input type="number" name="category[]" placeholder="idCategory 1" ><br>
                             <input type="number" name="category[]" placeholder="idCategory 2"><br>
-                            <br></br>
-                            <label>¿Qué personajes principales forman parte del tráiler?</label>
+
+                            <p>¿Qué personajes principales forman parte del tráiler?</p>
                             <input type="number" name="character[]" placeholder="idCharacter 1"><br>
                             <input type="number" name="character[]" placeholder="idCharacter 2"><br>
                             <input type="number" name="character[]" placeholder="idCharacter 3"><br>
-                            <br></br>
-                            <label>¿Quiénes son sus intérpretes?</label>
+
+                            <p>¿Quiénes son sus intérpretes?</p>
                             <input type="number" name="participant[]" placeholder="idParticipant 1"><br>
                             <input type="number" name="participant[]" placeholder="idParticipant 2"><br>
                             <input type="number" name="participant[]" placeholder="idParticipant 3"><br>

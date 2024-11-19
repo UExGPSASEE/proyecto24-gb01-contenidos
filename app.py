@@ -66,9 +66,9 @@ def deleteTrailer():
 def putTrailer():
     return TrailerCtrl.put_trailer(db['trailers'])
 
-# @app.route('/trailers/trailerFound', methods=['GET'])
-# def getTrailerById():
-#     return TrailerCtrl.getTrailerById(db['trailers'])
+@app.route('/trailers/trailerFound', methods=['GET'])
+def getTrailerById():
+    return TrailerCtrl.getTrailerById(db['trailers'])
 
 # -------------------------------------------------------------------------------------------------------
 @app.route('/chapters')
