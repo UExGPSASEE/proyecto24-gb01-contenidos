@@ -100,6 +100,41 @@ class SeriesCtrl:
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
+# --------------------------------------------------------------
+
+    @staticmethod
+    def getSeriesById(db: Collection):
+        idSeries = int(request.args.get('idSeries'))
+        if idSeries:
+            matching_series = db.find({'idSeries': idSeries})
+            if matching_series:
+                seriesFound = [
+                {
+                    'idSeries' : series.get('idSeries'),
+                    'title' : series.get('title'),
+                    'duration' : series.get('duration'),
+                    'urlTitlePage' : series.get('urlTitlePage'),
+                    'releaseDate' : series.get('releaseDate'),
+                    'synopsis' : series.get('synopsis'),
+                    'description' : series.get('description'),
+                    'isSuscription' : series.get('isSuscription'), # OJO
+                    'seasons': series.get('seasons'),
+                    'language' : series.get('language'),
+                    'category' : series.get('category'),
+                    'character' : series.get('character'),
+                    'participant' : series.get('participant'),
+                    'trailer' : series.get('trailer')
+                }
+                for series in matching_series
+                ]
+                return jsonify(seriesFound), 200
+            else:
+                return jsonify({'error': 'Series not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# --------------------------------------------------------------
+
     @staticmethod
     def delete_series(db: Collection):
         if request.form.get('_method') == 'DELETE':
@@ -112,6 +147,8 @@ class SeriesCtrl:
                 return redirect(url_for('series'))
         else:
             return redirect(url_for('series'))
+
+# --------------------------------------------------------------
 
     @staticmethod
     def put_series(db: Collection):
