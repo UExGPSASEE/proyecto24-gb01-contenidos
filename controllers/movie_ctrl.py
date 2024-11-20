@@ -134,7 +134,7 @@ class MovieCtrl:
     def getMovieByTitle(db: Collection):
         title = request.args.get('title')
         if title:
-            matching_movie = db.find({'title': title})
+            matching_movie = db.find({'title': {'$regex': title, '$options': 'i'}})
             if matching_movie:
                 movieFound = [
                 {

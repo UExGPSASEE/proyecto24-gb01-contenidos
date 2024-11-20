@@ -73,7 +73,7 @@ class SeriesCtrl:
     def getSeriesByTitle(db: Collection):
         title = request.args.get('title')
         if title:
-            matching_series = db.find({'title': title})
+            matching_series = db.find({'title': {'$regex': title, '$options': 'i'}})
             if matching_series:
                 seriesFound = [
                 {
