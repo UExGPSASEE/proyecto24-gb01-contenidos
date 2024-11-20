@@ -117,7 +117,7 @@ class SeriesCtrl:
                     'releaseDate' : series.get('releaseDate'),
                     'synopsis' : series.get('synopsis'),
                     'description' : series.get('description'),
-                    'isSuscription' : series.get('isSuscription'), # OJO
+                    'isSuscription' : series.get('isSuscription'),
                     'seasons': series.get('seasons'),
                     'language' : series.get('language'),
                     'category' : series.get('category'),
@@ -128,6 +128,66 @@ class SeriesCtrl:
                 for series in matching_series
                 ]
                 return jsonify(seriesFound), 200
+            else:
+                return jsonify({'error': 'Series not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# --------------------------------------------------------------
+
+    @staticmethod
+    def getSeriesCharacters(seriesCollection, characterCollection):
+        idSeries = int(request.args.get('idSeries'))
+        if idSeries:
+            matching_series = seriesCollection.find({'idSeries': idSeries})
+            if matching_series:
+                characters_list = []
+                for series in matching_series:
+                    character_ids = series.get('character', [])
+                    for character_id in character_ids:
+                        if character_id and character_id.strip().isdigit():
+                            character_id_int = int(character_id)
+                            matching_character = characterCollection.find({'idCharacter': character_id_int})
+                            for character in matching_character:
+                                characters_list.append({
+                                    'idCharacter': character.get('idCharacter'),
+                                    'name': character.get('name'),
+                                    'participant': character.get('participant'),
+                                    'age': character.get('age')
+                                })
+                        else:
+                            print(f"Invalid character_id found: {character_id}")
+                return jsonify(characters_list), 200
+            else:
+                return jsonify({'error': 'Series not found', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# --------------------------------------------------------------
+
+    @staticmethod
+    def getSeriesParticipants(seriesCollection, participantsCollection):
+        idSeries = int(request.args.get('idSeries'))
+        if idSeries:
+            matching_series = seriesCollection.find({'idSeries': idSeries})
+            if matching_series:
+                participants_list = []
+                for series in matching_series:
+                    participants_ids = series.get('participant', [])
+                    for participant_id in participants_ids:
+                        if participant_id and participant_id.strip().isdigit():
+                            participant_id_int = int(participant_id)
+                            matching_participant = participantsCollection.find({'idParticipant': participant_id_int})
+                            for participant in matching_participant:
+                                participants_list.append({
+                                    'name': participant.get('name'),
+                                    'surname': participant.get('surname'),
+                                    'age': participant.get('age'),
+                                    'nationality': participant.get('nationality')
+                                })
+                        else:
+                            print(f"Invalid participant_id found: {participant_id}")
+                return jsonify(participants_list), 200
             else:
                 return jsonify({'error': 'Series not found', 'status': '404 Not Found'}), 404
         else:
