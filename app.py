@@ -226,6 +226,14 @@ def getSeriesByTitle():
 def getSeriesById():
     return SeriesCtrl.getSeriesById(db['series'])
 
+@app.route('/series/characters', methods=['GET'])
+def getSeriesCharacters():
+    return SeriesCtrl.getSeriesCharacters(db['series'], db['characters'])
+
+@app.route('/series/participants', methods=['GET'])
+def getSeriesParticipants():
+    return SeriesCtrl.getSeriesParticipants(db['series'], db['participants'])
+
 @app.route('/series/deleteSeries', methods=['POST'])
 def deleteSeries():
     return SeriesCtrl.delete_series(db['series'])
