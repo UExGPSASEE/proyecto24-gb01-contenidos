@@ -121,6 +121,14 @@ def deleteSeason():
 def getSeasonById():
     return SeasonCtrl.getSeasonById(db['seasons'])
 
+@app.route('/seasons/characters', methods=['GET'])
+def getSeasonCharacters():
+    return SeasonCtrl.getSeasonCharacters(db['seasons'], db['characters'])
+
+@app.route('/seasons/participants', methods=['GET'])
+def getSeasonParticipants():
+    return SeasonCtrl.getSeasonParticipants(db['seasons'], db['participants'])
+
 # -------------------------------------------------------------------------------------------------------
 
 @app.route('/categories')

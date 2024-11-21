@@ -61,11 +61,33 @@
                 </div>
 
                 <div class="card">
+                    <h3 class="text-center">Obtener personajes de una temporada</h3>
+                    <div class="card-body">
+                        <form action="/seasons/characters" method="GET">
+                            <span>ID</span>
+                            <input type="text" min=1 class="form-control mb-3" name="idSeason" required placeholder="idSeason 1">
+                            <button class="btn btn-primary" type="submit">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-center">Obtener participantes de una temporada</h3>
+                    <div class="card-body">
+                        <form action="/seasons/participants" method="GET">
+                            <span>ID</span>
+                            <input type="text" min=1 class="form-control mb-3" name="idSeason" required placeholder="idSeason 1">
+                            <button class="btn btn-primary" type="submit">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
                     <h3 class="text-center">Modificar temporada</h3>
                     <div class="card-body">
                         <form action="/seasons/updateSeason" method="POST">
                             <input type="hidden" name="_method" value="PUT">
-
+                            <label>ID</label>
                             <p>Nota: Los parámetros con * son obligatorios</p>
 
                             <span>ID*</span>
@@ -101,6 +123,7 @@
                         </form>
                     </div>
                 </div>
+
 
                 <div class="card">
                     <h3 class="text-center">Eliminar temporada</h3>
