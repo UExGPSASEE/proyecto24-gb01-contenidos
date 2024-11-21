@@ -14,115 +14,125 @@
         <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
             <div class="col-md-6 mb-3">
                 <div class="card">
+
+                    <div class="card-header">
+                        <h3 class="text-center">Obtener participante por identificador</h3>
+                        <form action="/participants/getParticipantById" method="GET">
+                            <p>¿Qué participante deseas buscar?</p>
+                            <span>ID</span>
+                            <input type="number" min=1 class="form-control mb-3" name="idParticipant" required placeholder="idParticipant 1">
+                            <button class="btn btn-primary" type="submit"> Buscar </button>
+                        </form>
+                    </div>
+
                     <div class="card-header">
                         <h3 class="text-center">Añadir participante</h3>
-                    </div>
-                    <div class="card-body">
                         <form action="/participants/addParticipant" method="POST">
-                            <label>Nombre</label>
-                            <input type="text" class="form-control mb-3" name="name" required>
-                            <label>Apellidos</label>
-                            <input type="text" class="form-control mb-3" name="surname" required>
-                            <label>Edad</label>
-                            <input type="number" min=0 class="form-control mb-3" name="age" required>
-                            <label>Nacionalidad</label>
-                            <input type="text" class="form-control mb-3" name="nationality">
+
+                            <p>Nota: Los parámetros con * son obligatorios</p>
+
+                            <span>Nombre*</span>
+                            <input type="text" class="form-control mb-3" name="name" required><br>
+                            <br>
+
+                            <span>Apellidos</span>
+                            <input type="text" class="form-control mb-3" name="surname"><br>
+                            <br>
+
+                            <span>Edad*</span>
+                            <input type="number" min=0 class="form-control mb-3" name="age" required><br>
+                            <br>
+
+                            <span>Nacionalidad</span>
+                            <input type="text" class="form-control mb-3" name="nationality" placeholder="España"><br>
+                            <br>
+
                             <button class="btn btn-primary" type="submit"> Guardar </button>
                         </form>
                     </div>
 
                     <div class="card-header">
-                        <h3 class="text-center">Obtener participantes por nombre</h3>
-                    </div>
-                    <div class="card-body">
-                        <form action="/participants/getParticipantByName" method="GET">
-                            <label>Nombre</label>
-                            <input type="text" class="form-control mb-3" name="name">
-                            <button class="btn btn-primary" type="submit"> Buscar </button>
-                        </form>
-                    </div>
-
-                    <div class="card-header">
-                        <h3 class="text-center">Obtener participantes por apellidos</h3>
-                    </div>
-                    <div class="card-body">
-                        <form action="/participants/getParticipantBySurname" method="GET">
-                            <label>Apellidos</label>
-                            <input type="text" class="form-control mb-3" name="surname">
-                            <button class="btn btn-primary" type="submit"> Buscar </button>
-                        </form>
-                    </div>
-
-                    <div class="card-header">
-                        <h3 class="text-center">Obtener participantes por edad</h3>
-                    </div>
-                    <div class="card-body">
-                        <form action="/participants/getParticipantByAge" method="GET">
-                            <label>Edad</label>
-                            <input type="text" class="form-control mb-3" name="age">
-                            <button class="btn btn-primary" type="submit"> Buscar </button>
-                        </form>
-                    </div>
-
-                    <div class="card-header">
-                        <h3 class="text-center">Obtener participantes por nacionalidad</h3>
-                    </div>
-                    <div class="card-body">
-                        <form action="/participants/getParticipantByNationality" method="GET">
-                            <label>Nacionalidad</label>
-                            <input type="text" class="form-control mb-3" name="nationality">
-                            <button class="btn btn-primary" type="submit"> Buscar </button>
-                        </form>
-                    </div>
-
-                    <div class="card-header">
                         <h3 class="text-center">Obtener todos los participantes</h3>
-                    </div>
-                    <div class="card-body">
                         <form action="/participants/getAllParticipants" method="GET">
                             <button class="btn btn-primary" type="submit"> Buscar </button>
                         </form>
                     </div>
 
                     <div class="card-header">
-                        <h3 class="text-center">Obtener participante por identificador (único)</h3>
+                        <h3 class="text-center">Obtener participantes por nombre</h3>
+                        <form action="/participants/getParticipantByName" method="GET">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control mb-3" name="name" required>
+                            <button class="btn btn-primary" type="submit"> Buscar </button>
+                        </form>
                     </div>
-                    <div class="card-body">
-                        <form action="/participants/getParticipantById" method="GET">
-                            <label>Identificador</label>
-                            <input type="number" min=0 class="form-control mb-3" name="idParticipant" required>
+
+                    <div class="card-header">
+                        <h3 class="text-center">Obtener participantes por apellidos</h3>
+                        <form action="/participants/getParticipantBySurname" method="GET">
+                            <label>Apellidos</label>
+                            <input type="text" class="form-control mb-3" name="surname" required>
+                            <button class="btn btn-primary" type="submit"> Buscar </button>
+                        </form>
+                    </div>
+
+                    <div class="card-header">
+                        <h3 class="text-center">Obtener participantes por edad</h3>
+                        <form action="/participants/getParticipantByAge" method="GET">
+                            <label>Edad</label>
+                            <input type="number" class="form-control mb-3" min=0 name="age" required>
+                            <button class="btn btn-primary" type="submit"> Buscar </button>
+                        </form>
+                    </div>
+
+                    <div class="card-header">
+                        <h3 class="text-center">Obtener participantes por nacionalidad</h3>
+                        <form action="/participants/getParticipantByNationality" method="GET">
+                            <label>Nacionalidad</label>
+                            <input type="text" class="form-control mb-3" name="nationality" required>
                             <button class="btn btn-primary" type="submit"> Buscar </button>
                         </form>
                     </div>
 
                     <div class="card-header">
                         <h3 class="text-center">Modificar participante</h3>
-                    </div>
-                    <div class="card-body">
                         <form action="/participants/updateParticipant" method="POST">
+
                             <input type="hidden" name="_method" value="PUT">
-                            <label>Identificador</label>
-                            <input type="number" class="form-control mb-3" name="idParticipant" required>
-                            <label>Nombre</label>
-                            <input type="text" class="form-control mb-3" name="name">
-                            <label>Apellidos</label>
-                            <input type="text" class="form-control mb-3" name="surname">
-                            <label>Edad</label>
-                            <input type="number" min=0 class="form-control mb-3" name="age">
-                            <label>Nacionalidad</label>
-                            <input type="text" class="form-control mb-3" name="nationality">
+
+                            <p>Nota: Los parámetros con * son obligatorios</p>
+
+                            <span>Identificador*</span>
+                            <input type="number" min=1 class="form-control mb-3" name="idParticipant" required placeholder="idParticipant 1"><br>
+                            <br>
+
+                            <span>Nombre</span>
+                            <input type="text" class="form-control mb-3" name="name"><br>
+                            <br>
+
+                            <span>Apellidos</span>
+                            <input type="text" class="form-control mb-3" name="surname"><br>
+                            <br>
+
+                            <span>Edad</span>
+                            <input type="number" min=0 class="form-control mb-3" name="age"><br>
+                            <br>
+
+                            <span>Nacionalidad</span>
+                            <input type="text" class="form-control mb-3" name="nationality" placeholder="España"><br>
+                            <br>
+
                             <button class="btn btn-primary" type="submit"> Guardar </button>
                         </form>
                     </div>
 
                     <div class="card-header">
                         <h3 class="text-center">Borrar participante</h3>
-                    </div>
-                    <div class="card-body">
                         <form action="/participants/deleteParticipant" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
-                            <label>Identificador</label>
-                            <input type="number" min=0 class="form-control mb-3" name="idParticipant" required>
+
+                            <span>Identificador</span>
+                            <input type="number" min=1 class="form-control mb-3" name="idParticipant" required placeholder="idParticipant 1">
                             <button class="btn btn-primary" type="submit"> Borrar </button>
                         </form>
                     </div>

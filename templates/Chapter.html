@@ -13,72 +13,89 @@
     <div class="container">
         <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
             <div class="col-md-6 mb-3">
+
                 <div class="card-body">
+                    <h3 class="text-center">Obtener capítulo por identificador</h3>
                     <form action="/chapters/chapterFound" method="GET">
-                        <label>¿Qué capítulo deseas buscar?</label>
-                        <input type="number" class="form-control mb-3" name="idChapter" required>
+                        <p>¿Qué capítulo deseas buscar?</p>
+                        <span>ID</span>
+                        <input type="number" class="form-control mb-3" name="idChapter" required placeholder="idChapter 1">
                         <button class="btn btn-primary" type="submit"> Buscar </button>
                     </form>
                 </div>
 
                 <div class="card">
-                    <h5 class="text-center">Añadir capítulo</h5>
+                    <h3 class="text-center">Añadir capítulo</h3>
                     <div class="card-body">
                         <form action="/chapters/addChapter" method="POST">
-                            <label>¿Cuál es el título del capítulo?</label>
+
+                            <p>Nota: Los parámetros con * son obligatorios</p>
+
+                            <span>¿Cuál es el título del capítulo?*</span>
                             <input type="text" class="form-control mb-3" name="title" required>
                             <br></br>
-                            <label>¿Cuál es el número del capítulo en la temporada?</label>
+
+                            <label>¿Cuál es el número del capítulo en la temporada?*</label>
                             <input type="number" class="form-control mb-3" name="chapterNumber" required>
                             <br></br>
-                            <label>¿Cuál es la duración (en minutos) del capítulo?</label>
-                            <input type="number" class="form-control mb-3" name="duration" required>
+
+                            <label>¿Cuál es la duración (en minutos) del capítulo?*</label>
+                            <input type="number" min=0 class="form-control mb-3" name="duration" required>
                             <br></br>
+
                             <label>¿Cuál es la URL del capítulo?</label>
                             <input type="url" class="form-control mb-3" name="urlVideo">
                             <br></br>
+
                             <button class="btn btn-primary" type="submit"> Añadir </button>
                         </form>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h5 class="text-center">Eliminar capítulo</h5>
-                    <div class="card-body">
-                        <form action="/chapters/deleteChapter" method="POST">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="idChapter" required>
-                            <button class="btn btn-primary" type="submit">Eliminar</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h5 class="text-center">Modificar capítulo</h5>
+                    <h3 class="text-center">Modificar capítulo</h3>
                     <div class="card-body">
                         <form action="/chapters/updateChapter" method="POST">
                             <input type="hidden" name="_method" value="PUT">
-                            <label>ID</label>
-                            <input type="text" class="form-control mb-3" required name="idChapter">
+
+                            <p>Nota: Los parámetros con * son obligatorios</p>
+
+                            <label>ID*</label>
+                            <input type="number" min=1 class="form-control mb-3" required name="idChapter" placeholder="idChapter 1">
                             <br></br>
+
                             <label>¿Cuál es el título del capítulo?</label>
                             <input type="text" class="form-control mb-3" name="title">
                             <br></br>
-                            <label>¿Cuál es la duración (en minutos) del capítulo?</label>
-                            <input type="number" class="form-control mb-3" name="duration">
-                            <br></br>
-                            <label>¿Cuál es la URL del capítulo?</label>
-                            <input type="url" class="form-control mb-3" name="urlVideo">
-                            <br></br>
+
                             <label>¿Cuál es el número del capítulo en la temporada?</label>
                             <input type="number" class="form-control mb-3" name="chapterNumber">
                             <br></br>
+
+                            <label>¿Cuál es la duración (en minutos) del capítulo?</label>
+                            <input type="number" min=0 class="form-control mb-3" name="duration">
+                            <br></br>
+
+                            <label>¿Cuál es la URL del capítulo?</label>
+                            <input type="url" class="form-control mb-3" name="urlVideo">
+                            <br></br>
+
                             <button class="btn btn-primary" type="submit">Modificar</button>
                         </form>
                     </div>
                 </div>
 
+                <div class="card">
+                    <h3 class="text-center">Eliminar capítulo</h3>
+                    <div class="card-body">
+                        <form action="/chapters/deleteChapter" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <label>ID</label>
+                            <input type="number" min=1 class="form-control mb-3" name="idChapter" required placeholder="idChapter 1">
+                            <button class="btn btn-primary" type="submit">Eliminar</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -21,21 +21,21 @@ class CategoryCtrl:
             db.insert_one(category.toDBCollection())
             return redirect(url_for('categories'))
         else:
-            return jsonify({'error': 'Category not found or not added', 'status':'404 Not Found'}), 404
+            return jsonify({'error': 'Categoría no insertada', 'status':'404 Not Found'}), 404
 
 # ---------------------------------------------------------
 
     @staticmethod
     def getAllCategories(db: Collection):
         allCategories = db.find()
-        category_list = [
+        categoryList = [
             {
                 'idCategory' : category.get('idCategory'),
                 'name' : category.get('name')
             }
             for category in allCategories
         ]
-        return jsonify(category_list), 200
+        return jsonify(categoryList), 200
 
 # ---------------------------------------------------------
 
@@ -43,17 +43,17 @@ class CategoryCtrl:
     def getCategoryById(db: Collection):
         idCategory = int(request.args.get('idCategory'))
         if idCategory:
-            matching_category = db.find({'idCategory': idCategory})
-            if matching_category:
+            matchingCategory = db.find({'idCategory': idCategory})
+            if matchingCategory:
                 categoryFound = [
                 {
                     'idCategory' : category.get('idCategory'),
                     'name' : category.get('name')
                 }
-                for category in matching_category
+                for category in matchingCategory
                 ]
                 return jsonify(categoryFound), 200
             else:
-                return jsonify({'error': 'Category not found', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Categoría no encontrada', 'status': '404 Not Found'}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
