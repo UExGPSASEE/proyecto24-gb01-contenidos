@@ -24,7 +24,7 @@ class CharacterCtrl:
 
             return redirect(url_for('characters'))
         else:
-            return jsonify({'error': 'Character not found or not added', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Personaje no añadido', 'status': '404 Not Found'}), 404
 
     # ---------------------------------------------------------
 
@@ -32,19 +32,20 @@ class CharacterCtrl:
     def getCharacterByName(db: Collection):
         name = request.args.get('name')
         if name:
-            matching_characters = db.find({'name': name})
-            characters_list = [
+            matchingCharacters = db.find({'name': {'$regex': name, '$options': 'i'}})
+            charactersList = [
                 {
+                    'idCharacter': character.get('idCharacter'),
                     'name': character.get('name'),
                     'participant': character.get('participant'),
                     'age': character.get('age')
                 }
-                for character in matching_characters
+                for character in matchingCharacters
             ]
 
-            return jsonify(characters_list), 200
+            return jsonify(charactersList), 200
         else:
-            return jsonify({'error': 'Nombre no proporcionado'}), 400
+            return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
 
 
     @staticmethod
@@ -52,45 +53,47 @@ class CharacterCtrl:
         age = int(request.args.get('age'))
 
         if age:
-            matching_characters = db.find({'age': age})
+            matchingCharacters = db.find({'age': age})
 
-            characters_list = [
-                {
-                    'name': character.get('name'),
-                    'participant': character.get('participant'),
-                    'age': character.get('age')
-                }
-                for character in matching_characters
-            ]
-
-            return jsonify(characters_list), 200
-        else:
-            return jsonify({'error': 'Edad no proporcionada'}), 400
-
-    @staticmethod
-    def getCharacterById(db: Collection):
-        idCharacter = request.args.get('idCharacter')
-        if idCharacter:
-            idCharacter = int(idCharacter)
-            matching_character = db.find({'idCharacter': idCharacter})
-            characters_list = [
+            charactersList = [
                 {
                     'idCharacter': character.get('idCharacter'),
                     'name': character.get('name'),
                     'participant': character.get('participant'),
                     'age': character.get('age')
                 }
-                for character in matching_character
+                for character in matchingCharacters
             ]
-            return jsonify(characters_list), 200
+
+            return jsonify(charactersList), 200
         else:
-            return jsonify({'error': 'idCharacter no proporcionado'}), 400
+            return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def getCharacterById(db: Collection):
+        idCharacter = request.args.get('idCharacter')
+        if idCharacter:
+            idCharacter = int(idCharacter)
+            matchingCharacter = db.find({'idCharacter': idCharacter})
+            charactersList = [
+                {
+                    'idCharacter': character.get('idCharacter'),
+                    'name': character.get('name'),
+                    'participant': character.get('participant'),
+                    'age': character.get('age')
+                }
+                for character in matchingCharacter
+            ]
+            return jsonify(charactersList), 200
+
+        else:
+            return jsonify({'error': 'idCharacter no proporcionado', 'status': '400 Bad Request'}), 400
 
 
     @staticmethod
     def getAllCharacters(db: Collection):
         allCharacters = db.find()
-        characters_list = [
+        charactersList = [
             {
                 'idCharacter': character.get('idCharacter'),
                 'name': character.get('name'),
@@ -99,7 +102,7 @@ class CharacterCtrl:
             }
             for character in allCharacters
         ]
-        return jsonify(characters_list), 200
+        return jsonify(charactersList), 200
 
     # ---------------------------------------------------------
 
@@ -134,16 +137,16 @@ class CharacterCtrl:
 
             filter = {'idCharacter': idCharacter}
 
-            update_fields = {}
+            updateFields = {}
 
             if name:
-                update_fields['name'] = name
+                updateFields['name'] = name
             if participant:
-                update_fields['participant'] = participant
+                updateFields['participant'] = participant
             if age:
-                update_fields['age'] = age
+                updateFields['age'] = age
 
-            change = {'$set': update_fields}
+            change = {'$set': updateFields}
 
             result = db.update_one(filter, change)
             if result.matched_count == 0:

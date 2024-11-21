@@ -14,7 +14,7 @@ class TrailerCtrl:
     @staticmethod
     def addTrailer(db: Collection):
         idTrailer = get_next_sequence_value(db,"idTrailer")
-        trailerTitle = request.form.get('title')
+        title = request.form.get('title')
         duration = request.form.get('duration')
         urlVideo = request.form.get('urlVideo')
         language = request.form.getlist('language[]')
@@ -22,11 +22,11 @@ class TrailerCtrl:
         character = request.form.getlist('character[]')
         participant = request.form.getlist('participant[]')
         if idTrailer:
-            trailer = Trailer(idTrailer, trailerTitle, duration, urlVideo, language, category, character, participant)
+            trailer = Trailer(idTrailer, title, duration, urlVideo, language, category, character, participant)
             db.insert_one(trailer.toDBCollection())
             return redirect(url_for('trailers'))
         else:
-            return jsonify({'error': 'Trailer not found or not added', 'status':'404 Not Found'}), 404
+            return jsonify({'error': 'Tráiler no añadido', 'status':'404 Not Found'}), 404
 
 # ---------------------------------------------------------
 
@@ -34,8 +34,8 @@ class TrailerCtrl:
     def getTrailerById(db: Collection):
         idTrailer = int(request.args.get('idTrailer'))
         if idTrailer:
-            matching_trailer = db.find({'idTrailer': idTrailer})
-            if matching_trailer:
+            matchingTrailer = db.find({'idTrailer': idTrailer})
+            if matchingTrailer:
                 trailerFound = [
                 {
                     'idTrailer' : trailer.get('idTrailer'),
@@ -47,13 +47,13 @@ class TrailerCtrl:
                     'character' : trailer.get('character'),
                     'participant' : trailer.get('participant'),
                 }
-                for trailer in matching_trailer
+                for trailer in matchingTrailer
                 ]
                 return jsonify(trailerFound), 200
             else:
-                return jsonify({'error': 'Trailer not found', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Tráiler no encontrado', 'status': '404 Not Found'}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
 # ---------------------------------------------------------
 
@@ -87,28 +87,28 @@ class TrailerCtrl:
             participant = request.form.getlist('participant[]')
 
             if not idTrailer:
-                return jsonify({'error': 'ID de tráiler requerido', 'status': '400 Bad Request'}), 400
+                return jsonify({'error': 'Identificador de tráiler requerido', 'status': '400 Bad Request'}), 400
 
             filter = {'idTrailer': idTrailer}
 
-            update_fields = {}
+            updateFields = {}
 
             if trailerTitle:
-                update_fields['title'] = trailerTitle
+                updateFields['title'] = trailerTitle
             if duration:
-                update_fields['duration'] = int(duration)  # Convertir a entero si aplica
+                updateFields['duration'] = int(duration)
             if urlVideo:
-                update_fields['urlVideo'] = urlVideo
+                updateFields['urlVideo'] = urlVideo
             if language:
-                update_fields['language'] = language
+                updateFields['language'] = language
             if category:
-                update_fields['category'] = category
+                updateFields['category'] = category
             if character:
-                update_fields['character'] = character
+                updateFields['character'] = character
             if participant:
-                update_fields['participant'] = participant
+                updateFields['participant'] = participant
 
-            change = {'$set': update_fields}
+            change = {'$set': updateFields}
 
             result = db.update_one(filter, change)
             if result.matched_count == 0:
@@ -116,7 +116,6 @@ class TrailerCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'El tráiler ya está actualizado', 'status': '200 OK'}), 200
 
-            # Redirigir a la lista de tráileres
             return redirect(url_for('trailers'))
 
         except ValueError:

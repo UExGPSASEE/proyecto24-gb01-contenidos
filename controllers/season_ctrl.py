@@ -30,7 +30,7 @@ class SeasonCtrl:
             db.insert_one(season.toDBCollection())
             return redirect(url_for('seasons'))
         else:
-            return jsonify({'error': 'Season not added', 'status':'404 Not Found'}), 404
+            return jsonify({'error': 'Temporada no añadida', 'status':'404 Not Found'}), 404
 
 # ---------------------------------------------------------
     @staticmethod
@@ -64,30 +64,30 @@ class SeasonCtrl:
             trailer = request.form.get('trailer')
 
             if not idSeason:
-                return jsonify({'error': 'ID de temporada requerido', 'status': '400 Bad Request'}), 400
+                return jsonify({'error': 'Identificador de temporada requerido', 'status': '400 Bad Request'}), 400
 
             filter = {'idSeason': idSeason}
 
-            update_fields = {}
+            updateFields = {}
 
             if idSeries:
-                update_fields['idSeries'] = int(idSeries)
+                updateFields['idSeries'] = int(idSeries)
             if title:
-                update_fields['title'] = title
+                updateFields['title'] = title
             if seasonNumber:
-                update_fields['seasonNumber'] = int(seasonNumber)
+                updateFields['seasonNumber'] = int(seasonNumber)
             if totalChapters:
-                update_fields['totalChapters'] = int(totalChapters)
+                updateFields['totalChapters'] = int(totalChapters)
             if chapterList:
-                update_fields['chapterList'] = chapterList
+                updateFields['chapterList'] = chapterList
             if character:
-                update_fields['character'] = character
+                updateFields['character'] = character
             if participant:
-                update_fields['participant'] = participant
+                updateFields['participant'] = participant
             if trailer:
-                update_fields['trailer'] = trailer
+                updateFields['trailer'] = trailer
 
-            change = {'$set': update_fields}
+            change = {'$set': updateFields}
 
             result = db.update_one(filter, change)
             if result.matched_count == 0:
@@ -111,8 +111,8 @@ class SeasonCtrl:
     def getSeasonById(db: Collection):
         idSeason = int(request.args.get('idSeason'))
         if idSeason:
-            matching_season = db.find({'idSeason': idSeason})
-            if matching_season:
+            matchingSeason = db.find({'idSeason': idSeason})
+            if matchingSeason:
                 seasonFound = [
                 {
                     'idSeason' : season.get('idSeason'),
@@ -125,7 +125,7 @@ class SeasonCtrl:
                     'participant' : season.get('participant'),
                     'trailer' : season.get('trailer')
                 }
-                for season in matching_season
+                for season in matchingSeason
                 ]
                 return jsonify(seasonFound), 200
             else:

@@ -17,7 +17,8 @@
                 <div class="card-body">
                     <h3 class="text-center">Obtener película por identificador</h3>
                     <form action="/movies/movieFound" method="GET">
-                        <label>¿Qué película deseas buscar?</label>
+                        <p>¿Qué película deseas buscar?</p>
+                        <span>ID</span>
                         <input type="number" class="form-control mb-3" name="idMovie" placeholder="idMovie 1" required min="1">
                         <button class="btn btn-primary" type="submit"> Buscar </button>
                     </form>
@@ -27,26 +28,41 @@
                     <h3 class="text-center">Añadir película</h3>
                     <div class="card-body">
                         <form action="/movies/addMovie" method="POST">
-                            <label>¿Cuál es el título de la película?</label>
+
+                            <p>Nota: Los parámetros con * son obligatorios</p>
+
+                            <span>¿Cuál es el título de la película?*</span>
                             <input type="text" class="form-control mb-3" name="title" required>
                             <br></br>
-                            <label>¿Cuál es la duración (en minutos) de la película?</label>
+
+                            <span>¿Cuál es la duración (en minutos) de la película?*</span>
                             <input type="number" class="form-control mb-3" name="duration" required>
                             <br></br>
-                            <label>¿Cuál es la URL de la película?</label>
+
+                            <span>¿Cuál es la URL de la película?</span>
                             <input type="url" class="form-control mb-3" name="urlVideo">
                             <br></br>
-                            <label>¿Cuál es la URL de la portada de la película? (Opcional)</label>
+
+                            <span>¿Cuál es la URL de la portada de la película?</span>
                             <input type="url" class="form-control mb-3" name="urlTitlePage">
                             <br></br>
-                            <label>¿Cuál es la fecha de estreno? (Opcional)</label>
+
+                            <span>¿Cuál es la fecha de estreno?</span>
                             <input type="date" class="form-control mb-3" name="releaseDate">
                             <br></br>
-                            <label>¿Cuál es la sinopsis de la película? (Opcional)</label>
+
+                            <span>¿Cuál es la sinopsis de la película?</span>
                             <input type="text" class="form-control mb-3" name="synopsis">
                             <br></br>
-                            <label>¿Cuál es la descripción de la película? (Opcional)</label>
+
+                            <span>¿Cuál es la descripción de la película?</span>
                             <input type="text" class="form-control mb-3" name="description">
+
+                            <p>¿Disponible con suscripción?</p>
+                            <input type="radio" id="yes" name="isSuscription" value="True">
+                            <label for="yes">Sí</label><br>
+                            <input type="radio" id="no" name="isSuscription" value="False">
+                            <label for="no">No</label><br>
 
                             <p>¿Para qué idiomas está disponible?</p>
                             <input type="number" min=1 name="language[]" placeholder="idLanguage 1"><br>
@@ -66,30 +82,11 @@
                             <input type="number" min=1 name="participant[]" placeholder="idParticipant 1"><br>
                             <input type="number" min=1 name="participant[]" placeholder="idParticipant 2"><br>
                             <input type="number" min=1 name="participant[]" placeholder="idParticipant 3"><br>
-                            <br></br>
+                            <br>
 
-                            <p>¿Para qué idiomas está disponible?</p>
-                            <input type="number" min="1" name="language[]" placeholder="idLanguage 1"><br>
-                            <input type="number" min="1" name="language[]" placeholder="idLanguage 2"><br>
-                            <input type="number" min="1" name="language[]" placeholder="idLanguage 3"><br>
-
-                            <p>¿Qué categorías tiene asociadas?</p>
-                            <input type="number" min="1" name="category[]" placeholder="idCategory 1"><br>
-                            <input type="number" min="1" name="category[]" placeholder="idCategory 2"><br>
-
-                            <p>¿Qué personajes principales forman parte de la película?</p>
-                            <input type="number" min="1" name="character[]" placeholder="idCharacter 1"><br>
-                            <input type="number" min="1" name="character[]" placeholder="idCharacter 2"><br>
-                            <input type="number" min="1" name="character[]" placeholder="idCharacter 3"><br>
-
-                            <p>¿Quiénes son sus intérpretes?</p>
-                            <input type="number" min="1" name="participant[]" placeholder="idParticipant 1"><br>
-                            <input type="number" min="1" name="participant[]" placeholder="idParticipant 2"><br>
-                            <input type="number" min="1" name="participant[]" placeholder="idParticipant 3"><br>
-                            <br></br>
-                            <label>¿Qué tráiler se adjunta?</label>
-                            <input type="number" name="trailer"><br>
-                            <br></br>
+                            <span>¿Qué tráiler se adjunta?</span>
+                            <input type="number" name="trailer" min=1 placeholder="idTrailer 1"><br>
+                            <br>
                             <button class="btn btn-primary" type="submit"> Añadir </button>
                         </form>
                     </div>
@@ -106,7 +103,7 @@
                     <h3 class="text-center">Obtener película por título</h3>
                     <form action="/movies/title" method="GET">
                         <label>Título</label>
-                        <input type="text" class="form-control mb-3" name="title" required>
+                        <input type="text" class="form-control mb-3" name="title" required placeholder="Blade Runner">
                         <button class="btn btn-primary" type="submit"> Buscar </button>
                     </form>
                 </div>
@@ -118,6 +115,80 @@
                         <input type="date" class="form-control mb-3" name="releaseDate" required>
                         <button class="btn btn-primary" type="submit"> Buscar </button>
                     </form>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-center">Modificar película</h3>
+                    <div class="card-body">
+                        <form action="/movies/updateMovie" method="POST">
+
+                            <input type="hidden" name="_method" value="PUT">
+
+                            <p>Nota: Los parámetros con * son obligatorios</p>
+
+                            <span>¿Cuçal es el identificador de la película?*</span>
+                            <input type="text" class="form-control mb-3" name="idMovie" placeholder="idMovie 1" required>
+                            <br></br>
+
+                            <span>¿Cuál es el título de la película?</span>
+                            <input type="text" class="form-control mb-3" name="title">
+                            <br></br>
+
+                            <span>¿Cuál es la duración (en minutos) de la película?</span>
+                            <input type="number" class="form-control mb-3" name="duration">
+                            <br></br>
+
+                            <span>¿Cuál es la URL de la película?</span>
+                            <input type="url" class="form-control mb-3" name="urlVideo">
+                            <br></br>
+
+                            <span>¿Cuál es la URL de la portada de la película?</span>
+                            <input type="url" class="form-control mb-3" name="urlTitlePage">
+                            <br></br>
+
+                            <span>¿Cuál es la fecha de estreno?</span>
+                            <input type="date" class="form-control mb-3" name="releaseDate">
+                            <br></br>
+
+                            <span>¿Cuál es la sinopsis de la película?</span>
+                            <input type="text" class="form-control mb-3" name="synopsis">
+                            <br></br>
+
+                            <span>¿Cuál es la descripción de la película?</span>
+                            <input type="text" class="form-control mb-3" name="description">
+
+                            <p>¿Suscripción necesaria?</p>
+                            <input type="radio" id="yes" name="isSuscription" value="True">
+                            <label for="yes">Sí</label><br>
+                            <input type="radio" id="no" name="isSuscription" value="False">
+                            <label for="no">No</label><br>
+
+                            <p>¿Para qué idiomas está disponible?</p>
+                            <input type="number" min=1 name="language[]" placeholder="idLanguage 1"><br>
+                            <input type="number" min=1 name="language[]" placeholder="idLanguage 2"><br>
+                            <input type="number" min=1 name="language[]" placeholder="idLanguage 3"><br>
+
+                            <p>¿Qué categorías tiene asociadas?</p>
+                            <input type="number" min=1 name="category[]" placeholder="idCategory 1" ><br>
+                            <input type="number" min=1 name="category[]" placeholder="idCategory 2"><br>
+
+                            <p>¿Qué personajes principales forman parte de la película?</p>
+                            <input type="number" min=1 name="character[]" placeholder="idCharacter 1"><br>
+                            <input type="number" min=1 name="character[]" placeholder="idCharacter 2"><br>
+                            <input type="number" min=1 name="character[]" placeholder="idCharacter 3"><br>
+
+                            <p>¿Quiénes son sus intérpretes?</p>
+                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 1"><br>
+                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 2"><br>
+                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 3"><br>
+                            <br>
+
+                            <span>¿Qué tráiler se adjunta?</span>
+                            <input type="number" name="trailer"><br>
+                            <br>
+                            <button class="btn btn-primary" type="submit"> Modificar </button>
+                        </form>
+                    </div>
                 </div>
 
                 <div class="card">
@@ -141,82 +212,6 @@
                         </form>
                     </div>
                 </div>
-
-                <div class="card">
-                    <h3 class="text-center">Modificar película</h3>
-                    <div class="card-body">
-                        <form action="/movies/updateMovie" method="POST">
-                            <input type="hidden" name="_method" value="PUT">
-                            <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="idMovie" placeholder="idMovie 1" required>
-                            <br></br>
-                            <label>¿Cuál es el título de la película?</label>
-                            <input type="text" class="form-control mb-3" name="title">
-                            <br></br>
-                            <label>¿Cuál es la duración (en minutos) de la película?</label>
-                            <input type="number" class="form-control mb-3" name="duration">
-                            <br></br>
-                            <label>¿Cuál es la URL de la película?</label>
-                            <input type="url" class="form-control mb-3" name="urlVideo">
-                            <br></br>
-                            <label>¿Cuál es la URL de la portada de la película?</label>
-                            <input type="url" class="form-control mb-3" name="urlTitlePage">
-                            <br></br>
-                            <label>¿Cuál es la fecha de estreno?</label>
-                            <input type="date" class="form-control mb-3" name="releaseDate">
-                            <br></br>
-                            <label>¿Cuál es la sinopsis de la película?</label>
-                            <input type="text" class="form-control mb-3" name="synopsis">
-                            <br></br>
-                            <label>¿Cuál es la descripción de la película?</label>
-                            <input type="text" class="form-control mb-3" name="description">
-
-                            <p>¿Para qué idiomas está disponible?</p>
-                            <input type="number" min=1 name="language[]" placeholder="idLanguage 1"><br>
-                            <input type="number" min=1 name="language[]" placeholder="idLanguage 2"><br>
-                            <input type="number" min=1 name="language[]" placeholder="idLanguage 3"><br>
-
-                            <p>¿Qué categorías tiene asociadas?</p>
-                            <input type="number" min=1 name="category[]" placeholder="idCategory 1" ><br>
-                            <input type="number" min=1 name="category[]" placeholder="idCategory 2"><br>
-
-                            <p>¿Qué personajes principales forman parte de la película?</p>
-                            <input type="number" min=1 name="character[]" placeholder="idCharacter 1"><br>
-                            <input type="number" min=1 name="character[]" placeholder="idCharacter 2"><br>
-                            <input type="number" min=1 name="character[]" placeholder="idCharacter 3"><br>
-
-                            <p>¿Quiénes son sus intérpretes?</p>
-                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 1"><br>
-                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 2"><br>
-                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 3"><br>
-
-                            <p>¿Para qué idiomas está disponible?</p>
-                            <input type="number" min="1" name="language[]" placeholder="idLanguage 1"><br>
-                            <input type="number" min="1" name="language[]" placeholder="idLanguage 2"><br>
-                            <input type="number" min="1" name="language[]" placeholder="idLanguage 3"><br>
-
-                            <p>¿Qué categorías tiene asociadas?</p>
-                            <input type="number" min="1" name="category[]" placeholder="idCategory 1" ><br>
-                            <input type="number" min="1" name="category[]" placeholder="idCategory 2"><br>
-
-                            <p>¿Qué personajes principales forman parte de la película?</p>
-                            <input type="number" min="1" name="character[]" placeholder="idCharacter 1"><br>
-                            <input type="number" min="1" name="character[]" placeholder="idCharacter 2"><br>
-                            <input type="number" min="1" name="character[]" placeholder="idCharacter 3"><br>
-
-                            <p>¿Quiénes son sus intérpretes?</p>
-                            <input type="number" min="1" name="participant[]" placeholder="idParticipant 1"><br>
-                            <input type="number" min="1" name="participant[]" placeholder="idParticipant 2"><br>
-                            <input type="number" min="1" name="participant[]" placeholder="idParticipant 3"><br>
-                            <br></br>
-                            <label>¿Qué tráiler se adjunta?</label>
-                            <input type="number" name="trailer"><br>
-                            <br></br>
-                            <button class="btn btn-primary" type="submit"> Modificar </button>
-                        </form>
-                    </div>
-                </div>
-
 
                 <div class="card">
                     <h3 class="text-center">Eliminar película</h3>

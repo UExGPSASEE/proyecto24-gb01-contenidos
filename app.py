@@ -203,7 +203,6 @@ def updateCharacter():
 def deleteCharacter():
     return CharacterCtrl.deleteCharacter(db['characters'])
 
-
 @app.route('/characters/getCharacterByName', methods=['GET'])
 def getCharacterByName():
     return CharacterCtrl.getCharacterByName(db['characters'])
