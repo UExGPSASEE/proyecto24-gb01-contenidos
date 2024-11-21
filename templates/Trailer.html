@@ -14,9 +14,11 @@
         <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
             <div class="col-md-6 mb-3">
                 <div class="card-body">
+                    <h3 class="text-center">Obtener tráiler por identificador</h3>
                     <form action="/trailers/trailerFound" method="GET">
-                        <label>¿Qué tráiler deseas buscar?</label>
-                        <input type="number" class="form-control mb-3" name="idTrailer" required>
+                        <p>¿Qué tráiler deseas buscar?</p>
+                        <span>ID</span>
+                        <input type="number" min=1 class="form-control mb-3" name="idTrailer" required placeholder="idTrailer 1">
                         <button class="btn btn-primary" type="submit"> Buscar </button>
                     </form>
                 </div>
@@ -25,47 +27,41 @@
                     <h3 class="text-center">Añadir tráiler</h3>
                     <div class="card-body">
                         <form action="/trailers/addTrailer" method="POST">
-                            <label>¿Cuál es el título del tráiler?</label>
+
+                            <p>Nota: Los parámetros con * son obligatorios</p>
+
+                            <span>¿Cuál es el título del tráiler?*</span>
                             <input type="text" class="form-control mb-3" name="title" required>
                             <br></br>
-                            <label>¿Cuál es la duración (en minutos) del tráiler?</label>
+
+                            <span>¿Cuál es la duración (en minutos) del tráiler?*</span>
                             <input type="number" class="form-control mb-3" name="duration" required>
                             <br></br>
-                            <label>¿Cuál es la URL del tráiler?</label>
-                            <input type="url" class="form-control mb-3" name="urlVideo (Opcional)">
+
+                            <span>¿Cuál es la URL del tráiler?</span>
+                            <input type="url" class="form-control mb-3" name="urlVideo">
 
                             <p>¿Para qué idiomas está disponible?</p>
-                            <input type="number" name="language[]" placeholder="idLanguage 1 (Opcional)"><br>
-                            <input type="number" name="language[]" placeholder="idLanguage 2 (Opcional)"><br>
-                            <input type="number" name="language[]" placeholder="idLanguage 3 (Opcional)"><br>
+                            <input type="number" min=1 name="language[]" placeholder="idLanguage 1"><br>
+                            <input type="number" min=1 name="language[]" placeholder="idLanguage 2"><br>
+                            <input type="number" min=1 name="language[]" placeholder="idLanguage 3"><br>
 
                             <p>¿Qué categorías tiene asociadas?</p>
-                            <input type="number" name="category[]" placeholder="idCategory 1 (Opcional)" ><br>
-                            <input type="number" name="category[]" placeholder="idCategory 2 (Opcional)"><br>
+                            <input type="number" min=1 name="category[]" placeholder="idCategory 1"><br>
+                            <input type="number" min=1 name="category[]" placeholder="idCategory 2"><br>
 
                             <p>¿Qué personajes principales forman parte del tráiler?</p>
-                            <input type="number" name="character[]" placeholder="idCharacter 1 (Opcional)"><br>
-                            <input type="number" name="character[]" placeholder="idCharacter 2 (Opcional)"><br>
-                            <input type="number" name="character[]" placeholder="idCharacter 3 (Opcional)"><br>
+                            <input type="number" min=1 name="character[]" placeholder="idCharacter 1"><br>
+                            <input type="number" min=1 name="character[]" placeholder="idCharacter 2"><br>
+                            <input type="number" min=1 name="character[]" placeholder="idCharacter 3"><br>
 
                             <p>¿Quiénes son sus intérpretes?</p>
-                            <input type="number" name="participant[]" placeholder="idParticipant 1 (Opcional)"><br>
-                            <input type="number" name="participant[]" placeholder="idParticipant 2 (Opcional)"><br>
-                            <input type="number" name="participant[]" placeholder="idParticipant 3 (Opcional)"><br>
-                            <br></br>
-                            <button class="btn btn-primary" type="submit"> Añadir </button>
-                        </form>
-                    </div>
-                </div>
+                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 1"><br>
+                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 2"><br>
+                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 3"><br>
+                            <br>
 
-                <div class="card">
-                    <h3 class="text-center">Eliminar tráiler</h3>
-                    <div class="card-body">
-                        <form action="/trailers/deleteTrailer" method="POST">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="idTrailer" required>
-                            <button class="btn btn-primary" type="submit">Eliminar</button>
+                            <button class="btn btn-primary" type="submit"> Añadir </button>
                         </form>
                     </div>
                 </div>
@@ -75,38 +71,55 @@
                     <div class="card-body">
                         <form action="/trailers/updateTrailer" method="POST">
                             <input type="hidden" name="_method" value="PUT">
-                            <label>ID</label>
-                            <input type="text" class="form-control mb-3" required name="idTrailer">
+
+                            <span>ID*</span>
+                            <input type="text" class="form-control mb-3" required name="idTrailer" placeholder="idTrailer 1">
                             <br></br>
-                            <label>¿Cuál es el título del tráiler?</label>
+
+                            <span>¿Cuál es el título del tráiler?</span>
                             <input type="text" class="form-control mb-3" name="title">
                             <br></br>
-                            <label>¿Cuál es la duración (en minutos) del tráiler?</label>
+
+                            <span>¿Cuál es la duración (en minutos) del tráiler?</span>
                             <input type="number" class="form-control mb-3" name="duration">
                             <br></br>
-                            <label>¿Cuál es la URL del tráiler?</label>
+
+                            <span>¿Cuál es la URL del tráiler?</span>
                             <input type="url" class="form-control mb-3" name="urlVideo">
 
                             <p>¿Para qué idiomas está disponible?</p>
-                            <input type="number" name="language[]" placeholder="idLanguage 1"><br>
-                            <input type="number" name="language[]" placeholder="idLanguage 2"><br>
-                            <input type="number" name="language[]" placeholder="idLanguage 3"><br>
+                            <input type="number" min=1 name="language[]" placeholder="idLanguage 1"><br>
+                            <input type="number" min=1 name="language[]" placeholder="idLanguage 2"><br>
+                            <input type="number" min=1 name="language[]" placeholder="idLanguage 3"><br>
 
                             <p>¿Qué categorías tiene asociadas?</p>
-                            <input type="number" name="category[]" placeholder="idCategory 1" ><br>
-                            <input type="number" name="category[]" placeholder="idCategory 2"><br>
+                            <input type="number" min=1 name="category[]" placeholder="idCategory 1" ><br>
+                            <input type="number" min=1 name="category[]" placeholder="idCategory 2"><br>
 
                             <p>¿Qué personajes principales forman parte del tráiler?</p>
-                            <input type="number" name="character[]" placeholder="idCharacter 1"><br>
-                            <input type="number" name="character[]" placeholder="idCharacter 2"><br>
-                            <input type="number" name="character[]" placeholder="idCharacter 3"><br>
+                            <input type="number" min=1 name="character[]" placeholder="idCharacter 1"><br>
+                            <input type="number" min=1 name="character[]" placeholder="idCharacter 2"><br>
+                            <input type="number" min=1 name="character[]" placeholder="idCharacter 3"><br>
 
                             <p>¿Quiénes son sus intérpretes?</p>
-                            <input type="number" name="participant[]" placeholder="idParticipant 1"><br>
-                            <input type="number" name="participant[]" placeholder="idParticipant 2"><br>
-                            <input type="number" name="participant[]" placeholder="idParticipant 3"><br>
-                            <br></br>
+                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 1"><br>
+                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 2"><br>
+                            <input type="number" min=1 name="participant[]" placeholder="idParticipant 3"><br>
+                            <br>
+
                             <button class="btn btn-primary" type="submit">Modificar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-center">Eliminar tráiler</h3>
+                    <div class="card-body">
+                        <form action="/trailers/deleteTrailer" method="POST">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <span>ID</span>
+                            <input type="number" min=1 class="form-control mb-3" name="idTrailer" required placeholder="idTrailer 1">
+                            <button class="btn btn-primary" type="submit">Eliminar</button>
                         </form>
                     </div>
                 </div>
