@@ -1,13 +1,14 @@
 class Season:
     def __init__(self, idSeason, idSeries, title, seasonNumber, totalChapters,
-                 chapterList, participants, trailer):
+                 chapterList, character, participant, trailer):
         self.idSeason = idSeason
         self.idSeries = idSeries
         self.title = title
         self.seasonNumber = seasonNumber
         self.totalChapters = totalChapters
         self.chapterList = chapterList
-        self.participants = participants
+        self.character = character
+        self.participant = participant
         self.trailer = trailer
 
     def toDBCollection(self):
@@ -18,6 +19,7 @@ class Season:
             'seasonNumber': self.seasonNumber,
             'totalChapters': self.totalChapters,
             'chapterList': self.chapterList,
-            'participants': self.participants,
+            'character': self.character,
+            'participant': self.participant,
             'trailer': self.trailer
         }

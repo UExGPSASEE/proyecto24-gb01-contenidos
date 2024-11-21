@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="card">
-                    <h5 class="text-center">Añadir temporada</h5>
+                    <h3 class="text-center">Añadir temporada</h3>
                     <div class="card-body">
                         <form action="/seasons/addSeason" method="POST">
                              <label>¿A qué serie pertenece?</label>
@@ -37,21 +37,32 @@
                             <label>¿Cuántos capítulos tiene la temporada?</label>
                             <input type="number" class="form-control mb-3" name="totalChapters" required>
                             <br></br>
-                             <label>¿Cuáles son los capítulos de la temporada?</label>
+                            <label>¿Cuáles son los capítulos de la temporada?</label>
                             <input type="number" name="chapterList[]" placeholder="idChapter 1"><br>
                             <input type="number" name="chapterList[]" placeholder="idChapter 2"><br>
                             <input type="number" name="chapterList[]" placeholder="idChapter 3"><br>
-                            <br></br>
+
+                            <p>¿Cuáles son los personajes de la temporada?</p>
+                            <input type="number" name="character[]" placeholder="idCharacter 1"><br>
+                            <input type="number" name="character[]" placeholder="idCharacter 2"><br>
+                            <input type="number" name="character[]" placeholder="idCharacter 3"><br>
+
+                            <p>¿Cuáles son los participantes de la temporada?</p>
+                            <input type="number" name="participant[]" placeholder="idParticipant 1"><br>
+                            <input type="number" name="participant[]" placeholder="idParticipant 2"><br>
+                            <input type="number" name="participant[]" placeholder="idParticipant 3"><br>
+                            <br>
+
                             <label>¿Qué tráiler se adjunta?</label>
                             <input type="number" name="trailer"><br>
-                            <br></br>
+                            <br>
                             <button class="btn btn-primary" type="submit"> Añadir </button>
                         </form>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h5 class="text-center">Eliminar temporada</h5>
+                    <h3 class="text-center">Eliminar temporada</h3>
                     <div class="card-body">
                         <form action="/seasons/deleteSeason" method="POST">
                             <input type="hidden" name="_method" value="DELETE">
@@ -63,12 +74,34 @@
                 </div>
 
                 <div class="card">
-                    <h5 class="text-center">Modificar temporada</h5>
+                    <h3 class="text-center">Obtener personajes de una temporada</h3>
+                    <div class="card-body">
+                        <form action="/seasons/characters" method="GET">
+                            <span>ID</span>
+                            <input type="text" min=1 class="form-control mb-3" name="idSeason" required placeholder="idSeason 1">
+                            <button class="btn btn-primary" type="submit">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-center">Obtener participantes de una temporada</h3>
+                    <div class="card-body">
+                        <form action="/seasons/participants" method="GET">
+                            <span>ID</span>
+                            <input type="text" min=1 class="form-control mb-3" name="idSeason" required placeholder="idSeason 1">
+                            <button class="btn btn-primary" type="submit">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="text-center">Modificar temporada</h3>
                     <div class="card-body">
                         <form action="/seasons/updateSeason" method="POST">
                             <input type="hidden" name="_method" value="PUT">
                             <label>ID</label>
-                            <input type="text" class="form-control mb-3" required name="idSeason">
+                            <input type="text" class="form-control mb-3" required name="idSeason" placeholder="idSeason 1">
                             <br></br>
                              <label>¿A qué serie pertenece?</label>
                             <input type="number" name="idSeries"><br>
@@ -86,10 +119,21 @@
                             <input type="number" name="chapterList[]" placeholder="idChapter 1"><br>
                             <input type="number" name="chapterList[]" placeholder="idChapter 2"><br>
                             <input type="number" name="chapterList[]" placeholder="idChapter 3"><br>
-                            <br></br>
+
+                            <p>¿Cuáles son los personajes de la temporada?</p>
+                            <input type="number" name="character[]" placeholder="idCharacter 1"><br>
+                            <input type="number" name="character[]" placeholder="idCharacter 2"><br>
+                            <input type="number" name="character[]" placeholder="idCharacter 3"><br>
+
+                            <p>¿Cuáles son los participantes de la temporada?</p>
+                            <input type="number" name="participant[]" placeholder="idParticipant 1"><br>
+                            <input type="number" name="participant[]" placeholder="idParticipant 2"><br>
+                            <input type="number" name="participant[]" placeholder="idParticipant 3"><br>
+                            <br>
+
                             <label>¿Qué tráiler se adjunta?</label>
                             <input type="number" name="trailer"><br>
-                            <br></br>
+                            <br>
                             <button class="btn btn-primary" type="submit">Modificar</button>
                         </form>
                     </div>
