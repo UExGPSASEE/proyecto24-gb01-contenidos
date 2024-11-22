@@ -147,6 +147,10 @@ def getAllCategories():
 def getCategoryById():
     return CategoryCtrl.getCategoryById(db['categories'])
 
+@app.route('/categories/content', methods=['GET'])
+def getContentByCategory():
+    return CategoryCtrl.getContentByCategory(db['categories'], db['movies'], db['series'])
+
 # -------------------------------------------------------------------------------------------------------
 
 @app.route('/participants')
