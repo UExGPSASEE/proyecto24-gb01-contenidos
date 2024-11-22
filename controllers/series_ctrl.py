@@ -2,6 +2,7 @@ from flask import render_template, request, jsonify, redirect, url_for
 from database import get_next_sequence_value as get_next_sequence_value
 from pymongo.collection import Collection
 from models.series import Series
+from controllers import season_ctrl
 
 class SeriesCtrl:
     @staticmethod
@@ -140,6 +141,49 @@ class SeriesCtrl:
                         else:
                             print(f"idCharacter inválido encontrado: {idCharacter}")
                 return jsonify(charactersList), 200
+
+            else:
+                return jsonify({'error': 'Serie no encontrada', 'status': '404 Not Found'}), 404
+
+        else:
+            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+
+# --------------------------------------------------------------
+
+    @staticmethod
+    def getSeriesChapters(seriesCollection: Collection, seasonCollection: Collection):
+        idSeries = int(request.args.get('idSeries'))
+        print(idSeries)
+
+        if idSeries:
+            matchingSeries = seriesCollection.find({'idSeries': idSeries})
+
+            if matchingSeries:
+                seasonsList = []
+
+                for series in matchingSeries:
+                    seasonsIds = series.get('seasons', [])
+                    print(seasonsIds)
+
+                    for idSeason in seasonsIds:
+
+                        if idSeason and idSeason.strip().isdigit():
+                            matchingSeason = seasonCollection.find({'idSeason': int(idSeason), 'idSeries': int(idSeries)})
+
+                            for season in matchingSeason:
+                                seasonsList.append({
+                                    'idSeason' : season.get('idSeason'),
+                                    'idSeries' : season.get('idSeries'),
+                                    'title' : season.get('title'),
+                                    'seasonNumber' : season.get('seasonNumber'),
+                                    'totalChapters' : season.get('totalChapters'),
+                                    'chapterList' : season.get('chapterList'),
+                                    'character' : season.get('character'),
+                                    'participant' : season.get('participant'),
+                                    'trailer' : season.get('trailer')
+                                })
+
+                return jsonify(seasonsList), 200
 
             else:
                 return jsonify({'error': 'Serie no encontrada', 'status': '404 Not Found'}), 404
