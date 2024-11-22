@@ -181,6 +181,11 @@ def getParticipantByAge():
 def getParticipantById():
     return ParticipantCtrl.getParticipantById(db['participants'])
 
+@app.route('/participants/content', methods=['GET'])
+def getContentByParticipant():
+    return ParticipantCtrl.getContentByParticipant(db['participants'], db['movies'], db['series'])
+
+
 @app.route('/participants/getAllParticipants', methods=['GET'])
 def getAllParticipants():
     return ParticipantCtrl.getAllParticipants(db['participants'])
