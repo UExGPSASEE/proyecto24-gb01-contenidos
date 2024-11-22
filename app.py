@@ -219,6 +219,10 @@ def getCharacterById():
 def getAllCharacters():
     return CharacterCtrl.getAllCharacters(db['characters'])
 
+@app.route('/characters/content', methods=['GET'])
+def getContentByCharacter():
+    return CharacterCtrl.getContentByCharacter(db['characters'], db['movies'], db['series'])
+
 # -------------------------------------------------------------------------------------------------------
 
 @app.route('/series')
