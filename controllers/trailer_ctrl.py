@@ -97,8 +97,7 @@ class TrailerCtrl:
             if not idTrailer:
                 return jsonify({'error': 'Identificador de tráiler requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'idTrailer': idTrailer}
-
+            filterDict = {'idTrailer': idTrailer}
             updateFields = {}
 
             if trailerTitle:
@@ -117,15 +116,43 @@ class TrailerCtrl:
                 updateFields['participant'] = participant
 
             change = {'$set': updateFields}
-
-            result = db.update_one(filter, change)
-            if result.matched_count == 0:
-                return jsonify({'error': 'Tráiler no encontrado', 'status': '404 Not Found'}), 404
-            elif result.modified_count == 0:
-                return jsonify({'message': 'El tráiler ya está actualizado', 'status': '200 OK'}), 200
-
-            return redirect(url_for('trailers'))
+            return TrailerCtrl.updateTrailer(trailers, filterDict, change)
 
         return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
 # --------------------------------
+
+    @staticmethod
+    def putCategoryIntoTrailer(trailers: Collection, categories: Collection, idTrailer: int):
+        idCategory = request.args.get('idCategory')
+        if idCategory:
+            idCategory = int(idCategory)
+            if categories.find({'idCategory': idCategory}):
+                filterDict = {'idTrailer': int(idTrailer)}
+                change = {'$addToSet': {'categories': idCategory}}
+                return TrailerCtrl.updateTrailer(trailers, filterDict, change)
+            else:
+                return jsonify({'error': 'No category was found', 'status': '404 Not Found'}), 400
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def deleteCategoryFromTrailer(trailers: Collection, idTrailer: int):
+        idCategory = request.args.get('idCategory')
+        if idCategory:
+            idCategory = int(idCategory)
+            filterDict = {'idTrailer': int(idTrailer)}
+            change = {'$pull': {'categories': idCategory}}
+            return TrailerCtrl.updateTrailer(trailers, filterDict, change)
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def updateTrailer(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
+        result = db.update_one(filterDict, changeDict)
+        print(result)
+        if result.matched_count == 0:
+            return jsonify({'error': 'Trailer not found or not updated', 'status': '404 Not Found'}), 404
+        elif result.modified_count == 0:
+            return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
+        return redirect(url_for('trailers'))

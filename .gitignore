@@ -5,3 +5,4 @@
 *.pyc
 /controllers/__pycache__
 /models/__pycache__
+/.run

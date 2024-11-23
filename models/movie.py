@@ -1,6 +1,6 @@
 class Movie:
-    def __init__(self, idMovie, title, urlVideo, urlTitlePage, releaseDate, synopsis, description,
-                 isSuscription, duration, language, category, character, participant, trailer):
+    def __init__(self, idMovie, title, urlVideo, urlTitlePage, releaseDate, synopsis, description, 
+                 isSuscription, duration, languages, categories, characters, participants, trailer):
         self.idMovie = idMovie
         self.title = title
         self.urlVideo = urlVideo
@@ -10,26 +10,25 @@ class Movie:
         self.description = description
         self.isSuscription = isSuscription
         self.duration = duration
-        self.language = language
-        self.category = category
-        self.character = character
-        self.participant = participant
+        self.languages = languages
+        self.categories = categories
+        self.characters = characters
+        self.participants = participants
         self.trailer = trailer
 
     def toDBCollection(self):
-        return {
-            'idMovie': self.idMovie,
-            'title': self.title,
-            'urlVideo': self.urlVideo,
-            'urlTitlePage': self.urlTitlePage,
-            'releaseDate': self.releaseDate,
-            'synopsis': self.synopsis,
-            'description': self.description,
-            'isSuscription': self.isSuscription,
-            'duration': self.duration,
-            'language': self.language,
-            'category': self.category,
-            'character': self.character,
-            'participant': self.participant,
-            'trailer': self.trailer
-        }
+        return{
+            'idMovie' : self.idMovie,
+            'title' : self.title,
+            'urlVideo' : self.urlVideo,
+            'urlTitlePage' : self.urlTitlePage,
+            'releaseDate' : self.releaseDate,
+            'synopsis' : self.synopsis,
+            'description' : self.description,
+            'isSuscription' : self.isSuscription,
+            'duration' : self.duration,
+            'languages': self.languages,
+            'categories': self.categories,
+            'characters': self.characters,
+            'participants': self.participants,
+            'trailer' : self.trailer

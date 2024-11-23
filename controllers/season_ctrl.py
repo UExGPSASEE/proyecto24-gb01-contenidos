@@ -264,15 +264,9 @@ class SeasonCtrl:
         if idTrailer:
             idTrailer = int(idTrailer)
             if trailers.find({'idTrailer': idTrailer}):
-                filter = {'idSeason': int(idSeason)}
+                filterDict = {'idSeason': int(idSeason)}
                 change = {'$set': {'trailer': idTrailer}}
-                result = seasons.update_one(filter, change)
-                print(result)
-                if result.matched_count == 0:
-                    return jsonify({'error': 'Season not found or not updated', 'status': '404 Not Found'}), 404
-                elif result.modified_count == 0:
-                    return jsonify({'message': 'New trailer matches with current trailer', 'status': '200 OK'}), 200
-                return redirect(url_for('seasons'))
+                return SeasonCtrl.updateSeason(seasons, filterDict, change)
             else:
                 return jsonify({'error': 'No trailer was found', 'status': '404 Not Found'}), 400
         else:
@@ -281,14 +275,43 @@ class SeasonCtrl:
     @staticmethod
     def deleteTrailerFromSeason(db: Collection, idSeason:int):
         if idSeason:
-            filter = {'idSeason': int(idSeason)}
+            filterDict = {'idSeason': int(idSeason)}
             change = {'$set': {'trailer': None}}
-            result = db.update_one(filter, change)
-            print(result)
-            if result.matched_count == 0:
-                return jsonify({'error': 'Season not found or not updated', 'status': '404 Not Found'}), 404
-            elif result.modified_count == 0:
-                return jsonify({'message': 'There was no trailer to be deleted', 'status': '200 OK'}), 200
-            return redirect(url_for('seasons'))
+            return SeasonCtrl.updateSeason(db, filterDict, change)
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def putCategoryIntoSeason(seasons: Collection, categories: Collection, idSeason: int):
+        idCategory = request.args.get('idCategory')
+        if idCategory:
+            idCategory = int(idCategory)
+            if categories.find({'idCategory': idCategory}):
+                filterDict = {'idSeason': int(idSeason)}
+                change = {'$addToSet': {'categories': idCategory}}
+                return SeasonCtrl.updateSeason(seasons, filterDict, change)
+            else:
+                return jsonify({'error': 'No category was found', 'status': '404 Not Found'}), 400
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def deleteCategoryFromSeason(seasons: Collection, idSeason: int):
+        idCategory = request.args.get('idCategory')
+        if idCategory:
+            idCategory = int(idCategory)
+            filterDict = {'idSeason': int(idSeason)}
+            change = {'$pull': {'categories': idCategory}}
+            return SeasonCtrl.updateSeason(seasons, filterDict, change)
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def updateSeason(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
+        result = db.update_one(filterDict, changeDict)
+        print(result)
+        if result.matched_count == 0:
+            return jsonify({'error': 'Season not found or not updated', 'status': '404 Not Found'}), 404
+        elif result.modified_count == 0:
+            return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
+        return redirect(url_for('seasons'))

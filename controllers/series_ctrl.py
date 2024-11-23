@@ -306,7 +306,7 @@ class SeriesCtrl:
             if not idSeries:
                 return jsonify({'error': 'Identificador de serie requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'idSeries': idSeries}
+            filterDict = {'idSeries': idSeries}
 
             updateFields = {}
 
@@ -339,13 +339,7 @@ class SeriesCtrl:
 
             change = {'$set': updateFields}
 
-            result = db.update_one(filter, change)
-            if result.matched_count == 0:
-                return jsonify({'error': 'Serie no encontrada', 'status': '404 Not Found'}), 404
-            elif result.modified_count == 0:
-                return jsonify({'message': 'La serie ya está actualizada', 'status': '200 OK'}), 200
-
-            return redirect(url_for('series'))
+            return SeriesCtrl.updateSeries(db, filterDict, change)
 
         return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -355,15 +349,9 @@ class SeriesCtrl:
         if idTrailer:
             idTrailer = int(idTrailer)
             if trailers.find({'idTrailer': idTrailer}):
-                filter = {'idSeries': int(idSeries)}
+                filterDict = {'idSeries': int(idSeries)}
                 change = {'$set': {'trailer': idTrailer}}
-                result = series.update_one(filter, change)
-                print(result)
-                if result.matched_count == 0:
-                    return jsonify({'error': 'Series not found or not updated', 'status': '404 Not Found'}), 404
-                elif result.modified_count == 0:
-                    return jsonify({'message': 'New trailer matches with current trailer', 'status': '200 OK'}), 200
-                return redirect(url_for('series'))
+                return SeriesCtrl.updateSeries(series, filterDict, change)
             else:
                 return jsonify({'error': 'No trailer was found', 'status': '404 Not Found'}), 400
         else:
@@ -372,14 +360,44 @@ class SeriesCtrl:
     @staticmethod
     def deleteTrailerFromSeries(db: Collection, idSeries:int):
         if idSeries:
-            filter = {'idSeries': int(idSeries)}
+            filterDict = {'idSeries': int(idSeries)}
             change = {'$set': {'trailer': None}}
-            result = db.update_one(filter, change)
-            print(result)
-            if result.matched_count == 0:
-                return jsonify({'error': 'Series not found or not updated', 'status': '404 Not Found'}), 404
-            elif result.modified_count == 0:
-                return jsonify({'message': 'There was no trailer to be deleted', 'status': '200 OK'}), 200
-            return redirect(url_for('seasons'))
+            return updateSeries(db, filterDict, change)
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def putCategoryIntoSeries(series: Collection, categories: Collection, idSeries: int):
+        idCategory = request.args.get('idCategory')
+        if idCategory:
+            idCategory = int(idCategory)
+            if categories.find({'idCategory': idCategory}):
+                filterDict = {'idSeries': int(idSeries)}
+                change = {'$addToSet': {'categories': idCategory}}
+                return SeriesCtrl.updateSeries(series, filterDict, change)
+            else:
+                return jsonify({'error': 'No category was found', 'status': '404 Not Found'}), 400
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def deleteCategoryFromSeries(series: Collection, idSeries: int):
+        idCategory = request.args.get('idCategory')
+        if idCategory:
+            idCategory = int(idCategory)
+            filterDict = {'idSeries': int(idSeries)}
+            change = {'$pull': {'categories': idCategory}}
+            return SeriesCtrl.updateSeries(series, filterDict, change)
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+
+    @staticmethod
+    def updateSeries(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
+        result = db.update_one(filterDict, changeDict)
+        print(result)
+        if result.matched_count == 0:
+            return jsonify({'error': 'Series not found or not updated', 'status': '404 Not Found'}), 404
+        elif result.modified_count == 0:
+            return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
+        return redirect(url_for('series'))
