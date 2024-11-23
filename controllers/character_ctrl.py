@@ -11,6 +11,8 @@ class CharacterCtrl:
         charactersReceived = characters.find()
         return render_template('Character.html', characters=charactersReceived)
 
+    # ---------------------------------------------------------
+
     @staticmethod
     def addCharacter(db: Collection):
         idCharacter = get_next_sequence_value(db, "idCharacter")
@@ -47,6 +49,7 @@ class CharacterCtrl:
         else:
             return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
 
+    # ---------------------------------------------------------
 
     @staticmethod
     def getCharacterByAge(db: Collection):
@@ -69,6 +72,8 @@ class CharacterCtrl:
         else:
             return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
 
+    # ---------------------------------------------------------
+
     @staticmethod
     def getCharacterById(db: Collection):
         idCharacter = request.args.get('idCharacter')
@@ -89,6 +94,68 @@ class CharacterCtrl:
         else:
             return jsonify({'error': 'idCharacter no proporcionado', 'status': '400 Bad Request'}), 400
 
+    # --------------------------------------------------------
+
+    @staticmethod
+    def getContentByCharacter(characterCollection: Collection, movieCollection: Collection, seriesCollection: Collection):
+        idCharacter = int(request.args.get('idCharacter'))
+
+        if idCharacter:
+            matchingCharacter = characterCollection.find({'idCharacter': idCharacter})
+
+            if matchingCharacter:
+                contentList = []
+                matchingMovie = movieCollection.find({'character': {'$in': [str(idCharacter)]}})
+
+                contentList.append({'Content' : 'Movies'})
+
+                for movie in matchingMovie:
+                    contentList.append({
+                    'idMovie' : movie.get('idMovie'),
+                    'title' : movie.get('title'),
+                    'urlVideo' : movie.get('urlVideo'),
+                    'urlTitlePage' : movie.get('urlTitlePage'),
+                    'releaseDate' : movie.get('releaseDate'),
+                    'synopsis' : movie.get('synopsis'),
+                    'description' : movie.get('description'),
+                    'isSuscription' : movie.get('isSuscription'),
+                    'duration' : movie.get('duration'),
+                    'language' : movie.get('language'),
+                    'category' : movie.get('category'),
+                    'character' : movie.get('character'),
+                    'participant' : movie.get('participant'),
+                    'trailer' : movie.get('trailer'),
+                    })
+
+                contentList.append({'Content' : 'Series'})
+                matchingSerie = seriesCollection.find({'character': {'$in': [str(idCharacter)]}})
+
+                for series in matchingSerie:
+                    contentList.append({
+                        'idSeries' : series.get('idSeries'),
+                        'title' : series.get('title'),
+                        'duration' : series.get('duration'),
+                        'urlTitlePage' : series.get('urlTitlePage'),
+                        'releaseDate' : series.get('releaseDate'),
+                        'synopsis' : series.get('synopsis'),
+                        'description' : series.get('description'),
+                        'isSuscription' : series.get('isSuscription'),
+                        'seasons': series.get('seasons'),
+                        'language' : series.get('language'),
+                        'category' : series.get('category'),
+                        'character' : series.get('character'),
+                        'participant' : series.get('participant'),
+                        'trailer' : series.get('trailer')
+                    })
+
+                return jsonify(contentList), 200
+
+            else:
+                return jsonify({'error': 'Personaje no encontrado', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
 
     @staticmethod
     def getAllCharacters(db: Collection):
@@ -164,4 +231,4 @@ class CharacterCtrl:
                 {'error': f'Error interno del servidor: {str(e)}', 'status': '500 Internal Server Error'}
             ), 500
 
-    # --------------------------------
+    # --------------------------------------------------------
