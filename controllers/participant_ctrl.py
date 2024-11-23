@@ -11,6 +11,8 @@ class ParticipantCtrl:
         participantsReceived = participants.find()
         return render_template('Participant.html', participants=participantsReceived)
 
+    # ---------------------------------------------------------
+
     @staticmethod
     def addParticipant(db: Collection):
         idParticipant = get_next_sequence_value(db, "idParticipant")
@@ -51,6 +53,8 @@ class ParticipantCtrl:
         else:
             return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
 
+    # ---------------------------------------------------------
+
     @staticmethod
     def getParticipantBySurname(db: Collection):
         surname = request.args.get('surname')
@@ -72,6 +76,8 @@ class ParticipantCtrl:
             return jsonify(participantsList), 200
         else:
             return jsonify({'error': 'Apellidos no proporcionados', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
 
     @staticmethod
     def getParticipantByAge(db: Collection):
@@ -95,6 +101,8 @@ class ParticipantCtrl:
         else:
             return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
 
+    # ---------------------------------------------------------
+
     @staticmethod
     def getParticipantByNationality(db: Collection):
         nationality = request.args.get('nationality')
@@ -114,6 +122,8 @@ class ParticipantCtrl:
             return jsonify(participantsList), 200
         else:
             return jsonify({'error': 'Nacionalidad no proporcionada', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
 
     @staticmethod
     def getParticipantById(db: Collection):
@@ -139,6 +149,68 @@ class ParticipantCtrl:
         else:
             return jsonify({'error': 'Identificador no proporcionado', 'status': '400 Bad Request'}), 400
 
+    # ---------------------------------------------------------
+
+    @staticmethod
+    def getContentByParticipant(participantCollection: Collection, movieCollection: Collection, seriesCollection: Collection):
+        idParticipant = int(request.args.get('idParticipant'))
+
+        if idParticipant:
+            matchingParticipant = participantCollection.find({'idParticipant': idParticipant})
+
+            if matchingParticipant:
+                contentList = []
+                matchingMovie = movieCollection.find({'participant': {'$in': [str(idParticipant)]}})
+
+                contentList.append({'Content' : 'Movies'})
+
+                for movie in matchingMovie:
+                    contentList.append({
+                    'idMovie' : movie.get('idMovie'),
+                    'title' : movie.get('title'),
+                    'urlVideo' : movie.get('urlVideo'),
+                    'urlTitlePage' : movie.get('urlTitlePage'),
+                    'releaseDate' : movie.get('releaseDate'),
+                    'synopsis' : movie.get('synopsis'),
+                    'description' : movie.get('description'),
+                    'isSuscription' : movie.get('isSuscription'),
+                    'duration' : movie.get('duration'),
+                    'language' : movie.get('language'),
+                    'category' : movie.get('category'),
+                    'character' : movie.get('character'),
+                    'participant' : movie.get('participant'),
+                    'trailer' : movie.get('trailer'),
+                    })
+
+                contentList.append({'Content' : 'Series'})
+                matchingSerie = seriesCollection.find({'participant': {'$in': [str(idParticipant)]}})
+
+                for series in matchingSerie:
+                    contentList.append({
+                        'idSeries' : series.get('idSeries'),
+                        'title' : series.get('title'),
+                        'duration' : series.get('duration'),
+                        'urlTitlePage' : series.get('urlTitlePage'),
+                        'releaseDate' : series.get('releaseDate'),
+                        'synopsis' : series.get('synopsis'),
+                        'description' : series.get('description'),
+                        'isSuscription' : series.get('isSuscription'),
+                        'seasons': series.get('seasons'),
+                        'language' : series.get('language'),
+                        'category' : series.get('category'),
+                        'character' : series.get('character'),
+                        'participant' : series.get('participant'),
+                        'trailer' : series.get('trailer')
+                    })
+
+                return jsonify(contentList), 200
+
+            else:
+                return jsonify({'error': 'Participante no encontrado', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
 
     @staticmethod
     def getAllParticipants(db: Collection):
