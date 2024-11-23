@@ -121,6 +121,10 @@ def deleteSeason():
 def getSeasonById():
     return SeasonCtrl.getSeasonById(db['seasons'])
 
+@app.route('/seasons/chapters', methods=['GET'])
+def getSeasonChapters():
+    return SeasonCtrl.getSeasonChapters(db['seasons'], db['chapters'])
+
 @app.route('/seasons/characters', methods=['GET'])
 def getSeasonCharacters():
     return SeasonCtrl.getSeasonCharacters(db['seasons'], db['characters'])
@@ -240,6 +244,10 @@ def getSeriesByTitle():
 @app.route('/series/seriesFound', methods=['GET'])
 def getSeriesById():
     return SeriesCtrl.getSeriesById(db['series'])
+
+@app.route('/series/chapters', methods=['GET'])
+def getSeriesChapters():
+    return SeriesCtrl.getSeriesChapters(db['series'], db['seasons'])
 
 @app.route('/series/characters', methods=['GET'])
 def getSeriesCharacters():

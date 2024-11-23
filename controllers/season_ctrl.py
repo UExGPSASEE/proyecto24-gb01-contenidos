@@ -18,14 +18,16 @@ class SeasonCtrl:
         idSeries = request.form.get('idSeries')
         title = request.form.get('title')
         seasonNumber = request.form.get('seasonNumber')
-        totalChapters = request.form.get('totalChapters')
         chapterList = request.form.getlist('chapterList[]')
         character = request.form.getlist('character[]')
         participant = request.form.getlist('participant[]')
         trailer = request.form.get('trailer')
+
+        totalChapters = len([chapter for chapter in chapterList if chapter != ""])
+
         if idSeason:
             season = Season(idSeason, int(idSeries), title, int(seasonNumber),
-                            int(totalChapters), chapterList, character, participant, trailer)
+                            totalChapters, chapterList, character, participant, trailer)
 
             db.insert_one(season.toDBCollection())
             return redirect(url_for('seasons'))
@@ -57,7 +59,6 @@ class SeasonCtrl:
             idSeries = request.form.get('idSeries')
             title = request.form.get('title')
             seasonNumber = request.form.get('seasonNumber')
-            totalChapters = request.form.get('totalChapters')
             chapterList = request.form.getlist('chapterList[]')
             character = request.form.getlist('character[]')
             participant = request.form.getlist('participant[]')
@@ -67,6 +68,8 @@ class SeasonCtrl:
                 return jsonify({'error': 'Identificador de temporada requerido', 'status': '400 Bad Request'}), 400
 
             filter = {'idSeason': idSeason}
+
+            totalChapters = len([chapter for chapter in chapterList if chapter != ""])
 
             updateFields = {}
 
@@ -132,6 +135,49 @@ class SeasonCtrl:
                 return jsonify({'error': 'Season not found', 'status': '404 Not Found'}), 404
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+# --------------------------------------
+
+    @staticmethod
+    def getSeasonChapters(seasonCollection: Collection, chapterCollection: Collection):
+        idSeason = int(request.args.get('idSeason'))
+
+        if idSeason:
+            matchingSeason = seasonCollection.find({'idSeason': idSeason})
+
+            if matchingSeason:
+                resultList = []
+
+                for season in matchingSeason:
+                    chapterList = season.get('chapterList', [])
+                    print(chapterList)
+
+                    for idChapter in chapterList:
+                        if isinstance(idChapter, (str, int)):
+                            idChapterStr = str(idChapter).strip()
+                            if idChapterStr.isdigit():
+                                matchingCharacter = chapterCollection.find({'idChapter': int(idChapterStr)})
+
+                                for character in matchingCharacter:
+                                    resultList.append({
+                                        'idChapter': character.get('idChapter'),
+                                        'title': character.get('title'),
+                                        'urlVideo': character.get('urlVideo'),
+                                        'duration': character.get('duration'),
+                                        'chapterNumber': character.get('chapterNumber')
+                                    })
+                            else:
+                                print(f"idChapter inválido encontrado: {idChapter}")
+                        else:
+                            print(f"idChapter no es del tipo esperado: {idChapter}")
+
+                return jsonify(resultList), 200
+
+            else:
+                return jsonify({'error': 'Temporada no encontrada', 'status': '404 Not Found'}), 404
+
+        else:
+            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
 # --------------------------------------
 
