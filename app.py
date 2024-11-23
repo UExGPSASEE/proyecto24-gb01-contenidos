@@ -420,5 +420,36 @@ def getSeriesParticipants():
     return SeriesCtrl.getSeriesParticipants(db['series'], db['participants'])
 
 
+# -------------------------------------------------------------------------------------------------------
+
+@app.route('/movies/<idMovie>/trailer', methods=['PUT'])
+def putTrailerIntoMovie(idMovie):
+    return MovieCtrl.putTrailerIntoMovie(db['movies'], db['trailers'], idMovie)
+
+
+@app.route('/series/<idSeries>/trailer', methods=['PUT'])
+def putTrailerIntoSeries(idSeries):
+    return SeriesCtrl.putTrailerIntoSeries(db['series'], db['trailers'], idSeries)
+
+
+@app.route('/seasons/<idSeason>/trailer', methods=['PUT'])
+def putTrailerIntoSeasons(idSeason):
+    return SeasonCtrl.putTrailerIntoSeason(db['seasons'], db['trailers'], idSeason)
+
+@app.route('/movies/<idMovie>/trailer', methods=['DELETE'])
+def deleteTrailerFromMovie(idMovie):
+    return MovieCtrl.deleteTrailerFromMovie(db['movies'], idMovie)
+
+
+@app.route('/series/<idSeries>/trailer', methods=['DELETE'])
+def deleteTrailerFromSeries(idSeries):
+    return SeriesCtrl.deleteTrailerFromSeries(db['series'], idSeries)
+
+
+@app.route('/seasons/<idSeason>/trailer', methods=['DELETE'])
+def deleteTrailerFromSeason(idSeason):
+    return SeasonCtrl.deleteTrailerFromSeason(db['seasons'], idSeason)
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=8082)
