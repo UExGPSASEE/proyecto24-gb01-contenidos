@@ -257,3 +257,38 @@ class SeasonCtrl:
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def putTrailerIntoSeason(seasons: Collection, trailers: Collection, idSeason: int):
+        idTrailer = request.args.get('idTrailer')
+        if idTrailer:
+            idTrailer = int(idTrailer)
+            if trailers.find({'idTrailer': idTrailer}):
+                filter = {'idSeason': int(idSeason)}
+                change = {'$set': {'trailer': idTrailer}}
+                result = seasons.update_one(filter, change)
+                print(result)
+                if result.matched_count == 0:
+                    return jsonify({'error': 'Season not found or not updated', 'status': '404 Not Found'}), 404
+                elif result.modified_count == 0:
+                    return jsonify({'message': 'New trailer matches with current trailer', 'status': '200 OK'}), 200
+                return redirect(url_for('seasons'))
+            else:
+                return jsonify({'error': 'No trailer was found', 'status': '404 Not Found'}), 400
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def deleteTrailerFromSeason(db: Collection, idSeason:int):
+        if idSeason:
+            filter = {'idSeason': int(idSeason)}
+            change = {'$set': {'trailer': None}}
+            result = db.update_one(filter, change)
+            print(result)
+            if result.matched_count == 0:
+                return jsonify({'error': 'Season not found or not updated', 'status': '404 Not Found'}), 404
+            elif result.modified_count == 0:
+                return jsonify({'message': 'There was no trailer to be deleted', 'status': '200 OK'}), 200
+            return redirect(url_for('seasons'))
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
