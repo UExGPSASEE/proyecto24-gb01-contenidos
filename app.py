@@ -295,7 +295,6 @@ def getParticipantByAge():
 def getContentByParticipant():
     return ParticipantCtrl.getContentByParticipant(db['participants'], db['movies'], db['series'])
 
-
 @app.route('/participants/all', methods=['GET'])
 def getAllParticipants():
     return ParticipantCtrl.getAllParticipants(db['participants'])
@@ -422,7 +421,6 @@ def getSeriesParticipants():
 
 # -------------------------------------------------------------------------------------------------------
 
-
 @app.route('/trailers/<idTrailer>/categories', methods=['PUT'])
 def putCategoryIntoTrailer(idTrailer):
     return TrailerCtrl.putCategoryIntoTrailer(db['trailers'], db['categories'], idTrailer)
@@ -465,11 +463,9 @@ def deleteCategoryFromMovie(idMovie):
 def putTrailerIntoSeries(idSeries):
     return SeriesCtrl.putTrailerIntoSeries(db['series'], db['trailers'], idSeries)
 
-
 @app.route('/series/<idSeries>/trailer', methods=['DELETE'])
 def deleteTrailerFromSeries(idSeries):
     return SeriesCtrl.deleteTrailerFromSeries(db['series'], idSeries)
-
 
 # @app.route('/series/<idSeries>/characters', methods=['PUT'])
 # def putCharacterIntoSeries(idSeries):
@@ -490,16 +486,13 @@ def putCategoryIntoSeries(idSeries):
 def deleteCategoryFromSeries(idSeries):
     return SeriesCtrl.deleteCategoryFromSeries(db['series'], idSeries)
 
-
 @app.route('/seasons/<idSeason>/trailer', methods=['PUT'])
 def putTrailerIntoSeasons(idSeason):
     return SeasonCtrl.putTrailerIntoSeason(db['seasons'], db['trailers'], idSeason)
 
-
 @app.route('/seasons/<idSeason>/trailer', methods=['DELETE'])
 def deleteTrailerFromSeason(idSeason):
     return SeasonCtrl.deleteTrailerFromSeason(db['seasons'], idSeason)
-
 
 # @app.route('/seasons/<idSeason>/characters', methods=['PUT'])
 # def putCharacterIntoSeason(idSeason):
@@ -510,7 +503,6 @@ def deleteTrailerFromSeason(idSeason):
 # def deleteCharacterFromSeason(idSeason):
 #     return SeasonCtrl.putCharacterIntoSeason(db['seasons'], idSeason)
 
-
 @app.route('/seasons/<idSeason>/categories', methods=['PUT'])
 def putCategoryIntoSeason(idSeason):
     return SeasonCtrl.putCategoryIntoSeason(db['seasons'], db['categories'], idSeason)
@@ -519,7 +511,7 @@ def putCategoryIntoSeason(idSeason):
 @app.route('/seasons/<idSeason>/categories', methods=['DELETE'])
 def deleteCategoryFromSeason(idSeason):
     return SeasonCtrl.deleteCategoryFromSeason(db['seasons'], idSeason)
-
+ 
 
 if __name__ == '__main__':
     app.run(debug=True, port=8082)

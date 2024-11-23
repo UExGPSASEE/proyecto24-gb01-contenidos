@@ -98,7 +98,6 @@ class TrailerCtrl:
                 return jsonify({'error': 'Identificador de tráiler requerido', 'status': '400 Bad Request'}), 400
 
             filterDict = {'idTrailer': idTrailer}
-
             updateFields = {}
 
             if trailerTitle:
@@ -117,7 +116,6 @@ class TrailerCtrl:
                 updateFields['participant'] = participant
 
             change = {'$set': updateFields}
-
             return TrailerCtrl.updateTrailer(trailers, filterDict, change)
 
         return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400

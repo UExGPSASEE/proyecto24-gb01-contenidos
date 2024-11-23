@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personajes</title>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center mt-5 mb-5"> Gestión de personajes </h1>
+    <p><a href="/">Volver al menú de gestión</a></p>
+</div>
+<div class="container">
+    <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
+        <div class="col-md-6 mb-3">
+            <div class="card">
+
+                <div class="card-body">
+                    <h3 class="text-center">Obtener personaje por identificador</h3>
+                    <form action="/characters/getCharacterById" method="GET">
+                        <p>¿Qué personaje deseas buscar?</p>
+                        <label>ID</label>
+                        <input type="number" min=1 class="form-control mb-3" name="idCharacter" required
+                               placeholder="idCharacter 1">
+                        <button class="btn btn-primary" type="submit"> Buscar</button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <h3 class="text-center">Añadir personaje</h3>
+                    <form action="/characters" method="POST">
+
+                        <p>Nota: Los parámetros con * son obligatorios</p>
+
+                        <span>Nombre*</span>
+                        <input type="text" class="form-control mb-3" name="name" required><br>
+                        <br>
+
+                        <span>Participante asociado*</span>
+                        <input type="number" min=1 class="form-control mb-3" name="participant" required
+                               placeholder="idParticipant 1"><br>
+                        <br>
+
+                        <span>Edad</span>
+                        <input type="number" class="form-control mb-3" name="age"><br>
+                        <br>
+
+                        <button class="btn btn-primary" type="submit"> Guardar</button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <h3 class="text-center">Obtener todos los personajes</h3>
+                    <form action="/characters/all" method="GET">
+                        <button class="btn btn-primary" type="submit"> Buscar</button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <h3 class="text-center">Obtener personajes por nombre</h3>
+                    <form action="/characters/getCharacterByName" method="GET">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control mb-3" name="name">
+                        <button class="btn btn-primary" type="submit"> Buscar</button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <h3 class="text-center">Obtener contenido por personaje</h3>
+                    <form action="/characters/content" method="GET">
+                        <label>ID</label>
+                        <input type="number" min=1 class="form-control mb-3" name="idCharacter" required
+                               placeholder="idCharacter 1">
+                        <button class="btn btn-primary" type="submit"> Buscar</button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <h3 class="text-center">Modificar personaje</h3>
+                    <form action="/characters/updateCharacter" method="POST">
+                        <input type="hidden" name="_method" value="PUT">
+
+                        <p>Nota: Los parámetros con * son obligatorios</p>
+
+                        <span>Identificador*</span>
+                        <input type="number" min=1 class="form-control mb-3" name="idCharacter" required
+                               placeholder="idCharacter 1"><br>
+                        <br>
+
+                        <span>Nombre</span>
+                        <input type="text" class="form-control mb-3" name="name"><br>
+                        <br>
+
+                        <span>Participante asociado</span>
+                        <input type="number" min=1 class="form-control mb-3" name="participant"
+                               placeholder="idParticipant 1"><br>
+                        <br>
+
+                        <span>Edad</span>
+                        <input type="number" class="form-control mb-3" name="age"><br>
+                        <br>
+
+                        <button class="btn btn-primary" type="submit"> Guardar</button>
+                    </form>
+                </div>
+
+                <div class="card-body">
+                    <h3 class="text-center">Borrar personaje</h3>
+                    <form action="/characters/deleteCharacter" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <label>Identificador</label>
+                        <input type="number" min=1 class="form-control mb-3" name="idCharacter" required
+                               placeholder="idCharacter 1">
+                        <button class="btn btn-primary" type="submit"> Borrar</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

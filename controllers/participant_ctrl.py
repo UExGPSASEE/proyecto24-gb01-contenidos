@@ -1,7 +1,9 @@
 from flask import render_template, request, jsonify, redirect, url_for
-from database import get_next_sequence_value as get_next_sequence_value
 from pymongo.collection import Collection
+
+from database import get_next_sequence_value as get_next_sequence_value
 from models.participant import Participant
+
 
 class ParticipantCtrl:
 
@@ -11,9 +13,11 @@ class ParticipantCtrl:
         participantsReceived = participants.find()
         return render_template('Participant.html', participants=participantsReceived)
 
+    # ---------------------------------------------------------
+
     @staticmethod
     def addParticipant(db: Collection):
-        idParticipant = get_next_sequence_value(db, "idParticipant")
+        idParticipant = int(get_next_sequence_value(db, "idParticipant"))
         name = request.form.get('name')
         surname = request.form.get('surname')
         age = int(request.form.get('age'))
@@ -25,49 +29,57 @@ class ParticipantCtrl:
 
             return redirect(url_for('participants'))
         else:
-            return jsonify({'error': 'Participant not found or not added', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Participante no añadido', 'status': '404 Not Found'}), 404
 
     # ---------------------------------------------------------
 
     @staticmethod
     def getParticipantByName(db: Collection):
         name = request.args.get('name')
+
         if name:
-            matching_participants = db.find({'name': name})
-            participants_list = [
+            matchingParticipants = db.find({'name': {'$regex': name, '$options': 'i'}})
+            participantsList = [
                 {
+                    'idParticipant': participant.get('idParticipant'),
                     'name': participant.get('name'),
                     'surname': participant.get('surname'),
                     'age': participant.get('age'),
                     'nationality': participant.get('nationality')
                 }
-                for participant in matching_participants
+                for participant in matchingParticipants
             ]
 
-            return jsonify(participants_list), 200
+            return jsonify(participantsList), 200
+
         else:
-            return jsonify({'error': 'Nombre no proporcionado'}), 400
+            return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
 
     @staticmethod
     def getParticipantBySurname(db: Collection):
         surname = request.args.get('surname')
 
         if surname:
-            matching_participants = db.find({'surname': surname})
+            matchingParticipants = db.find({'surname': {'$regex': surname, '$options': 'i'}})
 
-            participants_list = [
+            participantsList = [
                 {
+                    'idParticipant': participant.get('idParticipant'),
                     'name': participant.get('name'),
                     'surname': participant.get('surname'),
                     'age': participant.get('age'),
                     'nationality': participant.get('nationality')
                 }
-                for participant in matching_participants
+                for participant in matchingParticipants
             ]
 
-            return jsonify(participants_list), 200
+            return jsonify(participantsList), 200
         else:
-            return jsonify({'error': 'Apellido/s no proporcionados'}), 400
+            return jsonify({'error': 'Apellidos no proporcionados', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
 
     @staticmethod
     def getParticipantByAge(db: Collection):
@@ -78,6 +90,7 @@ class ParticipantCtrl:
 
             participants_list = [
                 {
+                    'idParticipant': participant.get('idParticipant'),
                     'name': participant.get('name'),
                     'surname': participant.get('surname'),
                     'age': participant.get('age'),
@@ -88,54 +101,125 @@ class ParticipantCtrl:
 
             return jsonify(participants_list), 200
         else:
-            return jsonify({'error': 'Edad no proporcionada'}), 400
+            return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
 
     @staticmethod
     def getParticipantByNationality(db: Collection):
         nationality = request.args.get('nationality')
         if nationality:
-            matching_participants = db.find({'nationality': nationality})
-            participants_list = [
+            matchingParticipants = db.find({'nationality': {'$regex': nationality, '$options': 'i'}})
+            participantsList = [
                 {
+                    'idParticipant': participant.get('idParticipant'),
                     'name': participant.get('name'),
                     'surname': participant.get('surname'),
                     'age': participant.get('age'),
                     'nationality': participant.get('nationality')
                 }
-                for participant in matching_participants
+                for participant in matchingParticipants
             ]
 
-            return jsonify(participants_list), 200
+            return jsonify(participantsList), 200
         else:
-            return jsonify({'error': 'Nacionalidad no proporcionada'}), 400
+            return jsonify({'error': 'Nacionalidad no proporcionada', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantById(db: Collection):
-        id = request.args.get('participant_id')
-        participant_id = int(id)
-        print(id)
-        if id:
-            matching_participant = db.find({'participant_id': participant_id})
-            participants_list = [
-                {
-                    'participant_id': participant.get('participant_id'),
-                    'name': participant.get('name'),
-                    'surname': participant.get('surname'),
-                    'age': participant.get('age'),
-                    'nationality': participant.get('nationality')
-                }
-                for participant in matching_participant
-            ]
-            return jsonify(participants_list), 200
-        else:
-            return jsonify({'error': 'Id no proporcionado'}), 400
+    def getParticipantById(db: Collection, idParticipant: int):
+        if idParticipant:
+            idParticipant = int(idParticipant)
+            matchingParticipant = db.find({'idParticipant': idParticipant})
 
+            if matchingParticipant:
+                participantsList = [
+                    {
+                        'idParticipant': participant.get('idParticipant'),
+                        'name': participant.get('name'),
+                        'surname': participant.get('surname'),
+                        'age': participant.get('age'),
+                        'nationality': participant.get('nationality')
+                    }
+                    for participant in matchingParticipant
+                ]
+                return jsonify(participantsList), 200
+            else:
+                return jsonify({'error': 'Participante no encontrado', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Identificador no proporcionado', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
+
+    @staticmethod
+    def getContentByParticipant(participantCollection: Collection, movieCollection: Collection,
+                                seriesCollection: Collection):
+        idParticipant = int(request.args.get('idParticipant'))
+
+        if idParticipant:
+            matchingParticipant = participantCollection.find({'idParticipant': idParticipant})
+
+            if matchingParticipant:
+                contentList = []
+                matchingMovie = movieCollection.find({'participant': {'$in': [str(idParticipant)]}})
+
+                contentList.append({'Content': 'Movies'})
+
+                for movie in matchingMovie:
+                    contentList.append({
+                        'idMovie': movie.get('idMovie'),
+                        'title': movie.get('title'),
+                        'urlVideo': movie.get('urlVideo'),
+                        'urlTitlePage': movie.get('urlTitlePage'),
+                        'releaseDate': movie.get('releaseDate'),
+                        'synopsis': movie.get('synopsis'),
+                        'description': movie.get('description'),
+                        'isSuscription': movie.get('isSuscription'),
+                        'duration': movie.get('duration'),
+                        'language': movie.get('language'),
+                        'category': movie.get('category'),
+                        'character': movie.get('character'),
+                        'participant': movie.get('participant'),
+                        'trailer': movie.get('trailer'),
+                    })
+
+                contentList.append({'Content': 'Series'})
+                matchingSerie = seriesCollection.find({'participant': {'$in': [str(idParticipant)]}})
+
+                for series in matchingSerie:
+                    contentList.append({
+                        'idSeries': series.get('idSeries'),
+                        'title': series.get('title'),
+                        'duration': series.get('duration'),
+                        'urlTitlePage': series.get('urlTitlePage'),
+                        'releaseDate': series.get('releaseDate'),
+                        'synopsis': series.get('synopsis'),
+                        'description': series.get('description'),
+                        'isSuscription': series.get('isSuscription'),
+                        'seasons': series.get('seasons'),
+                        'language': series.get('language'),
+                        'category': series.get('category'),
+                        'character': series.get('character'),
+                        'participant': series.get('participant'),
+                        'trailer': series.get('trailer')
+                    })
+
+                return jsonify(contentList), 200
+
+            else:
+                return jsonify({'error': 'Participante no encontrado', 'status': '404 Not Found'}), 404
+        else:
+            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+
+    # ---------------------------------------------------------
 
     @staticmethod
     def getAllParticipants(db: Collection):
         allParticipants = db.find()
         participants_list = [
             {
+                'idParticipant': participant.get('idParticipant'),
                 'name': participant.get('name'),
                 'surname': participant.get('surname'),
                 'age': participant.get('age'),
@@ -148,48 +232,56 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteParticipant(db: Collection):
-        if request.form.get('_method') == 'DELETE':
-            participant_id = int(request.form['participant_id'])
-            if participant_id and db.delete_one({'participant_id': participant_id}):
-                print("Delete ok")
+    def deleteParticipant(db: Collection, idParticipant: int):
+
+        if idParticipant:
+            idParticipant = int(idParticipant)
+            if db.delete_one({'idParticipant': idParticipant}):
                 return redirect(url_for('participants'))
             else:
-                print("Delete failed")
-                return redirect(url_for('participants'))
+                return jsonify({'error': 'Participant not found or not deleted', 'status': '404 Not Found'}), 404
         else:
-            return redirect(url_for('participants'))
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def put_participant(db: Collection):
-        if request.form.get('_method') != 'PUT':
-            return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
-        try:
-            participant_id = int(request.form.get('id'))
+    def deleteParticipantForm(db: Collection):
+        idParticipant = int(request.form.get('idParticipant'))
+        return ParticipantCtrl.deleteParticipant(db, idParticipant)
+
+    @staticmethod
+    def putParticipantForm(db: Collection):
+        idParticipant = int(request.form.get('idParticipant'))
+        return ParticipantCtrl.putParticipant(db, idParticipant)
+
+    @staticmethod
+    def putParticipant(db: Collection, idParticipant: int):
+        if idParticipant:
+            idParticipant = int(idParticipant)
             name = request.form.get('name')
             surname = request.form.get('surname')
-            age = int(request.form.get('age'))
+            age = request.form.get('age')
             nationality = request.form.get('nationality')
-
-            if not participant_id:
+            if age:
+                age = int(age)
+            if not idParticipant:
                 return jsonify({'error': 'ID de participante requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'idParticipant': participant_id}
+            filter = {'idParticipant': idParticipant}
 
-            update_fields = {}
+            updateFields = {}
 
             if name:
-                update_fields['name'] = name
+                updateFields['name'] = name
             if surname:
-                update_fields['surname'] = surname
+                updateFields['surname'] = surname
             if age:
-                update_fields['age'] = age
+                updateFields['age'] = age
             if nationality:
-                update_fields['nationality'] = nationality
+                updateFields['nationality'] = nationality
 
-            change = {'$set': update_fields}
+            change = {'$set': updateFields}
 
             result = db.update_one(filter, change)
             if result.matched_count == 0:
@@ -197,15 +289,11 @@ class ParticipantCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'El participante ya está actualizado', 'status': '200 OK'}), 200
 
-            # Redirigir a la lista de participantes
-            return redirect(url_for('participants'))
+        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
-        except ValueError:
-            return jsonify({'error': 'Datos inválidos', 'status': '400 Bad Request'}), 400
-
-        except Exception as e:
-            return jsonify(
-                {'error': f'Error interno del servidor: {str(e)}', 'status': '500 Internal Server Error'}
-            ), 500
+    @staticmethod
+    def putParticipantForm(db: Collection):
+        idParticipant = int(request.form.get('idParticipant'))
+        return ParticipantCtrl.putParticipant(db, idParticipant)
 
     # --------------------------------

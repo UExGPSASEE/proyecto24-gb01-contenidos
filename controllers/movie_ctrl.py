@@ -273,7 +273,6 @@ class MovieCtrl:
     def deleteMovieForm(db: Collection):
         idMovie = int(request.form.get('idMovie'))
         return MovieCtrl.deleteMovie(db, idMovie)
-
     # ---------------------------------------------------------
 
     @staticmethod
@@ -294,7 +293,7 @@ class MovieCtrl:
             trailer = request.form.get('trailer')
             isSuscription = request.form.get('isSuscription')
 
-            filter = {'idMovie': idMovie}
+            filterDict = {'idMovie': idMovie}
 
             updateFields = {}
 
@@ -326,13 +325,7 @@ class MovieCtrl:
                 updateFields['isSuscription'] = isSuscription
 
             change = {'$set': updateFields}
-            result = db.update_one(filter, change)
-
-            if result.matched_count == 0:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
-
-            elif result.modified_count == 0:
-                return jsonify({'message': 'La película ya está actualizada', 'status': '200 OK'}), 200
+            return MovieCtrl.updateMovie(db, filterDict, change)
 
         return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
