@@ -4,7 +4,7 @@ class Category:
         self.name = name
 
     def toDBCollection(self):
-        return{
-            'idCategory' : self.idCategory,
-            'name' : self.name
+        return {
+            'idCategory': self.idCategory,
+            'name': self.name
         }

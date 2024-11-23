@@ -1,7 +1,9 @@
 from flask import render_template, request, jsonify, redirect, url_for
-from database import get_next_sequence_value as get_next_sequence_value
 from pymongo.collection import Collection
+
+from database import get_next_sequence_value as get_next_sequence_value
 from models.category import Category
+
 
 class CategoryCtrl:
 
@@ -9,11 +11,12 @@ class CategoryCtrl:
     def render_template(db: Collection):
         categoriesReceived = db.find()
         return render_template('Category.html', categories=categoriesReceived)
-# ---------------------------------------------------------
+
+    # ---------------------------------------------------------
 
     @staticmethod
     def addCategory(db: Collection):
-        idCategory = get_next_sequence_value(db,"idCategory")
+        idCategory = int(get_next_sequence_value(db, "idCategory"))
         name = request.form['name']
 
         if idCategory:
@@ -21,36 +24,36 @@ class CategoryCtrl:
             db.insert_one(category.toDBCollection())
             return redirect(url_for('categories'))
         else:
-            return jsonify({'error': 'Categoría no insertada', 'status':'404 Not Found'}), 404
+            return jsonify({'error': 'Categoría no insertada', 'status': '404 Not Found'}), 404
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def getAllCategories(db: Collection):
         allCategories = db.find()
         categoryList = [
             {
-                'idCategory' : category.get('idCategory'),
-                'name' : category.get('name')
+                'idCategory': category.get('idCategory'),
+                'name': category.get('name')
             }
             for category in allCategories
         ]
         return jsonify(categoryList), 200
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
-    def getCategoryById(db: Collection):
-        idCategory = int(request.args.get('idCategory'))
+    def getCategoryById(db: Collection, idCategory: int):
         if idCategory:
+            idCategory = int(idCategory)
             matchingCategory = db.find({'idCategory': idCategory})
             if matchingCategory:
                 categoryFound = [
-                {
-                    'idCategory' : category.get('idCategory'),
-                    'name' : category.get('name')
-                }
-                for category in matchingCategory
+                    {
+                        'idCategory': category.get('idCategory'),
+                        'name': category.get('name')
+                    }
+                    for category in matchingCategory
                 ]
                 return jsonify(categoryFound), 200
             else:
@@ -58,7 +61,7 @@ class CategoryCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def getContentByCategory(categoryCollection: Collection, movieCollection: Collection, seriesCollection: Collection):
@@ -73,45 +76,45 @@ class CategoryCtrl:
                 contentList = []
                 matchingMovie = movieCollection.find({'category': {'$in': [str(idCategory)]}})
 
-                contentList.append({'Content' : 'Movies'})
+                contentList.append({'Content': 'Movies'})
 
                 for movie in matchingMovie:
                     contentList.append({
-                    'idMovie' : movie.get('idMovie'),
-                    'title' : movie.get('title'),
-                    'urlVideo' : movie.get('urlVideo'),
-                    'urlTitlePage' : movie.get('urlTitlePage'),
-                    'releaseDate' : movie.get('releaseDate'),
-                    'synopsis' : movie.get('synopsis'),
-                    'description' : movie.get('description'),
-                    'isSuscription' : movie.get('isSuscription'),
-                    'duration' : movie.get('duration'),
-                    'language' : movie.get('language'),
-                    'category' : movie.get('category'),
-                    'character' : movie.get('character'),
-                    'participant' : movie.get('participant'),
-                    'trailer' : movie.get('trailer'),
+                        'idMovie': movie.get('idMovie'),
+                        'title': movie.get('title'),
+                        'urlVideo': movie.get('urlVideo'),
+                        'urlTitlePage': movie.get('urlTitlePage'),
+                        'releaseDate': movie.get('releaseDate'),
+                        'synopsis': movie.get('synopsis'),
+                        'description': movie.get('description'),
+                        'isSuscription': movie.get('isSuscription'),
+                        'duration': movie.get('duration'),
+                        'language': movie.get('language'),
+                        'category': movie.get('category'),
+                        'character': movie.get('character'),
+                        'participant': movie.get('participant'),
+                        'trailer': movie.get('trailer'),
                     })
 
-                contentList.append({'Content' : 'Series'})
+                contentList.append({'Content': 'Series'})
                 matchingSerie = seriesCollection.find({'category': {'$in': [str(idCategory)]}})
 
                 for series in matchingSerie:
                     contentList.append({
-                        'idSeries' : series.get('idSeries'),
-                        'title' : series.get('title'),
-                        'duration' : series.get('duration'),
-                        'urlTitlePage' : series.get('urlTitlePage'),
-                        'releaseDate' : series.get('releaseDate'),
-                        'synopsis' : series.get('synopsis'),
-                        'description' : series.get('description'),
-                        'isSuscription' : series.get('isSuscription'),
+                        'idSeries': series.get('idSeries'),
+                        'title': series.get('title'),
+                        'duration': series.get('duration'),
+                        'urlTitlePage': series.get('urlTitlePage'),
+                        'releaseDate': series.get('releaseDate'),
+                        'synopsis': series.get('synopsis'),
+                        'description': series.get('description'),
+                        'isSuscription': series.get('isSuscription'),
                         'seasons': series.get('seasons'),
-                        'language' : series.get('language'),
-                        'category' : series.get('category'),
-                        'character' : series.get('character'),
-                        'participant' : series.get('participant'),
-                        'trailer' : series.get('trailer')
+                        'language': series.get('language'),
+                        'category': series.get('category'),
+                        'character': series.get('character'),
+                        'participant': series.get('participant'),
+                        'trailer': series.get('trailer')
                     })
 
                 return jsonify(contentList), 200

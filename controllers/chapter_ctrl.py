@@ -1,7 +1,9 @@
 from flask import render_template, request, jsonify, redirect, url_for
-from database import get_next_sequence_value as get_next_sequence_value
 from pymongo.collection import Collection
+
+from database import get_next_sequence_value as get_next_sequence_value
 from models.chapter import Chapter
+
 
 class ChapterCtrl:
     @staticmethod
@@ -9,11 +11,11 @@ class ChapterCtrl:
         chaptersReceived = db.find()
         return render_template('Chapter.html', chapters=chaptersReceived)
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def addChapter(db: Collection):
-        idChapter = get_next_sequence_value(db,"idChapter")
+        idChapter = int(get_next_sequence_value(db, "idChapter"))
         title = request.form.get('title')
         duration = request.form.get('duration')
         urlVideo = request.form.get('urlVideo')
@@ -23,30 +25,36 @@ class ChapterCtrl:
             db.insert_one(chapter.toDBCollection())
             return redirect(url_for('chapters'))
         else:
-            return jsonify({'error': 'Capítulo no añadido', 'status':'404 Not Found'}), 404
+            return jsonify({'error': 'Capítulo no añadido', 'status': '404 Not Found'}), 404
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
     @staticmethod
-    def delete_chapter(db: Collection):
-        if request.form.get('_method') == 'DELETE':
-            idChapter = int(request.form['idChapter'])
-            if idChapter and db.delete_one({'idChapter': idChapter}):
-                print("Delete ok")
+    def deleteChapter(db: Collection, idChapter: int):
+        if idChapter:
+            idChapter = int(idChapter)
+            if db.delete_one({'idChapter': idChapter}):
                 return redirect(url_for('chapters'))
             else:
-                print("Delete failed")
-                return redirect(url_for('chapters'))
+                return jsonify({'error': 'Chapter not found or not deleted', 'status': '404 Not Found'}), 404
         else:
-            return redirect(url_for('chapters'))
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
-    def put_chapter(db: Collection):
-        if request.form.get('_method') != 'PUT':
-            return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
-        try:
-            idChapter = int(request.form.get('idChapter'))
+    def deleteChapterForm(db: Collection):
+        idChapter = int(request.form.get('idChapter'))
+        return ChapterCtrl.deleteChapter(db, idChapter)
+
+    @staticmethod
+    def putChapterForm(db: Collection):
+        idChapter = int(request.form.get('idChapter'))
+        return ChapterCtrl.putChapter(db, idChapter)
+
+    @staticmethod
+    def putChapter(db: Collection, idChapter):
+        if idChapter:
+            idChapter = int(idChapter)
             title = request.form.get('title')
             duration = request.form.get('duration')
             urlVideo = request.form.get('urlVideo')
@@ -76,36 +84,28 @@ class ChapterCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'El capítulo ya está actualizado', 'status': '200 OK'}), 200
 
-            return redirect(url_for('chapters'))
+        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
-        except ValueError:
-            return jsonify({'error': 'Datos inválidos', 'status': '400 Bad Request'}), 400
-
-        except Exception as e:
-            return jsonify(
-                {'error': f'Error interno del servidor: {str(e)}', 'status': '500 Internal Server Error'}
-            ), 500
-
-# --------------------------------
+    # --------------------------------
 
     @staticmethod
-    def getChapterById(db: Collection):
-        idChapter = int(request.args.get('idChapter'))
+    def getChapterById(db: Collection, idChapter):
         if idChapter:
+            idChapter = int(idChapter)
             matchingChapter = db.find({'idChapter': idChapter})
             if matchingChapter:
                 chapterFound = [
-                {
-                    'idChapter' : chapter.get('idChapter'),
-                    'title' : chapter.get('title'),
-                    'urlVideo' : chapter.get('urlVideo'),
-                    'duration' : chapter.get('duration'),
-                    'chapterNumber' : chapter.get('chapterNumber')
-                }
-                for chapter in matchingChapter
+                    {
+                        'idChapter': chapter.get('idChapter'),
+                        'title': chapter.get('title'),
+                        'urlVideo': chapter.get('urlVideo'),
+                        'duration': chapter.get('duration'),
+                        'chapterNumber': chapter.get('chapterNumber')
+                    }
+                    for chapter in matchingChapter
                 ]
                 return jsonify(chapterFound), 200
             else:
                 return jsonify({'error': 'Capítulo no encontrado', 'status': '404 Not Found'}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400

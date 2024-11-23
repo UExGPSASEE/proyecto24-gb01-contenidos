@@ -8,7 +8,7 @@ class Participant:
 
     def toDBCollection(self):
         return {
-            'idParticipant' : self.idParticipant,
+            'idParticipant': self.idParticipant,
             'name': self.name,
             'surname': self.surname,
             'age': self.age,

@@ -1,7 +1,9 @@
 from flask import render_template, request, jsonify, redirect, url_for
-from database import get_next_sequence_value as get_next_sequence_value
 from pymongo.collection import Collection
+
+from database import get_next_sequence_value as get_next_sequence_value
 from models.trailer import Trailer
+
 
 class TrailerCtrl:
     @staticmethod
@@ -9,11 +11,11 @@ class TrailerCtrl:
         trailersReceived = db.find()
         return render_template('Trailer.html', trailers=trailersReceived)
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def addTrailer(db: Collection):
-        idTrailer = get_next_sequence_value(db,"idTrailer")
+        idTrailer = int(get_next_sequence_value(db, "idTrailer"))
         title = request.form.get('title')
         duration = request.form.get('duration')
         urlVideo = request.form.get('urlVideo')
@@ -26,28 +28,28 @@ class TrailerCtrl:
             db.insert_one(trailer.toDBCollection())
             return redirect(url_for('trailers'))
         else:
-            return jsonify({'error': 'Tráiler no añadido', 'status':'404 Not Found'}), 404
+            return jsonify({'error': 'Tráiler no añadido', 'status': '404 Not Found'}), 404
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
-    def getTrailerById(db: Collection):
-        idTrailer = int(request.args.get('idTrailer'))
+    def getTrailerById(db: Collection, idTrailer: int):
         if idTrailer:
+            idTrailer = int(idTrailer)
             matchingTrailer = db.find({'idTrailer': idTrailer})
             if matchingTrailer:
                 trailerFound = [
-                {
-                    'idTrailer' : trailer.get('idTrailer'),
-                    'title' : trailer.get('title'),
-                    'duration' : trailer.get('duration'),
-                    'urlVideo' : trailer.get('urlVideo'),
-                    'language' : trailer.get('language'),
-                    'category' : trailer.get('category'),
-                    'character' : trailer.get('character'),
-                    'participant' : trailer.get('participant'),
-                }
-                for trailer in matchingTrailer
+                    {
+                        'idTrailer': trailer.get('idTrailer'),
+                        'title': trailer.get('title'),
+                        'duration': trailer.get('duration'),
+                        'urlVideo': trailer.get('urlVideo'),
+                        'language': trailer.get('language'),
+                        'category': trailer.get('category'),
+                        'character': trailer.get('character'),
+                        'participant': trailer.get('participant'),
+                    }
+                    for trailer in matchingTrailer
                 ]
                 return jsonify(trailerFound), 200
             else:
@@ -55,29 +57,35 @@ class TrailerCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
-    def delete_trailer(db: Collection):
-        if request.form.get('_method') == 'DELETE':
-            idTrailer = int(request.form['idTrailer'])
-            if idTrailer and db.delete_one({'idTrailer': idTrailer}):
-                print("Delete ok")
+    def deleteTrailer(db: Collection, idTrailer: int):
+        if idTrailer:
+            idTrailer = int(idTrailer)
+            if db.delete_one({'idTrailer': idTrailer}):
                 return redirect(url_for('trailers'))
             else:
-                print("Delete failed")
-                return redirect(url_for('trailers'))
+                return jsonify({'error': 'Trailer not found or not deleted', 'status': '404 Not Found'}), 404
         else:
-            return redirect(url_for('trailers'))
-
-# ---------------------------------------------------------
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
     @staticmethod
-    def put_trailer(db: Collection):
-        if request.form.get('_method') != 'PUT':
-            return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
-        try:
-            idTrailer = int(request.form.get('idTrailer'))
+    def deleteTrailerForm(db: Collection):
+        idTrailer = int(request.form['idTrailer'])
+        return TrailerCtrl.deleteTrailer(db, idTrailer)
+
+    # ---------------------------------------------------------
+
+    @staticmethod
+    def putTrailerForm(db: Collection):
+        idTrailer = int(request.form['idTrailer'])
+        return TrailerCtrl.putTrailer(db, idTrailer)
+
+    @staticmethod
+    def putTrailer(db: Collection, idTrailer: int):
+        if idTrailer:
+            idTrailer = int(idTrailer)
             trailerTitle = request.form.get('title')
             duration = request.form.get('duration')
             urlVideo = request.form.get('urlVideo')
@@ -118,12 +126,6 @@ class TrailerCtrl:
 
             return redirect(url_for('trailers'))
 
-        except ValueError:
-            return jsonify({'error': 'Datos inválidos', 'status': '400 Bad Request'}), 400
-
-        except Exception as e:
-            return jsonify(
-                {'error': f'Error interno del servidor: {str(e)}', 'status': '500 Internal Server Error'}
-            ), 500
+        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
 # --------------------------------

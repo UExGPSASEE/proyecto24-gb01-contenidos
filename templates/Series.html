@@ -6,232 +6,236 @@
     <title>Series</title>
 </head>
 <body>
-    <div class="container">
-        <h1 class="text-center mt-5 mb-5"> Gestión de series </h1>
-        <p><a href="/">Volver al menú de gestión</a></p>
-    </div>
-    <div class="container">
-        <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
-            <div class="col-md-6 mb-3">
-                <div class="card">
-                    <h3 class="text-center">Obtener serie por identificador</h3>
-                    <div class="card-body">
-                        <form action="/series/seriesFound" method="GET">
-                            <p>¿Qué serie deseas buscar?</p>
-                            <span>ID</span>
-                            <input type="text" class="form-control mb-3" min=1 name="idSeries" required placeholder="idSeries 1">
-                            <button class="btn btn-primary" type="submit">Buscar</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card-header">
-                    <h3 class="text-center">Añadir serie</h3>
-                </div>
-
+<div class="container">
+    <h1 class="text-center mt-5 mb-5"> Gestión de series </h1>
+    <p><a href="/">Volver al menú de gestión</a></p>
+</div>
+<div class="container">
+    <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <h3 class="text-center">Obtener serie por identificador</h3>
                 <div class="card-body">
-                    <form action="/series/addSeries" method="POST">
-
-                        <p>Nota: Los parámetros con * son obligatorios</p>
-
-                        <span>Título*</span>
-                        <input type="text" class="form-control mb-3" name="title" required>
-                        <br></br>
-                        <span>Duración (en minutos)*</span>
-                        <input type="number" min=0 class="form-control mb-3" name="duration" required>
-
-                        <p>Disponible con suscripción</p>
-                        <input type="radio" id="yes" name="isSuscription" value="True">
-                        <label for="yes">Sí</label><br>
-                        <input type="radio" id="no" name="isSuscription" value="False">
-                        <label for="no">No</label><br>
-
-                        <p>Temporadas</p>
-                        <input type="number" min=1 name="seasons[]" placeholder="idSeason 1"><br>
-                        <input type="number" min=1 name="seasons[]" placeholder="idSeason 2"><br>
-                        <input type="number" min=1 name="seasons[]" placeholder="idSeason 3"><br>
-                        <br>
-
-                        <span>URL de la portada de la película</span>
-                        <input type="url" class="form-control mb-3" name="urlTitlePage">
-                        <br></br>
-
-                        <span>Fecha de estreno</span>
-                        <input type="date" class="form-control mb-3" name="releaseDate">
-                        <br></br>
-
-                        <span>Sinopsis de la película</span>
-                        <input type="text" class="form-control mb-3" name="synopsis">
-                        <br></br>
-
-                        <span>Descripción de la película</span>
-                        <input type="text" class="form-control mb-3" name="description">
-
-                        <p>Idiomas disponibles</p>
-                        <input type="number" min=1 name="language[]" placeholder="idLanguage 1"><br>
-                        <input type="number" min=1 name="language[]" placeholder="idLanguage 2"><br>
-                        <input type="number" min=1 name="language[]" placeholder="idLanguage 3"><br>
-
-                        <p>Categorías asociadas</p>
-                        <input type="number" min=1 name="category[]" placeholder="idCategory 1"><br>
-                        <input type="number" min=1 name="category[]" placeholder="idCategory 2"><br>
-
-                        <p>Personajes</p>
-                        <input type="number" min=1 name="character[]" placeholder="idCharacter 1"><br>
-                        <input type="number" min=1 name="character[]" placeholder="idCharacter 2"><br>
-                        <input type="number" min=1 name="character[]" placeholder="idCharacter 3"><br>
-
-                        <p>Intérpretes</p>
-                        <input type="number" min=1 name="participant[]" placeholder="idParticipant 1"><br>
-                        <input type="number" min=1 name="participant[]" placeholder="idParticipant 2"><br>
-                        <input type="number" min=1 name="participant[]" placeholder="idParticipant 3"><br>
-                        <br>
-
-                        <span>Tráiler</span>
-                        <input type="number" name="trailer" min=1 placeholder="idTrailer 1"><br>
-                        <br>
-                        <button class="btn btn-primary" type="submit"> Añadir </button>
+                    <form action="/series/seriesFound" method="GET">
+                        <p>¿Qué serie deseas buscar?</p>
+                        <span>ID</span>
+                        <input type="text" class="form-control mb-3" min=1 name="idSeries" required
+                               placeholder="idSeries 1">
+                        <button class="btn btn-primary" type="submit">Buscar</button>
                     </form>
                 </div>
+            </div>
 
+            <div class="card-header">
+                <h3 class="text-center">Añadir serie</h3>
+            </div>
+
+            <div class="card-body">
+                <form action="/series" method="POST">
+
+                    <p>Nota: Los parámetros con * son obligatorios</p>
+
+                    <span>Título*</span>
+                    <input type="text" class="form-control mb-3" name="title" required>
+                    <br></br>
+                    <span>Duración (en minutos)*</span>
+                    <input type="number" min=0 class="form-control mb-3" name="duration" required>
+
+                    <p>Disponible con suscripción</p>
+                    <input type="radio" id="yes" name="isSuscription" value="True">
+                    <label for="yes">Sí</label><br>
+                    <input type="radio" id="no" name="isSuscription" value="False">
+                    <label for="no">No</label><br>
+
+                    <p>Temporadas</p>
+                    <input type="number" min=1 name="seasons[]" placeholder="idSeason 1"><br>
+                    <input type="number" min=1 name="seasons[]" placeholder="idSeason 2"><br>
+                    <input type="number" min=1 name="seasons[]" placeholder="idSeason 3"><br>
+                    <br>
+
+                    <span>URL de la portada de la película</span>
+                    <input type="url" class="form-control mb-3" name="urlTitlePage">
+                    <br></br>
+
+                    <span>Fecha de estreno</span>
+                    <input type="date" class="form-control mb-3" name="releaseDate">
+                    <br></br>
+
+                    <span>Sinopsis de la película</span>
+                    <input type="text" class="form-control mb-3" name="synopsis">
+                    <br></br>
+
+                    <span>Descripción de la película</span>
+                    <input type="text" class="form-control mb-3" name="description">
+
+                    <p>Idiomas disponibles</p>
+                    <input type="number" min=1 name="language[]" placeholder="idLanguage 1"><br>
+                    <input type="number" min=1 name="language[]" placeholder="idLanguage 2"><br>
+                    <input type="number" min=1 name="language[]" placeholder="idLanguage 3"><br>
+
+                    <p>Categorías asociadas</p>
+                    <input type="number" min=1 name="category[]" placeholder="idCategory 1"><br>
+                    <input type="number" min=1 name="category[]" placeholder="idCategory 2"><br>
+
+                    <p>Personajes</p>
+                    <input type="number" min=1 name="character[]" placeholder="idCharacter 1"><br>
+                    <input type="number" min=1 name="character[]" placeholder="idCharacter 2"><br>
+                    <input type="number" min=1 name="character[]" placeholder="idCharacter 3"><br>
+
+                    <p>Intérpretes</p>
+                    <input type="number" min=1 name="participant[]" placeholder="idParticipant 1"><br>
+                    <input type="number" min=1 name="participant[]" placeholder="idParticipant 2"><br>
+                    <input type="number" min=1 name="participant[]" placeholder="idParticipant 3"><br>
+                    <br>
+
+                    <span>Tráiler</span>
+                    <input type="number" name="trailer" min=1 placeholder="idTrailer 1"><br>
+                    <br>
+                    <button class="btn btn-primary" type="submit"> Añadir</button>
+                </form>
+            </div>
+
+            <div class="card-body">
+                <h3 class="text-center">Obtener todas las series</h3>
+                <form action="/series/all" method="GET">
+                    <button class="btn btn-primary" type="submit"> Buscar</button>
+                </form>
+            </div>
+
+            <div class="card-body">
+                <h3 class="text-center">Obtener series por título</h3>
+                <form action="/series/title" method="GET">
+                    <label>Título</label>
+                    <input type="text" class="form-control mb-3" name="title" required placeholder="Stranger Things">
+                    <button class="btn btn-primary" type="submit"> Buscar</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 class="text-center">Obtener capítulos de serie</h3>
                 <div class="card-body">
-                    <h3 class="text-center">Obtener todas las series</h3>
-                    <form action="/series/all" method="GET">
-                        <button class="btn btn-primary" type="submit"> Buscar </button>
+                    <form action="/series/chapters" method="GET">
+                        <span>ID</span>
+                        <input type="text" class="form-control mb-3" min=1 name="idSeries" required
+                               placeholder="idSeries 1">
+                        <button class="btn btn-primary" type="submit">Buscar</button>
                     </form>
                 </div>
+            </div>
 
+            <div class="card-header">
+                <h3 class="text-center">Modificar serie</h3>
+            </div>
+
+            <div class="card-body">
+                <form action="/series/updateSeries" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+
+                    <p>Nota: Los parámetros con * son obligatorios</p>
+
+                    <label>ID*</label>
+                    <input type="text" class="form-control mb-3" name="idSeries" required placeholder="idSeries 1">
+                    <br></br>
+
+                    <label>Título</label>
+                    <input type="text" class="form-control mb-3" name="title">
+                    <br></br>
+
+                    <label>Duración (en minutos)</label>
+                    <input type="number" class="form-control mb-3" name="duration">
+
+                    <p>Disponible con suscripción</p>
+                    <input type="radio" id="yes" name="isSuscription" value="True">
+                    <label for="yes">Sí</label><br>
+                    <input type="radio" id="no" name="isSuscription" value="False">
+                    <label for="no">No</label><br>
+
+                    <p>Temporadas</p>
+                    <input type="number" min=1 name="seasons[]" placeholder="idSeason 1"><br>
+                    <input type="number" min=1 name="seasons[]" placeholder="idSeason 2"><br>
+                    <input type="number" min=1 name="seasons[]" placeholder="idSeason 3"><br>
+                    <br>
+
+                    <label>URL de la portada de la película (Opcional)</label>
+                    <input type="url" class="form-control mb-3" name="urlTitlePage">
+                    <br></br>
+
+                    <label>Fecha de estreno (Opcional)</label>
+                    <input type="date" class="form-control mb-3" name="releaseDate">
+                    <br></br>
+
+                    <label>Sinopsis de la película (Opcional)</label>
+                    <input type="text" class="form-control mb-3" name="synopsis">
+                    <br></br>
+
+                    <label>Descripción de la película (Opcional)</label>
+                    <input type="text" class="form-control mb-3" name="description">
+
+                    <p>Idiomas disponibles</p>
+                    <input type="number" min=1 name="language[]" placeholder="idLanguage 1"><br>
+                    <input type="number" min=1 name="language[]" placeholder="idLanguage 2"><br>
+                    <input type="number" min=1 name="language[]" placeholder="idLanguage 3"><br>
+
+                    <p>Categorías asociadas</p>
+                    <input type="number" min=1 name="category[]" placeholder="idCategory 1"><br>
+                    <input type="number" min=1 name="category[]" placeholder="idCategory 2"><br>
+
+                    <p>Personajes</p>
+                    <input type="number" min=1 name="character[]" placeholder="idCharacter 1"><br>
+                    <input type="number" min=1 name="character[]" placeholder="idCharacter 2"><br>
+                    <input type="number" min=1 name="character[]" placeholder="idCharacter 3"><br>
+
+                    <p>Intérpretes</p>
+                    <input type="number" min=1 name="participant[]" placeholder="idParticipant 1"><br>
+                    <input type="number" min=1 name="participant[]" placeholder="idParticipant 2"><br>
+                    <input type="number" min=1 name="participant[]" placeholder="idParticipant 3"><br>
+                    <br>
+
+                    <label>Tráiler</label>
+                    <input type="number" name="trailer" min=1 placeholder="idTrailer 1"><br>
+                    <br>
+
+                    <button class="btn btn-primary" type="submit"> Actualizar</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 class="text-center">Obtener personajes de una serie</h3>
                 <div class="card-body">
-                    <h3 class="text-center">Obtener series por título</h3>
-                    <form action="/series/title" method="GET">
-                        <label>Título</label>
-                        <input type="text" class="form-control mb-3" name="title" required placeholder="Stranger Things">
-                        <button class="btn btn-primary" type="submit"> Buscar </button>
+                    <form action="/series/characters" method="GET">
+                        <label>ID</label>
+                        <input type="text" class="form-control mb-3" name="idSeries" min="1" placeholder="idSeries 1"
+                               required>
+                        <button class="btn btn-primary" type="submit">Buscar</button>
                     </form>
                 </div>
+            </div>
 
-                <div class="card">
-                    <h3 class="text-center">Obtener capítulos de serie</h3>
-                    <div class="card-body">
-                        <form action="/series/chapters" method="GET">
-                            <span>ID</span>
-                            <input type="text" class="form-control mb-3" min=1 name="idSeries" required placeholder="idSeries 1">
-                            <button class="btn btn-primary" type="submit">Buscar</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card-header">
-                    <h3 class="text-center">Modificar serie</h3>
-                </div>
-
+            <div class="card">
+                <h3 class="text-center">Obtener participantes de una serie</h3>
                 <div class="card-body">
-                    <form action="/series/updateSeries" method="POST">
-                        <input type="hidden" name="_method" value="PUT">
-
-                        <p>Nota: Los parámetros con * son obligatorios</p>
-
-                        <label>ID*</label>
-                        <input type="text" class="form-control mb-3" name="idSeries" required placeholder="idSeries 1">
-                        <br></br>
-
-                        <label>Título</label>
-                        <input type="text" class="form-control mb-3" name="title">
-                        <br></br>
-
-                        <label>Duración (en minutos)</label>
-                        <input type="number" class="form-control mb-3" name="duration">
-
-                        <p>Disponible con suscripción</p>
-                        <input type="radio" id="yes" name="isSuscription" value="True">
-                        <label for="yes">Sí</label><br>
-                        <input type="radio" id="no" name="isSuscription" value="False">
-                        <label for="no">No</label><br>
-
-                        <p>Temporadas</p>
-                        <input type="number" min=1 name="seasons[]" placeholder="idSeason 1"><br>
-                        <input type="number" min=1 name="seasons[]" placeholder="idSeason 2"><br>
-                        <input type="number" min=1 name="seasons[]" placeholder="idSeason 3"><br>
-                        <br>
-
-                        <label>URL de la portada de la película (Opcional)</label>
-                        <input type="url" class="form-control mb-3" name="urlTitlePage">
-                        <br></br>
-
-                        <label>Fecha de estreno (Opcional)</label>
-                        <input type="date" class="form-control mb-3" name="releaseDate">
-                        <br></br>
-
-                        <label>Sinopsis de la película (Opcional)</label>
-                        <input type="text" class="form-control mb-3" name="synopsis">
-                        <br></br>
-
-                        <label>Descripción de la película (Opcional)</label>
-                        <input type="text" class="form-control mb-3" name="description">
-
-                        <p>Idiomas disponibles</p>
-                        <input type="number" min=1 name="language[]" placeholder="idLanguage 1"><br>
-                        <input type="number" min=1 name="language[]" placeholder="idLanguage 2"><br>
-                        <input type="number" min=1 name="language[]" placeholder="idLanguage 3"><br>
-
-                        <p>Categorías asociadas</p>
-                        <input type="number" min=1 name="category[]" placeholder="idCategory 1"><br>
-                        <input type="number" min=1 name="category[]" placeholder="idCategory 2"><br>
-
-                        <p>Personajes</p>
-                        <input type="number" min=1 name="character[]" placeholder="idCharacter 1"><br>
-                        <input type="number" min=1 name="character[]" placeholder="idCharacter 2"><br>
-                        <input type="number" min=1 name="character[]" placeholder="idCharacter 3"><br>
-
-                        <p>Intérpretes</p>
-                        <input type="number" min=1 name="participant[]" placeholder="idParticipant 1"><br>
-                        <input type="number" min=1 name="participant[]" placeholder="idParticipant 2"><br>
-                        <input type="number" min=1 name="participant[]" placeholder="idParticipant 3"><br>
-                        <br>
-
-                        <label>Tráiler</label>
-                        <input type="number" name="trailer" min=1 placeholder="idTrailer 1"><br>
-                        <br>
-
-                        <button class="btn btn-primary" type="submit"> Actualizar </button>
+                    <form action="/series/participants" method="GET">
+                        <label>ID</label>
+                        <input type="text" class="form-control mb-3" name="idSeries" min="1" placeholder="idSeries 1"
+                               required>
+                        <button class="btn btn-primary" type="submit">Buscar</button>
                     </form>
                 </div>
+            </div>
 
-                <div class="card">
-                    <h3 class="text-center">Obtener personajes de una serie</h3>
-                    <div class="card-body">
-                        <form action="/series/characters" method="GET">
-                            <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="idSeries" min="1" placeholder="idSeries 1" required>
-                            <button class="btn btn-primary" type="submit">Buscar</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-center">Obtener participantes de una serie</h3>
-                    <div class="card-body">
-                        <form action="/series/participants" method="GET">
-                            <label>ID</label>
-                            <input type="text" class="form-control mb-3" name="idSeries" min="1" placeholder="idSeries 1" required>
-                            <button class="btn btn-primary" type="submit">Buscar</button>
-                        </form>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3 class="text-center">Eliminar serie</h3>
-                    <div class="card-body">
-                        <form action="/series/deleteSeries" method="POST">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <label>ID</label>
-                            <input type="text" class="form-control mb-3" min="1" name="idSeries" required>
-                            <button class="btn btn-primary" type="submit">Eliminar</button>
-                        </form>
-                    </div>
+            <div class="card">
+                <h3 class="text-center">Eliminar serie</h3>
+                <div class="card-body">
+                    <form action="/series/deleteSeries" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <label>ID</label>
+                        <input type="text" class="form-control mb-3" min="1" name="idSeries" required>
+                        <button class="btn btn-primary" type="submit">Eliminar</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </body>
 </html>
