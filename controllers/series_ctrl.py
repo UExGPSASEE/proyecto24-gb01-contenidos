@@ -1,8 +1,9 @@
 from flask import render_template, request, jsonify, redirect, url_for
-from database import get_next_sequence_value as get_next_sequence_value
 from pymongo.collection import Collection
+
+from database import get_next_sequence_value as get_next_sequence_value
 from models.series import Series
-from controllers import season_ctrl
+
 
 class SeriesCtrl:
     @staticmethod
@@ -10,11 +11,11 @@ class SeriesCtrl:
         seriesReceived = db.find()
         return render_template('Series.html', series=seriesReceived)
 
-# --------------------------------------------------------------
+    # --------------------------------------------------------------
 
     @staticmethod
     def addSeries(db: Collection):
-        idSeries = get_next_sequence_value(db,"idSeries")
+        idSeries = int(get_next_sequence_value(db, "idSeries"))
         title = request.form.get('title')
         duration = request.form.get('duration')
         urlTitlePage = request.form.get('urlTitlePage')
@@ -31,13 +32,13 @@ class SeriesCtrl:
 
         if idSeries:
             series = Series(idSeries, title, seasons, urlTitlePage, releaseDate, synopsis, description,
-                          isSuscription, duration, language, category, character, participant, trailer)
+                            isSuscription, duration, language, category, character, participant, trailer)
             db.insert_one(series.toDBCollection())
             return redirect(url_for('series'))
         else:
-            return jsonify({'error': 'Serie no añadida', 'status':'404 Not Found'}), 404
+            return jsonify({'error': 'Serie no añadida', 'status': '404 Not Found'}), 404
 
-# --------------------------------------------------------------
+    # --------------------------------------------------------------
 
     @staticmethod
     def getSeriesByTitle(db: Collection):
@@ -48,23 +49,23 @@ class SeriesCtrl:
 
             if db.count_documents({'title': {'$regex': title, '$options': 'i'}}) > 0:
                 seriesFound = [
-                {
-                    'idSeries' : series.get('idSeries'),
-                    'title' : series.get('title'),
-                    'duration' : series.get('duration'),
-                    'urlTitlePage' : series.get('urlTitlePage'),
-                    'releaseDate' : series.get('releaseDate'),
-                    'synopsis' : series.get('synopsis'),
-                    'description' : series.get('description'),
-                    'isSuscription' : series.get('isSuscription'), # OJO
-                    'seasons': series.get('seasons'),
-                    'language' : series.get('language'),
-                    'category' : series.get('category'),
-                    'character' : series.get('character'),
-                    'participant' : series.get('participant'),
-                    'trailer' : series.get('trailer')
-                }
-                for series in matching_series
+                    {
+                        'idSeries': series.get('idSeries'),
+                        'title': series.get('title'),
+                        'duration': series.get('duration'),
+                        'urlTitlePage': series.get('urlTitlePage'),
+                        'releaseDate': series.get('releaseDate'),
+                        'synopsis': series.get('synopsis'),
+                        'description': series.get('description'),
+                        'isSuscription': series.get('isSuscription'),  # OJO
+                        'seasons': series.get('seasons'),
+                        'language': series.get('language'),
+                        'category': series.get('category'),
+                        'character': series.get('character'),
+                        'participant': series.get('participant'),
+                        'trailer': series.get('trailer')
+                    }
+                    for series in matching_series
                 ]
                 return jsonify(seriesFound), 200
 
@@ -74,34 +75,33 @@ class SeriesCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# --------------------------------------------------------------
+    # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesById(db: Collection):
-        idSeries = int(request.args.get('idSeries'))
-
+    def getSeriesById(db: Collection, idSeries: int):
         if idSeries:
+            idSeries = int(idSeries)
             matching_series = db.find({'idSeries': idSeries})
 
             if matching_series:
                 seriesFound = [
-                {
-                    'idSeries' : series.get('idSeries'),
-                    'title' : series.get('title'),
-                    'duration' : series.get('duration'),
-                    'urlTitlePage' : series.get('urlTitlePage'),
-                    'releaseDate' : series.get('releaseDate'),
-                    'synopsis' : series.get('synopsis'),
-                    'description' : series.get('description'),
-                    'isSuscription' : series.get('isSuscription'),
-                    'seasons': series.get('seasons'),
-                    'language' : series.get('language'),
-                    'category' : series.get('category'),
-                    'character' : series.get('character'),
-                    'participant' : series.get('participant'),
-                    'trailer' : series.get('trailer')
-                }
-                for series in matching_series
+                    {
+                        'idSeries': series.get('idSeries'),
+                        'title': series.get('title'),
+                        'duration': series.get('duration'),
+                        'urlTitlePage': series.get('urlTitlePage'),
+                        'releaseDate': series.get('releaseDate'),
+                        'synopsis': series.get('synopsis'),
+                        'description': series.get('description'),
+                        'isSuscription': series.get('isSuscription'),
+                        'seasons': series.get('seasons'),
+                        'language': series.get('language'),
+                        'category': series.get('category'),
+                        'character': series.get('character'),
+                        'participant': series.get('participant'),
+                        'trailer': series.get('trailer')
+                    }
+                    for series in matching_series
                 ]
                 return jsonify(seriesFound), 200
 
@@ -111,7 +111,7 @@ class SeriesCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# --------------------------------------------------------------
+    # --------------------------------------------------------------
 
     @staticmethod
     def getSeriesCharacters(seriesCollection: Collection, characterCollection: Collection):
@@ -148,7 +148,7 @@ class SeriesCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# --------------------------------------------------------------
+    # --------------------------------------------------------------
 
     @staticmethod
     def getSeriesChapters(seriesCollection: Collection, seasonCollection: Collection):
@@ -168,19 +168,20 @@ class SeriesCtrl:
                     for idSeason in seasonsIds:
 
                         if idSeason and idSeason.strip().isdigit():
-                            matchingSeason = seasonCollection.find({'idSeason': int(idSeason), 'idSeries': int(idSeries)})
+                            matchingSeason = seasonCollection.find(
+                                {'idSeason': int(idSeason), 'idSeries': int(idSeries)})
 
                             for season in matchingSeason:
                                 seasonsList.append({
-                                    'idSeason' : season.get('idSeason'),
-                                    'idSeries' : season.get('idSeries'),
-                                    'title' : season.get('title'),
-                                    'seasonNumber' : season.get('seasonNumber'),
-                                    'totalChapters' : season.get('totalChapters'),
-                                    'chapterList' : season.get('chapterList'),
-                                    'character' : season.get('character'),
-                                    'participant' : season.get('participant'),
-                                    'trailer' : season.get('trailer')
+                                    'idSeason': season.get('idSeason'),
+                                    'idSeries': season.get('idSeries'),
+                                    'title': season.get('title'),
+                                    'seasonNumber': season.get('seasonNumber'),
+                                    'totalChapters': season.get('totalChapters'),
+                                    'chapterList': season.get('chapterList'),
+                                    'character': season.get('character'),
+                                    'participant': season.get('participant'),
+                                    'trailer': season.get('trailer')
                                 })
 
                 return jsonify(seasonsList), 200
@@ -191,7 +192,7 @@ class SeriesCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# --------------------------------------------------------------
+    # --------------------------------------------------------------
 
     @staticmethod
     def getSeriesParticipants(seriesCollection, participantsCollection):
@@ -228,7 +229,7 @@ class SeriesCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# --------------------------------------------------------------
+    # --------------------------------------------------------------
 
     @staticmethod
     def getAllSeries(db: Collection):
@@ -237,20 +238,20 @@ class SeriesCtrl:
         if db.count_documents({}) > 0:
             series_list = [
                 {
-                    'idSeries' : series.get('idSeries'),
-                    'title' : series.get('title'),
-                    'duration' : series.get('duration'),
-                    'urlTitlePage' : series.get('urlTitlePage'),
-                    'releaseDate' : series.get('releaseDate'),
-                    'synopsis' : series.get('synopsis'),
-                    'description' : series.get('description'),
-                    'isSuscription' : series.get('isSuscription'),
+                    'idSeries': series.get('idSeries'),
+                    'title': series.get('title'),
+                    'duration': series.get('duration'),
+                    'urlTitlePage': series.get('urlTitlePage'),
+                    'releaseDate': series.get('releaseDate'),
+                    'synopsis': series.get('synopsis'),
+                    'description': series.get('description'),
+                    'isSuscription': series.get('isSuscription'),
                     'seasons': series.get('seasons'),
-                    'language' : series.get('language'),
-                    'category' : series.get('category'),
-                    'character' : series.get('character'),
-                    'participant' : series.get('participant'),
-                    'trailer' : series.get('trailer')
+                    'language': series.get('language'),
+                    'category': series.get('category'),
+                    'character': series.get('character'),
+                    'participant': series.get('participant'),
+                    'trailer': series.get('trailer')
                 }
                 for series in allSeries
             ]
@@ -259,29 +260,35 @@ class SeriesCtrl:
         else:
             return jsonify({'error': 'No existen películas insertadas', 'status': '404 Not Found'}), 404
 
-# --------------------------------------------------------------
+    # --------------------------------------------------------------
 
     @staticmethod
-    def delete_series(db: Collection):
-        if request.form.get('_method') == 'DELETE':
-            idSeries = int(request.form['idSeries'])
-            if idSeries and db.delete_one({'idSeries': idSeries}):
-                print("Delete ok")
+    def deleteSeries(db: Collection, idSeries: int):
+        if idSeries:
+            idSeries = int(idSeries)
+            if db.delete_one({'idSeries': idSeries}):
                 return redirect(url_for('series'))
             else:
-                print("Delete failed")
-                return redirect(url_for('series'))
+                return jsonify({'error': 'Series not found or not deleted', 'status': '404 Not Found'}), 404
         else:
-            return redirect(url_for('series'))
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
-# --------------------------------------------------------------
+    # --------------------------------------------------------------
 
     @staticmethod
-    def put_series(db: Collection):
-        if request.form.get('_method') != 'PUT':
-            return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
-        try:
-            idSeries = int(request.form.get('idSeries'))
+    def deleteSeriesForm(db: Collection):
+        idSeries = int(request.form.get('idSeries'))
+        return SeriesCtrl.deleteSeries(db, idSeries)
+
+    @staticmethod
+    def putSeriesForm(db: Collection):
+        idSeries = int(request.form.get('idSeries'))
+        return SeriesCtrl.putSeries(db, idSeries)
+
+    @staticmethod
+    def putSeries(db: Collection, idSeries: int):
+        if idSeries:
+            idSeries = int(idSeries)
             title = request.form.get('title')
             duration = request.form.get('duration')
             seasons = request.form.get('seasons[]')
@@ -340,10 +347,4 @@ class SeriesCtrl:
 
             return redirect(url_for('series'))
 
-        except ValueError:
-            return jsonify({'error': 'Datos inválidos', 'status': '400 Bad Request'}), 400
-
-        except Exception as e:
-            return jsonify(
-                {'error': f'Error interno del servidor: {str(e)}', 'status': '500 Internal Server Error'}
-            ), 500
+        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400

@@ -7,7 +7,7 @@ class Character:
 
     def toDBCollection(self):
         return {
-            'idCharacter' : self.idCharacter,
+            'idCharacter': self.idCharacter,
             'name': self.name,
             'participant': self.participant,
             'age': self.age,

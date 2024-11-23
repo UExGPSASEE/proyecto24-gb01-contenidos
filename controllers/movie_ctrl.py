@@ -1,8 +1,11 @@
-from flask import render_template, request, jsonify, redirect, url_for
-from database import get_next_sequence_value as get_next_sequence_value
 from datetime import datetime
+
+from flask import render_template, request, jsonify, redirect, url_for
 from pymongo.collection import Collection
+
+from database import get_next_sequence_value as get_next_sequence_value
 from models.movie import Movie
+
 
 class MovieCtrl:
     @staticmethod
@@ -10,11 +13,11 @@ class MovieCtrl:
         moviesReceived = db.find()
         return render_template('Movie.html', movies=moviesReceived)
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def addMovie(db: Collection):
-        idMovie = get_next_sequence_value(db,"idMovie")
+        idMovie = int(get_next_sequence_value(db, "idMovie"))
         movieTitle = request.form.get('title')
         duration = request.form.get('duration')
         urlVideo = request.form.get('urlVideo')
@@ -35,36 +38,35 @@ class MovieCtrl:
             db.insert_one(movie.toDBCollection())
             return redirect(url_for('movies'))
         else:
-            return jsonify({'error': 'Película no añadida', 'status':'404 Not Found'}), 404
+            return jsonify({'error': 'Película no añadida', 'status': '404 Not Found'}), 404
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieById(db: Collection):
-        idMovie = int(request.args.get('idMovie'))
-
+    def getMovieById(db: Collection, idMovie: int):
         if idMovie:
+            idMovie = int(idMovie)
             matchingMovie = db.find({'idMovie': idMovie})
 
             if matchingMovie:
                 movieFound = [
-                {
-                    'idMovie' : movie.get('idMovie'),
-                    'title' : movie.get('title'),
-                    'urlVideo' : movie.get('urlVideo'),
-                    'urlTitlePage' : movie.get('urlTitlePage'),
-                    'releaseDate' : movie.get('releaseDate'),
-                    'synopsis' : movie.get('synopsis'),
-                    'description' : movie.get('description'),
-                    'isSuscription' : movie.get('isSuscription'),
-                    'duration' : movie.get('duration'),
-                    'language' : movie.get('language'),
-                    'category' : movie.get('category'),
-                    'character' : movie.get('character'),
-                    'participant' : movie.get('participant'),
-                    'trailer' : movie.get('trailer'),
-                }
-                for movie in matchingMovie
+                    {
+                        'idMovie': movie.get('idMovie'),
+                        'title': movie.get('title'),
+                        'urlVideo': movie.get('urlVideo'),
+                        'urlTitlePage': movie.get('urlTitlePage'),
+                        'releaseDate': movie.get('releaseDate'),
+                        'synopsis': movie.get('synopsis'),
+                        'description': movie.get('description'),
+                        'isSuscription': movie.get('isSuscription'),
+                        'duration': movie.get('duration'),
+                        'language': movie.get('language'),
+                        'category': movie.get('category'),
+                        'character': movie.get('character'),
+                        'participant': movie.get('participant'),
+                        'trailer': movie.get('trailer'),
+                    }
+                    for movie in matchingMovie
                 ]
                 return jsonify(movieFound), 200
 
@@ -74,7 +76,7 @@ class MovieCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def getMovieCharacters(movieCollection: Collection, characterCollection: Collection):
@@ -112,7 +114,7 @@ class MovieCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def getMovieParticipants(movieCollection, participantsCollection):
@@ -148,7 +150,7 @@ class MovieCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def getMovieByTitle(db: Collection):
@@ -159,23 +161,23 @@ class MovieCtrl:
 
             if db.count_documents({'title': {'$regex': title, '$options': 'i'}}) > 0:
                 movieFound = [
-                {
-                    'idMovie' : movie.get('idMovie'),
-                    'title' : movie.get('title'),
-                    'urlVideo' : movie.get('urlVideo'),
-                    'urlTitlePage' : movie.get('urlTitlePage'),
-                    'releaseDate' : movie.get('releaseDate'),
-                    'synopsis' : movie.get('synopsis'),
-                    'description' : movie.get('description'),
-                    'isSuscription' : movie.get('isSuscription'),
-                    'duration' : movie.get('duration'),
-                    'language' : movie.get('language'),
-                    'category' : movie.get('category'),
-                    'character' : movie.get('character'),
-                    'participant' : movie.get('participant'),
-                    'trailer' : movie.get('trailer'),
-                }
-                for movie in matching_movie
+                    {
+                        'idMovie': movie.get('idMovie'),
+                        'title': movie.get('title'),
+                        'urlVideo': movie.get('urlVideo'),
+                        'urlTitlePage': movie.get('urlTitlePage'),
+                        'releaseDate': movie.get('releaseDate'),
+                        'synopsis': movie.get('synopsis'),
+                        'description': movie.get('description'),
+                        'isSuscription': movie.get('isSuscription'),
+                        'duration': movie.get('duration'),
+                        'language': movie.get('language'),
+                        'category': movie.get('category'),
+                        'character': movie.get('character'),
+                        'participant': movie.get('participant'),
+                        'trailer': movie.get('trailer'),
+                    }
+                    for movie in matching_movie
                 ]
                 return jsonify(movieFound), 200
 
@@ -185,7 +187,7 @@ class MovieCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def getMovieByReleaseDate(db: Collection):
@@ -197,23 +199,23 @@ class MovieCtrl:
 
             if db.count_documents({'releaseDate': str(releaseDate)}) > 0:
                 movieFound = [
-                {
-                    'idMovie' : movie.get('idMovie'),
-                    'title' : movie.get('title'),
-                    'urlVideo' : movie.get('urlVideo'),
-                    'urlTitlePage' : movie.get('urlTitlePage'),
-                    'releaseDate' : movie.get('releaseDate'),
-                    'synopsis' : movie.get('synopsis'),
-                    'description' : movie.get('description'),
-                    'isSuscription' : movie.get('isSuscription'),
-                    'duration' : movie.get('duration'),
-                    'language' : movie.get('language'),
-                    'category' : movie.get('category'),
-                    'character' : movie.get('character'),
-                    'participant' : movie.get('participant'),
-                    'trailer' : movie.get('trailer'),
-                }
-                for movie in matching_movies
+                    {
+                        'idMovie': movie.get('idMovie'),
+                        'title': movie.get('title'),
+                        'urlVideo': movie.get('urlVideo'),
+                        'urlTitlePage': movie.get('urlTitlePage'),
+                        'releaseDate': movie.get('releaseDate'),
+                        'synopsis': movie.get('synopsis'),
+                        'description': movie.get('description'),
+                        'isSuscription': movie.get('isSuscription'),
+                        'duration': movie.get('duration'),
+                        'language': movie.get('language'),
+                        'category': movie.get('category'),
+                        'character': movie.get('character'),
+                        'participant': movie.get('participant'),
+                        'trailer': movie.get('trailer'),
+                    }
+                    for movie in matching_movies
                 ]
                 return jsonify(movieFound), 200
 
@@ -223,7 +225,7 @@ class MovieCtrl:
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
     def getAllMovies(db: Collection):
@@ -232,20 +234,20 @@ class MovieCtrl:
         if db.count_documents({}) > 0:
             movies_list = [
                 {
-                    'idMovie' : movie.get('idMovie'),
-                    'title' : movie.get('title'),
-                    'urlVideo' : movie.get('urlVideo'),
-                    'urlTitlePage' : movie.get('urlTitlePage'),
-                    'releaseDate' : movie.get('releaseDate'),
-                    'synopsis' : movie.get('synopsis'),
-                    'description' : movie.get('description'),
-                    'isSuscription' : movie.get('isSuscription'),
-                    'duration' : movie.get('duration'),
-                    'language' : movie.get('language'),
-                    'category' : movie.get('category'),
-                    'character' : movie.get('character'),
-                    'participant' : movie.get('participant'),
-                    'trailer' : movie.get('trailer'),
+                    'idMovie': movie.get('idMovie'),
+                    'title': movie.get('title'),
+                    'urlVideo': movie.get('urlVideo'),
+                    'urlTitlePage': movie.get('urlTitlePage'),
+                    'releaseDate': movie.get('releaseDate'),
+                    'synopsis': movie.get('synopsis'),
+                    'description': movie.get('description'),
+                    'isSuscription': movie.get('isSuscription'),
+                    'duration': movie.get('duration'),
+                    'language': movie.get('language'),
+                    'category': movie.get('category'),
+                    'character': movie.get('character'),
+                    'participant': movie.get('participant'),
+                    'trailer': movie.get('trailer'),
                 }
                 for movie in allMovies
             ]
@@ -254,29 +256,30 @@ class MovieCtrl:
         else:
             return jsonify({'error': 'No existen películas insertadas', 'status': '404 Not Found'}), 404
 
-# ---------------------------------------------------------
+    # ---------------------------------------------------------
 
     @staticmethod
-    def delete_movie(db: Collection):
-        if request.form.get('_method') == 'DELETE':
-            idMovie = int(request.form['idMovie'])
-            if idMovie and db.delete_one({'idMovie': idMovie}):
-                print("Delete ok")
+    def deleteMovie(db: Collection, idMovie: int):
+        if idMovie:
+            idMovie = int(idMovie)
+            if db.delete_one({'idMovie': idMovie}):
                 return redirect(url_for('movies'))
             else:
-                print("Delete failed")
-                return redirect(url_for('movies'))
+                return jsonify({'error': 'Movie not found or not deleted', 'status': '404 Not Found'}), 404
         else:
-            return redirect(url_for('movies'))
-
-# ---------------------------------------------------------
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
     @staticmethod
-    def put_movie(db: Collection):
-        if request.form.get('_method') != 'PUT':
-            return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
-        try:
-            idMovie = int(request.form.get('idMovie'))
+    def deleteMovieForm(db: Collection):
+        idMovie = int(request.form.get('idMovie'))
+        return MovieCtrl.deleteMovie(db, idMovie)
+
+    # ---------------------------------------------------------
+
+    @staticmethod
+    def putMovie(db: Collection, idMovie: int):
+        if idMovie:
+            idMovie = int(idMovie)
             movieTitle = request.form.get('title')
             duration = request.form.get('duration')
             urlVideo = request.form.get('urlVideo')
@@ -290,9 +293,6 @@ class MovieCtrl:
             participant = request.form.getlist('participant[]')
             trailer = request.form.get('trailer')
             isSuscription = request.form.get('isSuscription')
-
-            if not idMovie:
-                return jsonify({'error': 'Identificador de película requerido', 'status': '400 Bad Request'}), 400
 
             filter = {'idMovie': idMovie}
 
@@ -321,7 +321,7 @@ class MovieCtrl:
             if participant:
                 updateFields['participant'] = participant
             if trailer:
-                updateFields['trailer'] = trailer
+                updateFields['trailer'] = int(trailer)
             if isSuscription:
                 updateFields['isSuscription'] = isSuscription
 
@@ -334,14 +334,11 @@ class MovieCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'La película ya está actualizada', 'status': '200 OK'}), 200
 
-            return redirect(url_for('movies'))
+        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
-        except ValueError:
-            return jsonify({'error': 'Datos inválidos', 'status': '400 Bad Request'}), 400
-
-        except Exception as e:
-            return jsonify(
-                {'error': f'Error interno del servidor: {str(e)}', 'status': '500 Internal Server Error'}
-            ), 500
+    @staticmethod
+    def putMovieForm(db: Collection):
+        idMovie = int(request.form.get('idMovie'))
+        return MovieCtrl.putMovie(db, idMovie)
 
 # --------------------------------

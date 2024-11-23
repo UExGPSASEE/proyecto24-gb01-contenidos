@@ -1,7 +1,9 @@
 from flask import render_template, request, jsonify, redirect, url_for
-from database import get_next_sequence_value as get_next_sequence_value
 from pymongo.collection import Collection
+
+from database import get_next_sequence_value as get_next_sequence_value
 from models.character import Character
+
 
 class CharacterCtrl:
 
@@ -15,7 +17,7 @@ class CharacterCtrl:
 
     @staticmethod
     def addCharacter(db: Collection):
-        idCharacter = get_next_sequence_value(db, "idCharacter")
+        idCharacter = int(get_next_sequence_value(db, "idCharacter"))
         name = request.form.get('name')
         participant = int(request.form.get('participant'))
         age = request.form.get('age')
@@ -75,8 +77,8 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCharacterById(db: Collection):
-        idCharacter = request.args.get('idCharacter')
+    def getCharacterById(db: Collection, idCharacter: int):
+        idCharacter = request.view_args.get('idCharacter')
         if idCharacter:
             idCharacter = int(idCharacter)
             matchingCharacter = db.find({'idCharacter': idCharacter})
@@ -92,12 +94,13 @@ class CharacterCtrl:
             return jsonify(charactersList), 200
 
         else:
-            return jsonify({'error': 'idCharacter no proporcionado', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
     # --------------------------------------------------------
 
     @staticmethod
-    def getContentByCharacter(characterCollection: Collection, movieCollection: Collection, seriesCollection: Collection):
+    def getContentByCharacter(characterCollection: Collection, movieCollection: Collection,
+                              seriesCollection: Collection):
         idCharacter = int(request.args.get('idCharacter'))
 
         if idCharacter:
@@ -107,45 +110,45 @@ class CharacterCtrl:
                 contentList = []
                 matchingMovie = movieCollection.find({'character': {'$in': [str(idCharacter)]}})
 
-                contentList.append({'Content' : 'Movies'})
+                contentList.append({'Content': 'Movies'})
 
                 for movie in matchingMovie:
                     contentList.append({
-                    'idMovie' : movie.get('idMovie'),
-                    'title' : movie.get('title'),
-                    'urlVideo' : movie.get('urlVideo'),
-                    'urlTitlePage' : movie.get('urlTitlePage'),
-                    'releaseDate' : movie.get('releaseDate'),
-                    'synopsis' : movie.get('synopsis'),
-                    'description' : movie.get('description'),
-                    'isSuscription' : movie.get('isSuscription'),
-                    'duration' : movie.get('duration'),
-                    'language' : movie.get('language'),
-                    'category' : movie.get('category'),
-                    'character' : movie.get('character'),
-                    'participant' : movie.get('participant'),
-                    'trailer' : movie.get('trailer'),
+                        'idMovie': movie.get('idMovie'),
+                        'title': movie.get('title'),
+                        'urlVideo': movie.get('urlVideo'),
+                        'urlTitlePage': movie.get('urlTitlePage'),
+                        'releaseDate': movie.get('releaseDate'),
+                        'synopsis': movie.get('synopsis'),
+                        'description': movie.get('description'),
+                        'isSuscription': movie.get('isSuscription'),
+                        'duration': movie.get('duration'),
+                        'language': movie.get('language'),
+                        'category': movie.get('category'),
+                        'character': movie.get('character'),
+                        'participant': movie.get('participant'),
+                        'trailer': movie.get('trailer'),
                     })
 
-                contentList.append({'Content' : 'Series'})
+                contentList.append({'Content': 'Series'})
                 matchingSerie = seriesCollection.find({'character': {'$in': [str(idCharacter)]}})
 
                 for series in matchingSerie:
                     contentList.append({
-                        'idSeries' : series.get('idSeries'),
-                        'title' : series.get('title'),
-                        'duration' : series.get('duration'),
-                        'urlTitlePage' : series.get('urlTitlePage'),
-                        'releaseDate' : series.get('releaseDate'),
-                        'synopsis' : series.get('synopsis'),
-                        'description' : series.get('description'),
-                        'isSuscription' : series.get('isSuscription'),
+                        'idSeries': series.get('idSeries'),
+                        'title': series.get('title'),
+                        'duration': series.get('duration'),
+                        'urlTitlePage': series.get('urlTitlePage'),
+                        'releaseDate': series.get('releaseDate'),
+                        'synopsis': series.get('synopsis'),
+                        'description': series.get('description'),
+                        'isSuscription': series.get('isSuscription'),
                         'seasons': series.get('seasons'),
-                        'language' : series.get('language'),
-                        'category' : series.get('category'),
-                        'character' : series.get('character'),
-                        'participant' : series.get('participant'),
-                        'trailer' : series.get('trailer')
+                        'language': series.get('language'),
+                        'category': series.get('category'),
+                        'character': series.get('character'),
+                        'participant': series.get('participant'),
+                        'trailer': series.get('trailer')
                     })
 
                 return jsonify(contentList), 200
@@ -174,26 +177,25 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteCharacter(db: Collection):
-        if request.form.get('_method') == 'DELETE':
-            idCharacter = int(request.form['idCharacter'])
-            if idCharacter and db.delete_one({'idCharacter': idCharacter}):
-                print("Delete ok")
+    def deleteCharacter(db: Collection, idCharacter: int):
+        if idCharacter:
+            if db.delete_one({'idCharacter': idCharacter}):
                 return redirect(url_for('characters'))
             else:
-                print("Delete failed")
-                return redirect(url_for('characters'))
+                return jsonify({'error': 'Character not found or not deleted', 'status': '404 Not Found'}), 404
         else:
-            return redirect(url_for('characters'))
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def updateCharacter(db: Collection):
-        if request.form.get('_method') != 'PUT':
-            return jsonify({'error': 'No se puede actualizar', 'status': '400 Bad Request'}), 400
-        try:
-            idCharacter = int(request.form.get('idCharacter'))
+    def deleteCharacterForm(db: Collection):
+        idCharacter = int(request.form.get('idCharacter'))
+        return CharacterCtrl.deleteCharacter(db, idCharacter)
+
+    @staticmethod
+    def putCharacter(db: Collection, idCharacter: int):
+        if idCharacter:
             name = request.form.get('name')
             participant = request.form.get('participant')
             age = request.form.get('age')
@@ -223,12 +225,11 @@ class CharacterCtrl:
 
             return redirect(url_for('characters'))
 
-        except ValueError:
-            return jsonify({'error': 'Datos inválidos', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
-        except Exception as e:
-            return jsonify(
-                {'error': f'Error interno del servidor: {str(e)}', 'status': '500 Internal Server Error'}
-            ), 500
+    @staticmethod
+    def putCharacterForm(db: Collection):
+        idCharacter = int(request.form.get('idCharacter'))
+        return CharacterCtrl.putCharacter(db, idCharacter)
 
     # --------------------------------------------------------
