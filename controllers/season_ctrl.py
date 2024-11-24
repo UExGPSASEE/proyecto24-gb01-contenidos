@@ -317,3 +317,12 @@ class SeasonCtrl:
         elif result.modified_count == 0:
             return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
         return redirect(url_for('seasons'))
+
+    @staticmethod
+    def updateSeasonSeries(db: Collection, idSeason:int, idSeries:int):
+        if idSeries and idSeason:
+            filterDict = {'idSeason': int(idSeason)}
+            change = {'$set': {'idSeries': int(idSeries)}}
+            return SeasonCtrl.updateSeasonSeries(db, filterDict, change)
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400

@@ -3,6 +3,7 @@ from pymongo.collection import Collection
 
 from database import get_next_sequence_value as get_next_sequence_value
 from models.series import Series
+from controllers.season_ctrl import SeasonCtrl
 
 
 class SeriesCtrl:
@@ -25,7 +26,7 @@ class SeriesCtrl:
         isSuscription = request.form.get('isSuscription')
 
         if idSeries:
-            series = Series(idSeries, title, seasons, urlTitlePage, releaseDate, synopsis, description,
+            series = Series(idSeries, title, None, urlTitlePage, releaseDate, synopsis, description,
                             isSuscription, duration, None, None, None, None, None)
             db.insert_one(series.toDBCollection())
             return redirect(url_for('series'))
@@ -339,7 +340,7 @@ class SeriesCtrl:
         if idSeries:
             filterDict = {'idSeries': int(idSeries)}
             change = {'$set': {'trailer': None}}
-            return updateSeries(db, filterDict, change)
+            return SeriesCtrl.updateSeries(db, filterDict, change)
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -376,6 +377,7 @@ class SeriesCtrl:
             if seasons.find({'idSeason': idSeason}):
                 filterDict = {'idSeries': int(idSeries)}
                 change = {'$addToSet': {'seasons': idSeason}}
+                SeasonCtrl.updateSeasonSeries(seasons, idSeason, idSeries)
                 return SeriesCtrl.updateSeries(series, filterDict, change)
             else:
                 return jsonify({'error': 'No season was found', 'status': '404 Not Found'}), 400
