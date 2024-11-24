@@ -93,26 +93,25 @@ class SeasonCtrl:
         if idSeason:
             idSeason = int(idSeason)
             matchingSeason = db.find({'idSeason': idSeason})
-            if matchingSeason:
-                seasonFound = [
-                    {
-                        'idSeason': season.get('idSeason'),
-                        'idSeries': season.get('idSeries'),
-                        'title': season.get('title'),
-                        'seasonNumber': season.get('seasonNumber'),
-                        'totalChapters': season.get('totalChapters'),
-                        'chapters': season.get('chapters'),
-                        'characters': season.get('characters'),
-                        'participants': season.get('participants'),
-                        'trailer': season.get('trailer')
-                    }
-                    for season in matchingSeason
-                ]
+            seasonFound = [
+                {
+                    'idSeason': season.get('idSeason'),
+                    'idSeries': season.get('idSeries'),
+                    'title': season.get('title'),
+                    'seasonNumber': season.get('seasonNumber'),
+                    'totalChapters': season.get('totalChapters'),
+                    'chapters': season.get('chapters'),
+                    'characters': season.get('characters'),
+                    'participants': season.get('participants'),
+                    'trailer': season.get('trailer')
+                }
+                for season in matchingSeason
+            ]
+            if seasonFound.__len__()>0:
                 return jsonify(seasonFound), 200
             else:
                 return jsonify({'error': 'Season not found', 'status': '404 Not Found'}), 404
-        else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
     # --------------------------------------
 

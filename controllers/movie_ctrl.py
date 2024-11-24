@@ -43,26 +43,26 @@ class MovieCtrl:
             idMovie = int(idMovie)
             matchingMovie = db.find({'idMovie': idMovie})
 
-            if matchingMovie:
-                movieFound = [
-                    {
-                        'idMovie': movie.get('idMovie'),
-                        'title': movie.get('title'),
-                        'urlVideo': movie.get('urlVideo'),
-                        'urlTitlePage': movie.get('urlTitlePage'),
-                        'releaseDate': movie.get('releaseDate'),
-                        'synopsis': movie.get('synopsis'),
-                        'description': movie.get('description'),
-                        'isSuscription': movie.get('isSuscription'),
-                        'duration': movie.get('duration'),
-                        'languages': movie.get('languages'),
-                        'categories': movie.get('categories'),
-                        'characters': movie.get('characters'),
-                        'participants': movie.get('participants'),
-                        'trailer': movie.get('trailer'),
-                    }
-                    for movie in matchingMovie
-                ]
+            movieFound = [
+                {
+                    'idMovie': movie.get('idMovie'),
+                    'title': movie.get('title'),
+                    'urlVideo': movie.get('urlVideo'),
+                    'urlTitlePage': movie.get('urlTitlePage'),
+                    'releaseDate': movie.get('releaseDate'),
+                    'synopsis': movie.get('synopsis'),
+                    'description': movie.get('description'),
+                    'isSuscription': movie.get('isSuscription'),
+                    'duration': movie.get('duration'),
+                    'languages': movie.get('languages'),
+                    'categories': movie.get('categories'),
+                    'characters': movie.get('characters'),
+                    'participants': movie.get('participants'),
+                    'trailer': movie.get('trailer'),
+                }
+                for movie in matchingMovie
+            ]
+            if movieFound.__len__()>0:
                 return jsonify(movieFound), 200
 
             else:
@@ -80,31 +80,31 @@ class MovieCtrl:
         if idMovie:
             matchingMovie = movieCollection.find({'idMovie': idMovie})
 
-            if matchingMovie:
-                charactersList = []
+            charactersList = []
 
-                for movie in matchingMovie:
-                    characterIds = movie.get('character', [])
+            for movie in matchingMovie:
+                characterIds = movie.get('character', [])
 
-                    for idCharacter in characterIds:
+                for idCharacter in characterIds:
+                    if idCharacter and idCharacter.strip().isdigit():
+                        matchingCharacter = characterCollection.find({'idCharacter': int(idCharacter)})
 
-                        if idCharacter and idCharacter.strip().isdigit():
-                            matchingCharacter = characterCollection.find({'idCharacter': int(idCharacter)})
+                        for character in matchingCharacter:
+                            charactersList.append({
+                                'idCharacter': character.get('idCharacter'),
+                                'name': character.get('name'),
+                                'participant': character.get('participant'),
+                                'age': character.get('age')
+                            })
 
-                            for character in matchingCharacter:
-                                charactersList.append({
-                                    'idCharacter': character.get('idCharacter'),
-                                    'name': character.get('name'),
-                                    'participant': character.get('participant'),
-                                    'age': character.get('age')
-                                })
+                    else:
+                        print(f"idCharacter inválido encontrado: {idCharacter}")
 
-                        else:
-                            print(f"idCharacter inválido encontrado: {idCharacter}")
+            if charactersList.__len__()>0:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Personajes no encontrados', 'status': '404 Not Found'}), 404
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
@@ -118,30 +118,30 @@ class MovieCtrl:
         if idMovie:
             matchingMovie = movieCollection.find({'idMovie': idMovie})
 
-            if matchingMovie:
-                participantsList = []
+            participantsList = []
 
-                for movie in matchingMovie:
-                    participantsIds = movie.get('participant', [])
+            for movie in matchingMovie:
+                participantsIds = movie.get('participant', [])
 
-                    for idParticipant in participantsIds:
+                for idParticipant in participantsIds:
 
-                        if idParticipant and idParticipant.strip().isdigit():
-                            matchingParticipant = participantsCollection.find({'idParticipant': int(idParticipant)})
+                    if idParticipant and idParticipant.strip().isdigit():
+                        matchingParticipant = participantsCollection.find({'idParticipant': int(idParticipant)})
 
-                            for participant in matchingParticipant:
-                                participantsList.append({
-                                    'name': participant.get('name'),
-                                    'surname': participant.get('surname'),
-                                    'age': participant.get('age'),
-                                    'nationality': participant.get('nationality')
-                                })
+                        for participant in matchingParticipant:
+                            participantsList.append({
+                                'name': participant.get('name'),
+                                'surname': participant.get('surname'),
+                                'age': participant.get('age'),
+                                'nationality': participant.get('nationality')
+                            })
 
-                        else:
-                            print(f"idParticipant inválido encontrado: {idParticipant}")
+                    else:
+                        print(f"idParticipant inválido encontrado: {idParticipant}")
+            if participantsList.__len__()>0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Participantes no encontrados', 'status': '404 Not Found'}), 404
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
@@ -174,7 +174,10 @@ class MovieCtrl:
                     }
                     for movie in matching_movie
                 ]
-                return jsonify(movieFound), 200
+                if movieFound.__len__() > 0:
+                    return jsonify(movieFound), 200
+                else:
+                    return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
 
             else:
                 return jsonify({'error': 'No se han encontrado películas', 'status': '404 Not Found'}), 404
@@ -212,7 +215,10 @@ class MovieCtrl:
                     }
                     for movie in matching_movies
                 ]
-                return jsonify(movieFound), 200
+                if movieFound.__len__() > 0:
+                    return jsonify(movieFound), 200
+                else:
+                    return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
 
             else:
                 return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
@@ -246,10 +252,9 @@ class MovieCtrl:
                 }
                 for movie in allMovies
             ]
-            return jsonify(movies_list), 200
-
-        else:
-            return jsonify({'error': 'No existen películas insertadas', 'status': '404 Not Found'}), 404
+            if movies_list.__len__()>0:
+               return jsonify(movies_list), 200
+        return jsonify({'error': 'No existen películas insertadas', 'status': '404 Not Found'}), 404
 
     # ---------------------------------------------------------
 

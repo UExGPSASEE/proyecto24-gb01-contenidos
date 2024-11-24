@@ -49,11 +49,12 @@ class ParticipantCtrl:
                 }
                 for participant in matchingParticipants
             ]
+            if participantsList.__len__()>0:
+                return jsonify(participantsList), 200
+            else:
+                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
 
-            return jsonify(participantsList), 200
-
-        else:
-            return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -74,10 +75,12 @@ class ParticipantCtrl:
                 }
                 for participant in matchingParticipants
             ]
+            if participantsList.__len__() > 0:
+                return jsonify(participantsList), 200
+            else:
+                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
 
-            return jsonify(participantsList), 200
-        else:
-            return jsonify({'error': 'Apellidos no proporcionados', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Apellidos no proporcionados', 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -88,7 +91,7 @@ class ParticipantCtrl:
         if age:
             matching_participants = db.find({'age': age})
 
-            participants_list = [
+            participantsList = [
                 {
                     'idParticipant': participant.get('idParticipant'),
                     'name': participant.get('name'),
@@ -98,10 +101,12 @@ class ParticipantCtrl:
                 }
                 for participant in matching_participants
             ]
+            if participantsList.__len__() > 0:
+                return jsonify(participantsList), 200
+            else:
+                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
 
-            return jsonify(participants_list), 200
-        else:
-            return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -120,8 +125,11 @@ class ParticipantCtrl:
                 }
                 for participant in matchingParticipants
             ]
+            if participantsList.__len__() > 0:
+                return jsonify(participantsList), 200
+            else:
+                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
 
-            return jsonify(participantsList), 200
         else:
             return jsonify({'error': 'Nacionalidad no proporcionada', 'status': '400 Bad Request'}), 400
 
@@ -133,20 +141,21 @@ class ParticipantCtrl:
             idParticipant = int(idParticipant)
             matchingParticipant = db.find({'idParticipant': idParticipant})
 
-            if matchingParticipant:
-                participantsList = [
-                    {
-                        'idParticipant': participant.get('idParticipant'),
-                        'name': participant.get('name'),
-                        'surname': participant.get('surname'),
-                        'age': participant.get('age'),
-                        'nationality': participant.get('nationality')
-                    }
-                    for participant in matchingParticipant
-                ]
+            participantsList = [
+                {
+                    'idParticipant': participant.get('idParticipant'),
+                    'name': participant.get('name'),
+                    'surname': participant.get('surname'),
+                    'age': participant.get('age'),
+                    'nationality': participant.get('nationality')
+                }
+                for participant in matchingParticipant
+            ]
+            if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'Participante no encontrado', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
+
         else:
             return jsonify({'error': 'Identificador no proporcionado', 'status': '400 Bad Request'}), 400
 

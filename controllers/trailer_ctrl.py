@@ -33,20 +33,20 @@ class TrailerCtrl:
         if idTrailer:
             idTrailer = int(idTrailer)
             matchingTrailer = db.find({'idTrailer': idTrailer})
-            if matchingTrailer:
-                trailerFound = [
-                    {
-                        'idTrailer': trailer.get('idTrailer'),
-                        'title': trailer.get('title'),
-                        'duration': trailer.get('duration'),
-                        'urlVideo': trailer.get('urlVideo'),
-                        'languages': trailer.get('languages'),
-                        'categories': trailer.get('categories'),
-                        'characters': trailer.get('characters'),
-                        'participants': trailer.get('participants'),
-                    }
-                    for trailer in matchingTrailer
-                ]
+            trailerFound = [
+                {
+                    'idTrailer': trailer.get('idTrailer'),
+                    'title': trailer.get('title'),
+                    'duration': trailer.get('duration'),
+                    'urlVideo': trailer.get('urlVideo'),
+                    'languages': trailer.get('languages'),
+                    'categories': trailer.get('categories'),
+                    'characters': trailer.get('characters'),
+                    'participants': trailer.get('participants'),
+                }
+                for trailer in matchingTrailer
+            ]
+            if trailerFound.__len__()>0:
                 return jsonify(trailerFound), 200
             else:
                 return jsonify({'error': 'Tráiler no encontrado', 'status': '404 Not Found'}), 404
