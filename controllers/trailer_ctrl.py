@@ -19,12 +19,8 @@ class TrailerCtrl:
         title = request.form.get('title')
         duration = request.form.get('duration')
         urlVideo = request.form.get('urlVideo')
-        language = request.form.getlist('language[]')
-        category = request.form.getlist('category[]')
-        character = request.form.getlist('character[]')
-        participant = request.form.getlist('participant[]')
         if idTrailer:
-            trailer = Trailer(idTrailer, title, duration, urlVideo, language, category, character, participant)
+            trailer = Trailer(idTrailer, title, duration, urlVideo, None, None, None, None)
             db.insert_one(trailer.toDBCollection())
             return redirect(url_for('trailers'))
         else:
@@ -44,10 +40,10 @@ class TrailerCtrl:
                         'title': trailer.get('title'),
                         'duration': trailer.get('duration'),
                         'urlVideo': trailer.get('urlVideo'),
-                        'language': trailer.get('language'),
-                        'category': trailer.get('category'),
-                        'character': trailer.get('character'),
-                        'participant': trailer.get('participant'),
+                        'languages': trailer.get('languages'),
+                        'categories': trailer.get('categories'),
+                        'characters': trailer.get('characters'),
+                        'participants': trailer.get('participants'),
                     }
                     for trailer in matchingTrailer
                 ]
@@ -89,10 +85,6 @@ class TrailerCtrl:
             trailerTitle = request.form.get('title')
             duration = request.form.get('duration')
             urlVideo = request.form.get('urlVideo')
-            language = request.form.getlist('language[]')
-            category = request.form.getlist('category[]')
-            character = request.form.getlist('character[]')
-            participant = request.form.getlist('participant[]')
 
             if not idTrailer:
                 return jsonify({'error': 'Identificador de tráiler requerido', 'status': '400 Bad Request'}), 400
@@ -106,14 +98,6 @@ class TrailerCtrl:
                 updateFields['duration'] = int(duration)
             if urlVideo:
                 updateFields['urlVideo'] = urlVideo
-            if language:
-                updateFields['language'] = language
-            if category:
-                updateFields['category'] = category
-            if character:
-                updateFields['character'] = character
-            if participant:
-                updateFields['participant'] = participant
 
             change = {'$set': updateFields}
             return TrailerCtrl.updateTrailer(trailers, filterDict, change)

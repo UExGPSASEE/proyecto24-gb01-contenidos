@@ -25,16 +25,11 @@ class MovieCtrl:
         releaseDate = request.form.get('releaseDate')
         synopsis = request.form.get('synopsis')
         description = request.form.get('description')
-        language = request.form.getlist('language[]')
-        category = request.form.getlist('category[]')
-        character = request.form.getlist('character[]')
-        participant = request.form.getlist('participant[]')
-        trailer = request.form.get('trailer')
         isSuscription = request.form.get('isSuscription')
 
         if idMovie:
             movie = Movie(idMovie, movieTitle, urlVideo, urlTitlePage, releaseDate, synopsis, description,
-                          isSuscription, duration, language, category, character, participant, trailer)
+                          isSuscription, duration, None, None, None, None, None)
             db.insert_one(movie.toDBCollection())
             return redirect(url_for('movies'))
         else:
@@ -60,10 +55,10 @@ class MovieCtrl:
                         'description': movie.get('description'),
                         'isSuscription': movie.get('isSuscription'),
                         'duration': movie.get('duration'),
-                        'language': movie.get('language'),
-                        'category': movie.get('category'),
-                        'character': movie.get('character'),
-                        'participant': movie.get('participant'),
+                        'languages': movie.get('languages'),
+                        'categories': movie.get('categories'),
+                        'characters': movie.get('characters'),
+                        'participants': movie.get('participants'),
                         'trailer': movie.get('trailer'),
                     }
                     for movie in matchingMovie
@@ -171,10 +166,10 @@ class MovieCtrl:
                         'description': movie.get('description'),
                         'isSuscription': movie.get('isSuscription'),
                         'duration': movie.get('duration'),
-                        'language': movie.get('language'),
-                        'category': movie.get('category'),
-                        'character': movie.get('character'),
-                        'participant': movie.get('participant'),
+                        'languages': movie.get('languages'),
+                        'categories': movie.get('categories'),
+                        'characters': movie.get('characters'),
+                        'participants': movie.get('participants'),
                         'trailer': movie.get('trailer'),
                     }
                     for movie in matching_movie
@@ -209,10 +204,10 @@ class MovieCtrl:
                         'description': movie.get('description'),
                         'isSuscription': movie.get('isSuscription'),
                         'duration': movie.get('duration'),
-                        'language': movie.get('language'),
-                        'category': movie.get('category'),
-                        'character': movie.get('character'),
-                        'participant': movie.get('participant'),
+                        'languages': movie.get('languages'),
+                        'categories': movie.get('categories'),
+                        'characters': movie.get('characters'),
+                        'participants': movie.get('participants'),
                         'trailer': movie.get('trailer'),
                     }
                     for movie in matching_movies
@@ -243,10 +238,10 @@ class MovieCtrl:
                     'description': movie.get('description'),
                     'isSuscription': movie.get('isSuscription'),
                     'duration': movie.get('duration'),
-                    'language': movie.get('language'),
-                    'category': movie.get('category'),
-                    'character': movie.get('character'),
-                    'participant': movie.get('participant'),
+                    'languages': movie.get('languages'),
+                    'categories': movie.get('categories'),
+                    'characters': movie.get('characters'),
+                    'participants': movie.get('participants'),
                     'trailer': movie.get('trailer'),
                 }
                 for movie in allMovies
@@ -286,11 +281,6 @@ class MovieCtrl:
             releaseDate = request.form.get('releaseDate')
             synopsis = request.form.get('synopsis')
             description = request.form.get('description')
-            language = request.form.getlist('language[]')
-            category = request.form.getlist('category[]')
-            character = request.form.getlist('character[]')
-            participant = request.form.getlist('participant[]')
-            trailer = request.form.get('trailer')
             isSuscription = request.form.get('isSuscription')
 
             filterDict = {'idMovie': idMovie}
@@ -311,16 +301,6 @@ class MovieCtrl:
                 updateFields['synopsis'] = synopsis
             if description:
                 updateFields['description'] = description
-            if language:
-                updateFields['language'] = language
-            if category:
-                updateFields['category'] = category
-            if character:
-                updateFields['character'] = character
-            if participant:
-                updateFields['participant'] = participant
-            if trailer:
-                updateFields['trailer'] = int(trailer)
             if isSuscription:
                 updateFields['isSuscription'] = isSuscription
 

@@ -32,3 +32,4 @@ class Movie:
             'characters': self.characters,
             'participants': self.participants,
             'trailer' : self.trailer
+        }

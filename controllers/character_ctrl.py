@@ -123,10 +123,10 @@ class CharacterCtrl:
                         'description': movie.get('description'),
                         'isSuscription': movie.get('isSuscription'),
                         'duration': movie.get('duration'),
-                        'language': movie.get('language'),
-                        'category': movie.get('category'),
-                        'character': movie.get('character'),
-                        'participant': movie.get('participant'),
+                        'languages': movie.get('languages'),
+                        'categories': movie.get('categories'),
+                        'characters': movie.get('characters'),
+                        'participants': movie.get('participants'),
                         'trailer': movie.get('trailer'),
                     })
 
@@ -144,10 +144,10 @@ class CharacterCtrl:
                         'description': series.get('description'),
                         'isSuscription': series.get('isSuscription'),
                         'seasons': series.get('seasons'),
-                        'language': series.get('language'),
-                        'category': series.get('category'),
-                        'character': series.get('character'),
-                        'participant': series.get('participant'),
+                        'languages': series.get('languages'),
+                        'categories': series.get('categories'),
+                        'characters': series.get('characters'),
+                        'participants': series.get('participants'),
                         'trailer': series.get('trailer')
                     })
 
