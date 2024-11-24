@@ -76,29 +76,27 @@ class SeriesCtrl:
         if idSeries:
             idSeries = int(idSeries)
             matching_series = db.find({'idSeries': idSeries})
-
-            if matching_series:
-                seriesFound = [
-                    {
-                        'idSeries': series.get('idSeries'),
-                        'title': series.get('title'),
-                        'duration': series.get('duration'),
-                        'urlTitlePage': series.get('urlTitlePage'),
-                        'releaseDate': series.get('releaseDate'),
-                        'synopsis': series.get('synopsis'),
-                        'description': series.get('description'),
-                        'isSuscription': series.get('isSuscription'),
-                        'seasons': series.get('seasons'),
-                        'languages': series.get('languages'),
-                        'categories': series.get('categories'),
-                        'characters': series.get('characters'),
-                        'participants': series.get('participants'),
-                        'trailer': series.get('trailer')
-                    }
-                    for series in matching_series
-                ]
+            seriesFound = [
+                {
+                    'idSeries': series.get('idSeries'),
+                    'title': series.get('title'),
+                    'duration': series.get('duration'),
+                    'urlTitlePage': series.get('urlTitlePage'),
+                    'releaseDate': series.get('releaseDate'),
+                    'synopsis': series.get('synopsis'),
+                    'description': series.get('description'),
+                    'isSuscription': series.get('isSuscription'),
+                    'seasons': series.get('seasons'),
+                    'languages': series.get('languages'),
+                    'categories': series.get('categories'),
+                    'characters': series.get('characters'),
+                    'participants': series.get('participants'),
+                    'trailer': series.get('trailer')
+                }
+                for series in matching_series
+            ]
+            if seriesFound.__len__()>0:
                 return jsonify(seriesFound), 200
-
             else:
                 return jsonify({'error': 'Serie no encontrada', 'status': '404 Not Found'}), 404
 

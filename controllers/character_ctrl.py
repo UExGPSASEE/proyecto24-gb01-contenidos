@@ -47,7 +47,11 @@ class CharacterCtrl:
                 for character in matchingCharacters
             ]
 
-            return jsonify(charactersList), 200
+            if charactersList.__len__() > 0:
+                return jsonify(charactersList), 200
+
+            else:
+                return jsonify({'error': 'Personajes no encontrados', 'status': '404 Not Found'}), 404
         else:
             return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
 
@@ -70,7 +74,11 @@ class CharacterCtrl:
                 for character in matchingCharacters
             ]
 
-            return jsonify(charactersList), 200
+            if charactersList.__len__() > 0:
+                return jsonify(charactersList), 200
+
+            else:
+                return jsonify({'error': 'Personajes no encontrados', 'status': '404 Not Found'}), 404
         else:
             return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
 
@@ -78,7 +86,6 @@ class CharacterCtrl:
 
     @staticmethod
     def getCharacterById(db: Collection, idCharacter: int):
-        idCharacter = request.view_args.get('idCharacter')
         if idCharacter:
             idCharacter = int(idCharacter)
             matchingCharacter = db.find({'idCharacter': idCharacter})
@@ -91,7 +98,11 @@ class CharacterCtrl:
                 }
                 for character in matchingCharacter
             ]
-            return jsonify(charactersList), 200
+            if charactersList.__len__()>0:
+                return jsonify(charactersList)
+            else:
+                return jsonify({'error': 'Personaje no encontrado', 'status': '404 Not Found'}), 404
+
 
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
@@ -106,51 +117,51 @@ class CharacterCtrl:
         if idCharacter:
             matchingCharacter = characterCollection.find({'idCharacter': idCharacter})
 
-            if matchingCharacter:
-                contentList = []
-                matchingMovie = movieCollection.find({'character': {'$in': [str(idCharacter)]}})
+            contentList = []
+            matchingMovie = movieCollection.find({'character': {'$in': [str(idCharacter)]}})
 
-                contentList.append({'Content': 'Movies'})
+            contentList.append({'Content': 'Movies'})
 
-                for movie in matchingMovie:
-                    contentList.append({
-                        'idMovie': movie.get('idMovie'),
-                        'title': movie.get('title'),
-                        'urlVideo': movie.get('urlVideo'),
-                        'urlTitlePage': movie.get('urlTitlePage'),
-                        'releaseDate': movie.get('releaseDate'),
-                        'synopsis': movie.get('synopsis'),
-                        'description': movie.get('description'),
-                        'isSuscription': movie.get('isSuscription'),
-                        'duration': movie.get('duration'),
-                        'languages': movie.get('languages'),
-                        'categories': movie.get('categories'),
-                        'characters': movie.get('characters'),
-                        'participants': movie.get('participants'),
-                        'trailer': movie.get('trailer'),
-                    })
+            for movie in matchingMovie:
+                contentList.append({
+                    'idMovie': movie.get('idMovie'),
+                    'title': movie.get('title'),
+                    'urlVideo': movie.get('urlVideo'),
+                    'urlTitlePage': movie.get('urlTitlePage'),
+                    'releaseDate': movie.get('releaseDate'),
+                    'synopsis': movie.get('synopsis'),
+                    'description': movie.get('description'),
+                    'isSuscription': movie.get('isSuscription'),
+                    'duration': movie.get('duration'),
+                    'languages': movie.get('languages'),
+                    'categories': movie.get('categories'),
+                    'characters': movie.get('characters'),
+                    'participants': movie.get('participants'),
+                    'trailer': movie.get('trailer'),
+                })
 
-                contentList.append({'Content': 'Series'})
-                matchingSerie = seriesCollection.find({'character': {'$in': [str(idCharacter)]}})
+            contentList.append({'Content': 'Series'})
+            matchingSerie = seriesCollection.find({'character': {'$in': [str(idCharacter)]}})
 
-                for series in matchingSerie:
-                    contentList.append({
-                        'idSeries': series.get('idSeries'),
-                        'title': series.get('title'),
-                        'duration': series.get('duration'),
-                        'urlTitlePage': series.get('urlTitlePage'),
-                        'releaseDate': series.get('releaseDate'),
-                        'synopsis': series.get('synopsis'),
-                        'description': series.get('description'),
-                        'isSuscription': series.get('isSuscription'),
-                        'seasons': series.get('seasons'),
-                        'languages': series.get('languages'),
-                        'categories': series.get('categories'),
-                        'characters': series.get('characters'),
-                        'participants': series.get('participants'),
-                        'trailer': series.get('trailer')
-                    })
+            for series in matchingSerie:
+                contentList.append({
+                    'idSeries': series.get('idSeries'),
+                    'title': series.get('title'),
+                    'duration': series.get('duration'),
+                    'urlTitlePage': series.get('urlTitlePage'),
+                    'releaseDate': series.get('releaseDate'),
+                    'synopsis': series.get('synopsis'),
+                    'description': series.get('description'),
+                    'isSuscription': series.get('isSuscription'),
+                    'seasons': series.get('seasons'),
+                    'languages': series.get('languages'),
+                    'categories': series.get('categories'),
+                    'characters': series.get('characters'),
+                    'participants': series.get('participants'),
+                    'trailer': series.get('trailer')
+                })
 
+            if contentList.__len__()>0:
                 return jsonify(contentList), 200
 
             else:
@@ -172,7 +183,11 @@ class CharacterCtrl:
             }
             for character in allCharacters
         ]
-        return jsonify(charactersList), 200
+        if charactersList.__len__() > 0:
+            return jsonify(charactersList), 200
+
+        else:
+            return jsonify({'error': 'Personajes no encontrados', 'status': '404 Not Found'}), 404
 
     # ---------------------------------------------------------
 

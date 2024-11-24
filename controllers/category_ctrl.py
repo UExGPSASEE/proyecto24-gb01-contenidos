@@ -47,17 +47,18 @@ class CategoryCtrl:
         if idCategory:
             idCategory = int(idCategory)
             matchingCategory = db.find({'idCategory': idCategory})
-            if matchingCategory:
-                categoryFound = [
-                    {
-                        'idCategory': category.get('idCategory'),
-                        'name': category.get('name')
-                    }
-                    for category in matchingCategory
-                ]
+            categoryFound = [
+                {
+                    'idCategory': category.get('idCategory'),
+                    'name': category.get('name')
+                }
+                for category in matchingCategory
+            ]
+            if categoryFound.__len__() > 0:
                 return jsonify(categoryFound), 200
             else:
                 return jsonify({'error': 'Categoría no encontrada', 'status': '404 Not Found'}), 404
+
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 

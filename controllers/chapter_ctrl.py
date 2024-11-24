@@ -93,19 +93,20 @@ class ChapterCtrl:
         if idChapter:
             idChapter = int(idChapter)
             matchingChapter = db.find({'idChapter': idChapter})
-            if matchingChapter:
-                chapterFound = [
-                    {
-                        'idChapter': chapter.get('idChapter'),
-                        'title': chapter.get('title'),
-                        'urlVideo': chapter.get('urlVideo'),
-                        'duration': chapter.get('duration'),
-                        'chapterNumber': chapter.get('chapterNumber')
-                    }
-                    for chapter in matchingChapter
-                ]
+            chapterFound = [
+                {
+                    'idChapter': chapter.get('idChapter'),
+                    'title': chapter.get('title'),
+                    'urlVideo': chapter.get('urlVideo'),
+                    'duration': chapter.get('duration'),
+                    'chapterNumber': chapter.get('chapterNumber')
+                }
+                for chapter in matchingChapter
+            ]
+            if chapterFound.__len__() > 0:
                 return jsonify(chapterFound), 200
             else:
                 return jsonify({'error': 'Capítulo no encontrado', 'status': '404 Not Found'}), 404
+
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
