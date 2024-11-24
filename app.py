@@ -511,7 +511,26 @@ def putCategoryIntoSeason(idSeason):
 @app.route('/seasons/<idSeason>/categories', methods=['DELETE'])
 def deleteCategoryFromSeason(idSeason):
     return SeasonCtrl.deleteCategoryFromSeason(db['seasons'], idSeason)
- 
+
+
+# ------------------------------
+
+@app.route('/series/<idSeries>/seasons', methods=['PUT'])
+def putSeasonIntoSeries(idSeries):
+    return SeriesCtrl.putSeasonIntoSeries(db['series'], db['seasons'], idSeries)
+
+
+@app.route('/series/<idSeries>/seasons', methods=['DELETE'])
+def deleteSeasonFromSeries(idSeries):
+    return SeriesCtrl.deleteSeasonFromSeries(db['series'], idSeries)
+
+@app.route('/seasons/<idSeason>/chapters', methods=['PUT'])
+def putChapterIntoSeason(idSeason):
+    return SeasonCtrl.putChapterIntoSeason(db['seasons'], db['chapters'], idSeason)
+
+@app.route('/seasons/<idSeason>/chapters', methods=['DELETE'])
+def deleteChapterFromSeason(idSeason):
+    return SeasonCtrl.deleteChapterFromSeason(db['seasons'], idSeason)
 
 if __name__ == '__main__':
     app.run(debug=True, port=8082)

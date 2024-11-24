@@ -22,17 +22,11 @@ class SeriesCtrl:
         releaseDate = request.form.get('releaseDate')
         synopsis = request.form.get('synopsis')
         description = request.form.get('description')
-        language = request.form.getlist('language[]')
-        category = request.form.getlist('category[]')
-        character = request.form.getlist('character[]')
-        participant = request.form.getlist('participant[]')
-        seasons = request.form.getlist('seasons[]')
-        trailer = request.form.get('trailer')
         isSuscription = request.form.get('isSuscription')
 
         if idSeries:
             series = Series(idSeries, title, seasons, urlTitlePage, releaseDate, synopsis, description,
-                            isSuscription, duration, language, category, character, participant, trailer)
+                            isSuscription, duration, None, None, None, None, None)
             db.insert_one(series.toDBCollection())
             return redirect(url_for('series'))
         else:
@@ -59,10 +53,10 @@ class SeriesCtrl:
                         'description': series.get('description'),
                         'isSuscription': series.get('isSuscription'),  # OJO
                         'seasons': series.get('seasons'),
-                        'language': series.get('language'),
-                        'category': series.get('category'),
-                        'character': series.get('character'),
-                        'participant': series.get('participant'),
+                        'languages': series.get('languages'),
+                        'categories': series.get('categories'),
+                        'characters': series.get('characters'),
+                        'participants': series.get('participants'),
                         'trailer': series.get('trailer')
                     }
                     for series in matching_series
@@ -95,10 +89,10 @@ class SeriesCtrl:
                         'description': series.get('description'),
                         'isSuscription': series.get('isSuscription'),
                         'seasons': series.get('seasons'),
-                        'language': series.get('language'),
-                        'category': series.get('category'),
-                        'character': series.get('character'),
-                        'participant': series.get('participant'),
+                        'languages': series.get('languages'),
+                        'categories': series.get('categories'),
+                        'characters': series.get('characters'),
+                        'participants': series.get('participants'),
                         'trailer': series.get('trailer')
                     }
                     for series in matching_series
@@ -178,9 +172,9 @@ class SeriesCtrl:
                                     'title': season.get('title'),
                                     'seasonNumber': season.get('seasonNumber'),
                                     'totalChapters': season.get('totalChapters'),
-                                    'chapterList': season.get('chapterList'),
-                                    'character': season.get('character'),
-                                    'participant': season.get('participant'),
+                                    'chapters': season.get('chapters'),
+                                    'characters': season.get('characters'),
+                                    'participants': season.get('participants'),
                                     'trailer': season.get('trailer')
                                 })
 
@@ -247,10 +241,10 @@ class SeriesCtrl:
                     'description': series.get('description'),
                     'isSuscription': series.get('isSuscription'),
                     'seasons': series.get('seasons'),
-                    'language': series.get('language'),
-                    'category': series.get('category'),
-                    'character': series.get('character'),
-                    'participant': series.get('participant'),
+                    'languages': series.get('languages'),
+                    'categories': series.get('categories'),
+                    'characters': series.get('characters'),
+                    'participants': series.get('participants'),
                     'trailer': series.get('trailer')
                 }
                 for series in allSeries
@@ -296,11 +290,6 @@ class SeriesCtrl:
             releaseDate = request.form.get('releaseDate')
             synopsis = request.form.get('synopsis')
             description = request.form.get('description')
-            language = request.form.getlist('language[]')
-            category = request.form.getlist('category[]')
-            character = request.form.getlist('character[]')
-            participant = request.form.getlist('participant[]')
-            trailer = request.form.get('trailer')
             isSuscription = request.form.get('isSuscription')
 
             if not idSeries:
@@ -324,16 +313,6 @@ class SeriesCtrl:
                 updateFields['synopsis'] = synopsis
             if description:
                 updateFields['description'] = description
-            if language:
-                updateFields['language'] = language
-            if category:
-                updateFields['category'] = category
-            if character:
-                updateFields['character'] = character
-            if participant:
-                updateFields['participant'] = participant
-            if trailer:
-                updateFields['trailer'] = trailer
             if isSuscription:
                 updateFields['isSuscription'] = isSuscription
 
@@ -391,6 +370,30 @@ class SeriesCtrl:
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
+    @staticmethod
+    def putSeasonIntoSeries(series: Collection, seasons: Collection, idSeries: int):
+        idSeason = request.args.get('idSeason')
+        if idSeason:
+            idSeason = int(idSeason)
+            if seasons.find({'idSeason': idSeason}):
+                filterDict = {'idSeries': int(idSeries)}
+                change = {'$addToSet': {'seasons': idSeason}}
+                return SeriesCtrl.updateSeries(series, filterDict, change)
+            else:
+                return jsonify({'error': 'No season was found', 'status': '404 Not Found'}), 400
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def deleteSeasonFromSeries(series: Collection, idSeries: int):
+        idSeason = request.args.get('idSeason')
+        if idSeason:
+            idSeason = int(idSeason)
+            filterDict = {'idSeries': int(idSeries)}
+            change = {'$pull': {'seasons': idSeason}}
+            return SeriesCtrl.updateSeries(series, filterDict, change)
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def updateSeries(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
@@ -401,3 +404,4 @@ class SeriesCtrl:
         elif result.modified_count == 0:
             return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
         return redirect(url_for('series'))
+

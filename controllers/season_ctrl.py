@@ -19,16 +19,11 @@ class SeasonCtrl:
         idSeries = request.form.get('idSeries')
         title = request.form.get('title')
         seasonNumber = request.form.get('seasonNumber')
-        chapterList = request.form.getlist('chapterList[]')
-        character = request.form.getlist('character[]')
-        participant = request.form.getlist('participant[]')
-        trailer = request.form.get('trailer')
-
-        totalChapters = len([chapter for chapter in chapterList if chapter != ""])
+        totalChapters = 0
 
         if idSeason:
             season = Season(idSeason, int(idSeries), title, int(seasonNumber),
-                            totalChapters, chapterList, character, participant, trailer)
+                            totalChapters, None, None, None, None)
 
             db.insert_one(season.toDBCollection())
             return redirect(url_for('seasons'))
@@ -66,15 +61,11 @@ class SeasonCtrl:
             idSeries = request.form.get('idSeries')
             title = request.form.get('title')
             seasonNumber = request.form.get('seasonNumber')
-            chapterList = request.form.getlist('chapterList[]')
-            character = request.form.getlist('character[]')
-            participant = request.form.getlist('participant[]')
-            trailer = request.form.get('trailer')
 
             if not idSeason:
                 return jsonify({'error': 'Identificador de temporada requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'idSeason': idSeason}
+            filterDict = {'idSeason': idSeason}
 
             totalChapters = len([chapter for chapter in chapterList if chapter != ""])
 
@@ -88,24 +79,10 @@ class SeasonCtrl:
                 updateFields['seasonNumber'] = int(seasonNumber)
             if totalChapters:
                 updateFields['totalChapters'] = int(totalChapters)
-            if chapterList:
-                updateFields['chapterList'] = chapterList
-            if character:
-                updateFields['character'] = character
-            if participant:
-                updateFields['participant'] = participant
-            if trailer:
-                updateFields['trailer'] = trailer
 
             change = {'$set': updateFields}
 
-            result = db.update_one(filter, change)
-            if result.matched_count == 0:
-                return jsonify({'error': 'Temporada no encontrada', 'status': '404 Not Found'}), 404
-            elif result.modified_count == 0:
-                return jsonify({'message': 'La temporada ya está actualizada', 'status': '200 OK'}), 200
-
-            return redirect(url_for('seasons'))
+            return SeasonCtrl.updateSeason(db, filterDict, change)
 
         return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -124,9 +101,9 @@ class SeasonCtrl:
                         'title': season.get('title'),
                         'seasonNumber': season.get('seasonNumber'),
                         'totalChapters': season.get('totalChapters'),
-                        'chapterList': season.get('chapterList'),
-                        'character': season.get('character'),
-                        'participant': season.get('participant'),
+                        'chapters': season.get('chapters'),
+                        'characters': season.get('characters'),
+                        'participants': season.get('participants'),
                         'trailer': season.get('trailer')
                     }
                     for season in matchingSeason
@@ -150,7 +127,7 @@ class SeasonCtrl:
                 resultList = []
 
                 for season in matchingSeason:
-                    chapterList = season.get('chapterList', [])
+                    chapterList = season.get('chapters', [])
                     print(chapterList)
 
                     for idChapter in chapterList:
@@ -305,6 +282,32 @@ class SeasonCtrl:
             return SeasonCtrl.updateSeason(seasons, filterDict, change)
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def putChapterIntoSeason(seasons: Collection, chapters: Collection, idSeason: int):
+        idChapter = request.args.get('idChapter')
+        if idChapter:
+            idChapter = int(idChapter)
+            if chapters.find({'idChapter': idChapter}):
+                filterDict = {'idSeason': int(idSeason)}
+                change = {'$addToSet': {'chapters': idChapter}}
+                return SeasonCtrl.updateSeason(seasons, filterDict, change)
+            else:
+                return jsonify({'error': 'No chapter was found', 'status': '404 Not Found'}), 400
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
+    @staticmethod
+    def deleteChapterFromSeason(db: Collection, idSeason: int):
+        idChapter = request.args.get('idChapter')
+        if idChapter:
+            idChapter = int(idChapter)
+            filterDict = {'idSeason': int(idSeason)}
+            change = {'$pull': {'chapters': idChapter}}
+            return SeasonCtrl.updateSeason(db, filterDict, change)
+        else:
+            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+
 
     @staticmethod
     def updateSeason(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
