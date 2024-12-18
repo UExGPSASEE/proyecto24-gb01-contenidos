@@ -80,7 +80,7 @@
             <div class="card-body">
                 <h3 class="text-center">Obtener película por título</h3>
                 <form action="/movies/title" method="GET">
-                    <label>Título</label>
+                    <span>Título</span>
                     <input type="text" class="form-control mb-3" name="title" required placeholder="Blade Runner">
                     <button class="btn btn-primary" type="submit"> Buscar</button>
                 </form>
@@ -89,7 +89,7 @@
             <div class="card-body">
                 <h3 class="text-center">Obtener película por fecha de salida</h3>
                 <form action="/movies/release" method="GET">
-                    <label>Fecha</label>
+                    <span>Fecha</span>
                     <input type="date" class="form-control mb-3" name="releaseDate" required>
                     <button class="btn btn-primary" type="submit"> Buscar</button>
                 </form>
@@ -151,7 +151,7 @@
                 <h3 class="text-center">Obtener personajes de película</h3>
                 <div class="card-body">
                     <form action="/movies/characters" method="GET">
-                        <label>ID</label>
+                        <span>ID</span>
                         <input type="text" class="form-control mb-3" name="idMovie" placeholder="idMovie 1" required>
                         <button class="btn btn-primary" type="submit">Buscar</button>
                     </form>
@@ -162,7 +162,7 @@
                 <h3 class="text-center">Obtener participantes de película</h3>
                 <div class="card-body">
                     <form action="/movies/participants" method="GET">
-                        <label>ID</label>
+                        <span>ID</span>
                         <input type="text" class="form-control mb-3" name="idMovie" placeholder="idMovie 1" required>
                         <button class="btn btn-primary" type="submit">Buscar</button>
                     </form>
@@ -174,7 +174,7 @@
                 <div class="card-body">
                     <form action="/movies/deleteMovie" method="POST">
                         <input type="hidden" name="_method" value="DELETE">
-                        <label>ID</label>
+                        <span>ID</span>
                         <input type="text" class="form-control mb-3" name="idMovie" min="1" required
                                placeholder="idMovie 1">
                         <button class="btn btn-primary" type="submit">Eliminar</button>
