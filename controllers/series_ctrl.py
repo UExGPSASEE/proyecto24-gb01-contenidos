@@ -8,7 +8,7 @@ from controllers.season_ctrl import SeasonCtrl
 
 class SeriesCtrl:
 
-    global not_found;
+    err_msg = 'Missing data or incorrect method';
     not_found = '404 Not Found';
 
     @staticmethod
@@ -35,7 +35,7 @@ class SeriesCtrl:
             db.insert_one(series.toDBCollection())
             return redirect(url_for('series'))
         else:
-            return jsonify({'error': 'Serie no añadida', 'status': not_found}), 404
+            return jsonify({'error': 'Serie no añadida', 'status': SeriesCtrl.not_found}), 404
 
     # --------------------------------------------------------------
 
@@ -69,10 +69,10 @@ class SeriesCtrl:
                 return jsonify(seriesFound), 200
 
             else:
-                return jsonify({'error': 'No se han encontrado series', 'status': not_found}), 404
+                return jsonify({'error': 'No se han encontrado series', 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     # --------------------------------------------------------------
 
@@ -103,10 +103,10 @@ class SeriesCtrl:
             if seriesFound.__len__()>0:
                 return jsonify(seriesFound), 200
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': not_found}), 404
+                return jsonify({'error': 'Serie no encontrada', 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     # --------------------------------------------------------------
 
@@ -140,10 +140,10 @@ class SeriesCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': not_found}), 404
+                return jsonify({'error': 'Serie no encontrada', 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     # --------------------------------------------------------------
 
@@ -184,10 +184,10 @@ class SeriesCtrl:
                 return jsonify(seasonsList), 200
 
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': not_found}), 404
+                return jsonify({'error': 'Serie no encontrada', 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     # --------------------------------------------------------------
 
@@ -221,10 +221,10 @@ class SeriesCtrl:
                 return jsonify(participantsList), 200
 
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': not_found}), 404
+                return jsonify({'error': 'Serie no encontrada', 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     # --------------------------------------------------------------
 
@@ -255,7 +255,7 @@ class SeriesCtrl:
             return jsonify(series_list), 200
 
         else:
-            return jsonify({'error': 'No existen películas insertadas', 'status': not_found}), 404
+            return jsonify({'error': 'No existen películas insertadas', 'status': SeriesCtrl.not_found}), 404
 
     # --------------------------------------------------------------
 
@@ -266,9 +266,9 @@ class SeriesCtrl:
             if db.delete_one({'idSeries': idSeries}):
                 return redirect(url_for('series'))
             else:
-                return jsonify({'error': 'Series not found or not deleted', 'status': not_found}), 404
+                return jsonify({'error': 'Series not found or not deleted', 'status': SeriesCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     # --------------------------------------------------------------
 
@@ -323,7 +323,7 @@ class SeriesCtrl:
 
             return SeriesCtrl.updateSeries(db, filterDict, change)
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def putTrailerIntoSeries(series: Collection, trailers: Collection, idSeries: int):
@@ -335,9 +335,9 @@ class SeriesCtrl:
                 change = {'$set': {'trailer': idTrailer}}
                 return SeriesCtrl.updateSeries(series, filterDict, change)
             else:
-                return jsonify({'error': 'No trailer was found', 'status': not_found}), 400
+                return jsonify({'error': 'No trailer was found', 'status': SeriesCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def deleteTrailerFromSeries(db: Collection, idSeries:int):
@@ -346,7 +346,7 @@ class SeriesCtrl:
             change = {'$set': {'trailer': None}}
             return SeriesCtrl.updateSeries(db, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def putCategoryIntoSeries(series: Collection, categories: Collection, idSeries: int):
@@ -358,9 +358,9 @@ class SeriesCtrl:
                 change = {'$addToSet': {'categories': idCategory}}
                 return SeriesCtrl.updateSeries(series, filterDict, change)
             else:
-                return jsonify({'error': 'No category was found', 'status': not_found}), 400
+                return jsonify({'error': 'No category was found', 'status': SeriesCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def deleteCategoryFromSeries(series: Collection, idSeries: int):
@@ -371,7 +371,7 @@ class SeriesCtrl:
             change = {'$pull': {'categories': idCategory}}
             return SeriesCtrl.updateSeries(series, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def putSeasonIntoSeries(series: Collection, seasons: Collection, idSeries: int):
@@ -384,9 +384,9 @@ class SeriesCtrl:
                 SeasonCtrl.updateSeasonSeries(seasons, idSeason, idSeries)
                 return SeriesCtrl.updateSeries(series, filterDict, change)
             else:
-                return jsonify({'error': 'No season was found', 'status': not_found}), 400
+                return jsonify({'error': 'No season was found', 'status': SeriesCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def deleteSeasonFromSeries(series: Collection, idSeries: int):
@@ -397,14 +397,14 @@ class SeriesCtrl:
             change = {'$pull': {'seasons': idSeason}}
             return SeriesCtrl.updateSeries(series, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def updateSeries(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
         result = db.update_one(filterDict, changeDict)
         print(result)
         if result.matched_count == 0:
-            return jsonify({'error': 'Series not found or not updated', 'status': not_found}), 404
+            return jsonify({'error': 'Series not found or not updated', 'status': SeriesCtrl.not_found}), 404
         elif result.modified_count == 0:
             return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
         return redirect(url_for('series'))

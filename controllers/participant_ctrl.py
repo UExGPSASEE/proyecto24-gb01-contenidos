@@ -7,7 +7,7 @@ from models.participant import Participant
 
 class ParticipantCtrl:
 
-    global not_found;
+    err_msg = 'Missing data or incorrect method';
     not_found = '404 Not Found';
 
     @staticmethod
@@ -32,7 +32,7 @@ class ParticipantCtrl:
 
             return redirect(url_for('participants'))
         else:
-            return jsonify({'error': 'Participante no añadido', 'status': not_found}), 404
+            return jsonify({'error': 'Participante no añadido', 'status': ParticipantCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
@@ -55,7 +55,7 @@ class ParticipantCtrl:
             if participantsList.__len__()>0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': not_found}), 404
+                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
         return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
 
@@ -81,7 +81,7 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': not_found}), 404
+                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
         return jsonify({'error': 'Apellidos no proporcionados', 'status': '400 Bad Request'}), 400
 
@@ -107,7 +107,7 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': not_found}), 404
+                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
         return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
 
@@ -131,7 +131,7 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': not_found}), 404
+                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
         else:
             return jsonify({'error': 'Nacionalidad no proporcionada', 'status': '400 Bad Request'}), 400
@@ -157,7 +157,7 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': not_found}), 404
+                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
         else:
             return jsonify({'error': 'Identificador no proporcionado', 'status': '400 Bad Request'}), 400
@@ -220,9 +220,9 @@ class ParticipantCtrl:
                 return jsonify(contentList), 200
 
             else:
-                return jsonify({'error': 'Participante no encontrado', 'status': not_found}), 404
+                return jsonify({'error': 'Participante no encontrado', 'status': ParticipantCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error':ParticipantCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -251,9 +251,9 @@ class ParticipantCtrl:
             if db.delete_one({'idParticipant': idParticipant}):
                 return redirect(url_for('participants'))
             else:
-                return jsonify({'error': 'Participant not found or not deleted', 'status': not_found}), 404
+                return jsonify({'error': 'Participant not found or not deleted', 'status': ParticipantCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': ParticipantCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -297,11 +297,11 @@ class ParticipantCtrl:
 
             result = db.update_one(filter, change)
             if result.matched_count == 0:
-                return jsonify({'error': 'Participante no encontrado', 'status': not_found}), 404
+                return jsonify({'error': 'Participante no encontrado', 'status': ParticipantCtrl.not_found}), 404
             elif result.modified_count == 0:
                 return jsonify({'message': 'El participante ya está actualizado', 'status': '200 OK'}), 200
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': ParticipantCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
 
     # --------------------------------

@@ -6,7 +6,7 @@ from models.category import Category
 
 class CategoryCtrl:
 
-    global not_found;
+    err_msg = 'Missing data or incorrect method';
     not_found = '404 Not Found';
 
     @staticmethod
@@ -26,7 +26,7 @@ class CategoryCtrl:
             db.insert_one(category.toDBCollection())
             return redirect(url_for('categories'))
         else:
-            return jsonify({'error': 'Categoría no insertada', 'status': not_found}), 404
+            return jsonify({'error': 'Categoría no insertada', 'status': CategoryCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
@@ -59,10 +59,10 @@ class CategoryCtrl:
             if categoryFound.__len__() > 0:
                 return jsonify(categoryFound), 200
             else:
-                return jsonify({'error': 'Categoría no encontrada', 'status': not_found}), 404
+                return jsonify({'error': 'Categoría no encontrada', 'status': CategoryCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CategoryCtrl.err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -123,6 +123,6 @@ class CategoryCtrl:
                 return jsonify(contentList), 200
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': not_found}), 404
+                return jsonify({'error': 'Película no encontrada', 'status': CategoryCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CategoryCtrl.err_msg, 'status': '400 Bad Request'}), 400
