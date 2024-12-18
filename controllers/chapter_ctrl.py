@@ -6,6 +6,10 @@ from models.chapter import Chapter
 
 
 class ChapterCtrl:
+
+    global not_found;
+    not_found = '404 Not Found';
+
     @staticmethod
     def render_template(db: Collection):
         chaptersReceived = db.find()
@@ -25,7 +29,7 @@ class ChapterCtrl:
             db.insert_one(chapter.toDBCollection())
             return redirect(url_for('chapters'))
         else:
-            return jsonify({'error': 'Capítulo no añadido', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Capítulo no añadido', 'status': not_found}), 404
 
     # ---------------------------------------------------------
     @staticmethod
@@ -35,7 +39,7 @@ class ChapterCtrl:
             if db.delete_one({'idChapter': idChapter}):
                 return redirect(url_for('chapters'))
             else:
-                return jsonify({'error': 'Chapter not found or not deleted', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Chapter not found or not deleted', 'status': not_found}), 404
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -80,7 +84,7 @@ class ChapterCtrl:
 
             result = db.update_one(filter, change)
             if result.matched_count == 0:
-                return jsonify({'error': 'Capítulo no encontrado', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Capítulo no encontrado', 'status': not_found}), 404
             elif result.modified_count == 0:
                 return jsonify({'message': 'El capítulo ya está actualizado', 'status': '200 OK'}), 200
 
@@ -106,7 +110,7 @@ class ChapterCtrl:
             if chapterFound.__len__() > 0:
                 return jsonify(chapterFound), 200
             else:
-                return jsonify({'error': 'Capítulo no encontrado', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Capítulo no encontrado', 'status': not_found}), 404
 
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400

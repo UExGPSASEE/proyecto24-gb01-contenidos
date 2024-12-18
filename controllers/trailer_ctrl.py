@@ -6,6 +6,10 @@ from models.trailer import Trailer
 
 
 class TrailerCtrl:
+
+    global not_found;
+    not_found = '404 Not Found';
+
     @staticmethod
     def render_template(db: Collection):
         trailersReceived = db.find()
@@ -24,7 +28,7 @@ class TrailerCtrl:
             db.insert_one(trailer.toDBCollection())
             return redirect(url_for('trailers'))
         else:
-            return jsonify({'error': 'Tráiler no añadido', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Tráiler no añadido', 'status': not_found}), 404
 
     # ---------------------------------------------------------
 
@@ -49,7 +53,7 @@ class TrailerCtrl:
             if trailerFound.__len__()>0:
                 return jsonify(trailerFound), 200
             else:
-                return jsonify({'error': 'Tráiler no encontrado', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Tráiler no encontrado', 'status': not_found}), 404
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
@@ -62,7 +66,7 @@ class TrailerCtrl:
             if db.delete_one({'idTrailer': idTrailer}):
                 return redirect(url_for('trailers'))
             else:
-                return jsonify({'error': 'Trailer not found or not deleted', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Trailer not found or not deleted', 'status': not_found}), 404
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -116,7 +120,7 @@ class TrailerCtrl:
                 change = {'$addToSet': {'categories': idCategory}}
                 return TrailerCtrl.updateTrailer(trailers, filterDict, change)
             else:
-                return jsonify({'error': 'No category was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No category was found', 'status': not_found}), 400
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -136,7 +140,7 @@ class TrailerCtrl:
         result = db.update_one(filterDict, changeDict)
         print(result)
         if result.matched_count == 0:
-            return jsonify({'error': 'Trailer not found or not updated', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Trailer not found or not updated', 'status': not_found}), 404
         elif result.modified_count == 0:
             return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
         return redirect(url_for('trailers'))
