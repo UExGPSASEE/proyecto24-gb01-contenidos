@@ -67,7 +67,7 @@ class ChapterCtrl:
             if not idChapter:
                 return jsonify({'error': 'Identificador de capítulo requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'idChapter': idChapter}
+            chapter_filter = {'idChapter': idChapter}
 
             updateFields = {}
 
@@ -82,7 +82,7 @@ class ChapterCtrl:
 
             change = {'$set': updateFields}
 
-            result = db.update_one(filter, change)
+            result = db.update_one(chapter_filter, change)
             if result.matched_count == 0:
                 return jsonify({'error': 'Capítulo no encontrado', 'status': ChapterCtrl.not_found}), 404
             elif result.modified_count == 0:
