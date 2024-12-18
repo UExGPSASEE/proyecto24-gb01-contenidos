@@ -4,8 +4,10 @@ from pymongo.collection import Collection
 from database import get_next_sequence_value as get_next_sequence_value
 from models.category import Category
 
-
 class CategoryCtrl:
+
+    global not_found;
+    not_found = '404 Not Found';
 
     @staticmethod
     def render_template(db: Collection):
@@ -24,7 +26,7 @@ class CategoryCtrl:
             db.insert_one(category.toDBCollection())
             return redirect(url_for('categories'))
         else:
-            return jsonify({'error': 'Categoría no insertada', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Categoría no insertada', 'status': not_found}), 404
 
     # ---------------------------------------------------------
 
@@ -57,7 +59,7 @@ class CategoryCtrl:
             if categoryFound.__len__() > 0:
                 return jsonify(categoryFound), 200
             else:
-                return jsonify({'error': 'Categoría no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Categoría no encontrada', 'status': not_found}), 404
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
@@ -121,6 +123,6 @@ class CategoryCtrl:
                 return jsonify(contentList), 200
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Película no encontrada', 'status': not_found}), 404
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400

@@ -8,6 +8,10 @@ from models.movie import Movie
 
 
 class MovieCtrl:
+
+    global not_found;
+    not_found = '404 Not Found';
+
     @staticmethod
     def render_template(db: Collection):
         moviesReceived = db.find()
@@ -33,7 +37,7 @@ class MovieCtrl:
             db.insert_one(movie.toDBCollection())
             return redirect(url_for('movies'))
         else:
-            return jsonify({'error': 'Película no añadida', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Película no añadida', 'status': not_found}), 404
 
     # ---------------------------------------------------------
 
@@ -66,7 +70,7 @@ class MovieCtrl:
                 return jsonify(movieFound), 200
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Película no encontrada', 'status': not_found}), 404
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
@@ -104,7 +108,7 @@ class MovieCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Personajes no encontrados', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Personajes no encontrados', 'status': not_found}), 404
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
@@ -141,7 +145,7 @@ class MovieCtrl:
             if participantsList.__len__()>0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'Participantes no encontrados', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Participantes no encontrados', 'status': not_found}), 404
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
 
@@ -177,10 +181,10 @@ class MovieCtrl:
                 if movieFound.__len__() > 0:
                     return jsonify(movieFound), 200
                 else:
-                    return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                    return jsonify({'error': 'Película no encontrada', 'status': not_found}), 404
 
             else:
-                return jsonify({'error': 'No se han encontrado películas', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'No se han encontrado películas', 'status': not_found}), 404
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
@@ -218,10 +222,10 @@ class MovieCtrl:
                 if movieFound.__len__() > 0:
                     return jsonify(movieFound), 200
                 else:
-                    return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                    return jsonify({'error': 'Película no encontrada', 'status': not_found}), 404
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Película no encontrada', 'status': not_found}), 404
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
@@ -254,7 +258,7 @@ class MovieCtrl:
             ]
             if movies_list.__len__()>0:
                return jsonify(movies_list), 200
-        return jsonify({'error': 'No existen películas insertadas', 'status': '404 Not Found'}), 404
+        return jsonify({'error': 'No existen películas insertadas', 'status': not_found}), 404
 
     # ---------------------------------------------------------
 
@@ -265,7 +269,7 @@ class MovieCtrl:
             if db.delete_one({'idMovie': idMovie}):
                 return redirect(url_for('movies'))
             else:
-                return jsonify({'error': 'Movie not found or not deleted', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Movie not found or not deleted', 'status': not_found}), 404
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -331,7 +335,7 @@ class MovieCtrl:
                 change = {'$set': {'trailer': idTrailer}}
                 return MovieCtrl.updateMovie(movies, filterDict, change)
             else:
-                return jsonify({'error': 'No trailer was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No trailer was found', 'status': not_found}), 400
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -343,7 +347,7 @@ class MovieCtrl:
             return MovieCtrl.updateMovie(db, filterDict, change)
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
-        
+
     @staticmethod
     def putCategoryIntoMovie(movies: Collection, categories: Collection, idMovie: int):
         idCategory = request.args.get('idCategory')
@@ -354,7 +358,7 @@ class MovieCtrl:
                 change = {'$addToSet': {'categories': idCategory}}
                 return MovieCtrl.updateMovie(movies, filterDict, change)
             else:
-                return jsonify({'error': 'No category was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No category was found', 'status': not_found}), 400
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -374,7 +378,7 @@ class MovieCtrl:
         result = db.update_one(filterDict, changeDict)
         print(result)
         if result.matched_count == 0:
-            return jsonify({'error': 'Movie not found or not updated', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Movie not found or not updated', 'status': not_found}), 404
         elif result.modified_count == 0:
             return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
         return redirect(url_for('movies'))
