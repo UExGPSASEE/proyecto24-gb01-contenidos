@@ -9,6 +9,7 @@ class ChapterCtrl:
 
     err_msg = 'Missing data or incorrect method';
     not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
 
     @staticmethod
     def render_template(db: Collection):
@@ -41,7 +42,7 @@ class ChapterCtrl:
             else:
                 return jsonify({'error': 'Chapter not found or not deleted', 'status': ChapterCtrl.not_found}), 404
         else:
-            return jsonify({'error': ChapterCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': ChapterCtrl.err_msg, 'status': ChapterCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -65,7 +66,7 @@ class ChapterCtrl:
             chapterNumber = request.form.get('chapterNumber')
 
             if not idChapter:
-                return jsonify({'error': 'Identificador de capítulo requerido', 'status': '400 Bad Request'}), 400
+                return jsonify({'error': 'Identificador de capítulo requerido', 'status': ChapterCtrl.bad_request}), 400
 
             chapter_filter = {'idChapter': idChapter}
 
@@ -88,7 +89,7 @@ class ChapterCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'El capítulo ya está actualizado', 'status': '200 OK'}), 200
 
-        return jsonify({'error': ChapterCtrl.err_msg, 'status': '400 Bad Request'}), 400
+        return jsonify({'error': ChapterCtrl.err_msg, 'status': ChapterCtrl.bad_request}), 400
 
     # --------------------------------
 
@@ -113,4 +114,4 @@ class ChapterCtrl:
                 return jsonify({'error': 'Capítulo no encontrado', 'status': ChapterCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': ChapterCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': ChapterCtrl.err_msg, 'status': ChapterCtrl.bad_request}), 400

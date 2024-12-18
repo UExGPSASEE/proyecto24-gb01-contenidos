@@ -11,6 +11,7 @@ class MovieCtrl:
 
     err_msg = 'Missing data or incorrect method';
     not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
 
     @staticmethod
     def render_template(db: Collection):
@@ -73,7 +74,7 @@ class MovieCtrl:
                 return jsonify({'error': 'Película no encontrada', 'status': MovieCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -111,7 +112,7 @@ class MovieCtrl:
                 return jsonify({'error': 'Personajes no encontrados', 'status': MovieCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -147,7 +148,7 @@ class MovieCtrl:
             else:
                 return jsonify({'error': 'Participantes no encontrados', 'status': MovieCtrl.not_found}), 404
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -187,7 +188,7 @@ class MovieCtrl:
                 return jsonify({'error': 'No se han encontrado películas', 'status': MovieCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -228,7 +229,7 @@ class MovieCtrl:
                 return jsonify({'error': 'Película no encontrada', 'status': MovieCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -271,7 +272,7 @@ class MovieCtrl:
             else:
                 return jsonify({'error': 'Movie not found or not deleted', 'status': MovieCtrl.not_found}), 404
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
     def deleteMovieForm(db: Collection):
@@ -316,7 +317,7 @@ class MovieCtrl:
             change = {'$set': updateFields}
             return MovieCtrl.updateMovie(db, filterDict, change)
 
-        return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+        return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
     def putMovieForm(db: Collection):
@@ -337,7 +338,7 @@ class MovieCtrl:
             else:
                 return jsonify({'error': 'No trailer was found', 'status': MovieCtrl.not_found}), 400
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
     def deleteTrailerFromMovie(db: Collection, idMovie:int):
@@ -346,7 +347,7 @@ class MovieCtrl:
             change = {'$set': {'trailer': None}}
             return MovieCtrl.updateMovie(db, filterDict, change)
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
     def putCategoryIntoMovie(movies: Collection, categories: Collection, idMovie: int):
@@ -360,7 +361,7 @@ class MovieCtrl:
             else:
                 return jsonify({'error': 'No category was found', 'status': MovieCtrl.not_found}), 400
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
     def deleteCategoryFromMovie(movies: Collection, idMovie: int):
@@ -371,7 +372,7 @@ class MovieCtrl:
             change = {'$pull': {'categories': idCategory}}
             return MovieCtrl.updateMovie(movies, filterDict, change)
         else:
-            return jsonify({'error': MovieCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
     def updateMovie(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):

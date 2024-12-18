@@ -8,6 +8,7 @@ class CategoryCtrl:
 
     err_msg = 'Missing data or incorrect method';
     not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
 
     @staticmethod
     def render_template(db: Collection):
@@ -62,7 +63,7 @@ class CategoryCtrl:
                 return jsonify({'error': 'Categoría no encontrada', 'status': CategoryCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': CategoryCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CategoryCtrl.err_msg, 'status': CategoryCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -123,6 +124,6 @@ class CategoryCtrl:
                 return jsonify(contentList), 200
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': CategoryCtrl.not_found}), 404
+                return jsonify({'error': 'Películas y/o series no encontradas', 'status': CategoryCtrl.not_found}), 404
         else:
-            return jsonify({'error': CategoryCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CategoryCtrl.err_msg, 'status': CategoryCtrl.bad_request}), 400

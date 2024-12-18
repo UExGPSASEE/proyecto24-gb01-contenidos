@@ -9,6 +9,7 @@ class ParticipantCtrl:
 
     err_msg = 'Missing data or incorrect method';
     not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
 
     @staticmethod
     def render_template(db: Collection):
@@ -57,7 +58,7 @@ class ParticipantCtrl:
             else:
                 return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
-        return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Nombre no proporcionado', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -83,7 +84,7 @@ class ParticipantCtrl:
             else:
                 return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
-        return jsonify({'error': 'Apellidos no proporcionados', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Apellidos no proporcionados', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -109,7 +110,7 @@ class ParticipantCtrl:
             else:
                 return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
-        return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Edad no proporcionada', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -134,7 +135,7 @@ class ParticipantCtrl:
                 return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Nacionalidad no proporcionada', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Nacionalidad no proporcionada', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -160,7 +161,7 @@ class ParticipantCtrl:
                 return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Identificador no proporcionado', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Identificador no proporcionado', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -222,7 +223,7 @@ class ParticipantCtrl:
             else:
                 return jsonify({'error': 'Participante no encontrado', 'status': ParticipantCtrl.not_found}), 404
         else:
-            return jsonify({'error':ParticipantCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error':ParticipantCtrl.err_msg, 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -253,7 +254,7 @@ class ParticipantCtrl:
             else:
                 return jsonify({'error': 'Participant not found or not deleted', 'status': ParticipantCtrl.not_found}), 404
         else:
-            return jsonify({'error': ParticipantCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': ParticipantCtrl.err_msg, 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -278,7 +279,7 @@ class ParticipantCtrl:
             if age:
                 age = int(age)
             if not idParticipant:
-                return jsonify({'error': 'ID de participante requerido', 'status': '400 Bad Request'}), 400
+                return jsonify({'error': 'ID de participante requerido', 'status': ParticipantCtrl.bad_request}), 400
 
             participant_filter = {'idParticipant': idParticipant}
 
@@ -301,7 +302,7 @@ class ParticipantCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'El participante ya está actualizado', 'status': '200 OK'}), 200
 
-        return jsonify({'error': ParticipantCtrl.err_msg, 'status': '400 Bad Request'}), 400
+        return jsonify({'error': ParticipantCtrl.err_msg, 'status': ParticipantCtrl.bad_request}), 400
 
 
     # --------------------------------
