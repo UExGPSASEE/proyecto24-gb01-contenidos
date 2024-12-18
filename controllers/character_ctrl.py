@@ -222,7 +222,7 @@ class CharacterCtrl:
             if participant:
                 participant = int(participant)
 
-            filter = {'idCharacter': idCharacter}
+            character_filter = {'idCharacter': idCharacter}
 
             updateFields = {}
 
@@ -235,7 +235,7 @@ class CharacterCtrl:
 
             change = {'$set': updateFields}
 
-            result = db.update_one(filter, change)
+            result = db.update_one(character_filter, change)
             if result.matched_count == 0:
                 return jsonify({'error': 'Personaje no encontrado', 'status': CharacterCtrl.not_found}), 404
             elif result.modified_count == 0:

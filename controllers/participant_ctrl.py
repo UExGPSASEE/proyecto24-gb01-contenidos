@@ -280,7 +280,7 @@ class ParticipantCtrl:
             if not idParticipant:
                 return jsonify({'error': 'ID de participante requerido', 'status': '400 Bad Request'}), 400
 
-            filter = {'idParticipant': idParticipant}
+            participant_filter = {'idParticipant': idParticipant}
 
             updateFields = {}
 
@@ -295,7 +295,7 @@ class ParticipantCtrl:
 
             change = {'$set': updateFields}
 
-            result = db.update_one(filter, change)
+            result = db.update_one(participant_filter, change)
             if result.matched_count == 0:
                 return jsonify({'error': 'Participante no encontrado', 'status': ParticipantCtrl.not_found}), 404
             elif result.modified_count == 0:
