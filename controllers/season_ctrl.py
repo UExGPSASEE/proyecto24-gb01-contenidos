@@ -6,6 +6,10 @@ from models.season import Season
 
 
 class SeasonCtrl:
+
+    global not_found;
+    not_found = '404 Not Found';
+
     @staticmethod
     def render_template(db: Collection):
         seasonsReceived = db.find()
@@ -28,7 +32,7 @@ class SeasonCtrl:
             db.insert_one(season.toDBCollection())
             return redirect(url_for('seasons'))
         else:
-            return jsonify({'error': 'Temporada no añadida', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Temporada no añadida', 'status': not_found}), 404
 
     # ---------------------------------------------------------
     @staticmethod
@@ -39,7 +43,7 @@ class SeasonCtrl:
                 print("Delete ok")
                 return redirect(url_for('seasons'))
             else:
-                return jsonify({'error': 'Season not found or not deleted', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Season not found or not deleted', 'status': not_found}), 404
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -110,7 +114,7 @@ class SeasonCtrl:
             if seasonFound.__len__()>0:
                 return jsonify(seasonFound), 200
             else:
-                return jsonify({'error': 'Season not found', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Season not found', 'status': not_found}), 404
         return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
     # --------------------------------------
@@ -151,7 +155,7 @@ class SeasonCtrl:
                 return jsonify(resultList), 200
 
             else:
-                return jsonify({'error': 'Temporada no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Temporada no encontrada', 'status': not_found}), 404
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
@@ -190,7 +194,7 @@ class SeasonCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Temporada no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Temporada no encontrada', 'status': not_found}), 404
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
@@ -229,7 +233,7 @@ class SeasonCtrl:
                 return jsonify(participantsList), 200
 
             else:
-                return jsonify({'error': 'Temporada no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Temporada no encontrada', 'status': not_found}), 404
 
         else:
             return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
@@ -244,7 +248,7 @@ class SeasonCtrl:
                 change = {'$set': {'trailer': idTrailer}}
                 return SeasonCtrl.updateSeason(seasons, filterDict, change)
             else:
-                return jsonify({'error': 'No trailer was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No trailer was found', 'status': not_found}), 400
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -267,7 +271,7 @@ class SeasonCtrl:
                 change = {'$addToSet': {'categories': idCategory}}
                 return SeasonCtrl.updateSeason(seasons, filterDict, change)
             else:
-                return jsonify({'error': 'No category was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No category was found', 'status': not_found}), 400
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -292,7 +296,7 @@ class SeasonCtrl:
                 change = {'$addToSet': {'chapters': idChapter}}
                 return SeasonCtrl.updateSeason(seasons, filterDict, change)
             else:
-                return jsonify({'error': 'No chapter was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No chapter was found', 'status': not_found}), 400
         else:
             return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
 
@@ -313,7 +317,7 @@ class SeasonCtrl:
         result = db.update_one(filterDict, changeDict)
         print(result)
         if result.matched_count == 0:
-            return jsonify({'error': 'Season not found or not updated', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Season not found or not updated', 'status': not_found}), 404
         elif result.modified_count == 0:
             return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
         return redirect(url_for('seasons'))
