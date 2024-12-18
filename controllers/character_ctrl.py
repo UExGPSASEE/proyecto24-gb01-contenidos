@@ -7,6 +7,9 @@ from models.character import Character
 
 class CharacterCtrl:
 
+    global err_msg;
+    err_msg = 'Missing data or incorrect method';
+
     global not_found;
     not_found = '404 Not Found';
 
@@ -108,7 +111,7 @@ class CharacterCtrl:
 
 
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # --------------------------------------------------------
 
@@ -170,7 +173,7 @@ class CharacterCtrl:
             else:
                 return jsonify({'error': 'Personaje no encontrado', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -202,7 +205,7 @@ class CharacterCtrl:
             else:
                 return jsonify({'error': 'Character not found or not deleted', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -243,7 +246,7 @@ class CharacterCtrl:
 
             return redirect(url_for('characters'))
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def putCharacterForm(db: Collection):

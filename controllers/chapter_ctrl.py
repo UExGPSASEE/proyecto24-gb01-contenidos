@@ -7,6 +7,9 @@ from models.chapter import Chapter
 
 class ChapterCtrl:
 
+    global err_msg;
+    err_msg = 'Missing data or incorrect method';
+
     global not_found;
     not_found = '404 Not Found';
 
@@ -41,7 +44,7 @@ class ChapterCtrl:
             else:
                 return jsonify({'error': 'Chapter not found or not deleted', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -88,7 +91,7 @@ class ChapterCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'El capítulo ya está actualizado', 'status': '200 OK'}), 200
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # --------------------------------
 
@@ -113,4 +116,4 @@ class ChapterCtrl:
                 return jsonify({'error': 'Capítulo no encontrado', 'status': not_found}), 404
 
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400

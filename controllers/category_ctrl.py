@@ -6,6 +6,9 @@ from models.category import Category
 
 class CategoryCtrl:
 
+    global err_msg;
+    err_msg = 'Missing data or incorrect method';
+
     global not_found;
     not_found = '404 Not Found';
 
@@ -62,7 +65,7 @@ class CategoryCtrl:
                 return jsonify({'error': 'Categoría no encontrada', 'status': not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -125,4 +128,4 @@ class CategoryCtrl:
             else:
                 return jsonify({'error': 'Película no encontrada', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400

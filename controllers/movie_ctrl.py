@@ -9,6 +9,9 @@ from models.movie import Movie
 
 class MovieCtrl:
 
+    global err_msg;
+    err_msg = 'Missing data or incorrect method';
+
     global not_found;
     not_found = '404 Not Found';
 
@@ -73,7 +76,7 @@ class MovieCtrl:
                 return jsonify({'error': 'Película no encontrada', 'status': not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -111,7 +114,7 @@ class MovieCtrl:
                 return jsonify({'error': 'Personajes no encontrados', 'status': not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -147,7 +150,7 @@ class MovieCtrl:
             else:
                 return jsonify({'error': 'Participantes no encontrados', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -187,7 +190,7 @@ class MovieCtrl:
                 return jsonify({'error': 'No se han encontrado películas', 'status': not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -228,7 +231,7 @@ class MovieCtrl:
                 return jsonify({'error': 'Película no encontrada', 'status': not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -271,7 +274,7 @@ class MovieCtrl:
             else:
                 return jsonify({'error': 'Movie not found or not deleted', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def deleteMovieForm(db: Collection):
@@ -316,7 +319,7 @@ class MovieCtrl:
             change = {'$set': updateFields}
             return MovieCtrl.updateMovie(db, filterDict, change)
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def putMovieForm(db: Collection):
@@ -337,7 +340,7 @@ class MovieCtrl:
             else:
                 return jsonify({'error': 'No trailer was found', 'status': not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def deleteTrailerFromMovie(db: Collection, idMovie:int):
@@ -346,7 +349,7 @@ class MovieCtrl:
             change = {'$set': {'trailer': None}}
             return MovieCtrl.updateMovie(db, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def putCategoryIntoMovie(movies: Collection, categories: Collection, idMovie: int):
@@ -360,7 +363,7 @@ class MovieCtrl:
             else:
                 return jsonify({'error': 'No category was found', 'status': not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def deleteCategoryFromMovie(movies: Collection, idMovie: int):
@@ -371,7 +374,7 @@ class MovieCtrl:
             change = {'$pull': {'categories': idCategory}}
             return MovieCtrl.updateMovie(movies, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def updateMovie(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):

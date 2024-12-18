@@ -7,6 +7,9 @@ from models.participant import Participant
 
 class ParticipantCtrl:
 
+    global err_msg;
+    err_msg = 'Missing data or incorrect method';
+
     global not_found;
     not_found = '404 Not Found';
 
@@ -222,7 +225,7 @@ class ParticipantCtrl:
             else:
                 return jsonify({'error': 'Participante no encontrado', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error':err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -253,7 +256,7 @@ class ParticipantCtrl:
             else:
                 return jsonify({'error': 'Participant not found or not deleted', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -301,7 +304,7 @@ class ParticipantCtrl:
             elif result.modified_count == 0:
                 return jsonify({'message': 'El participante ya está actualizado', 'status': '200 OK'}), 200
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
 
     # --------------------------------

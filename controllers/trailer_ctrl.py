@@ -7,6 +7,9 @@ from models.trailer import Trailer
 
 class TrailerCtrl:
 
+    global err_msg;
+    err_msg = 'Missing data or incorrect method';
+
     global not_found;
     not_found = '404 Not Found';
 
@@ -55,7 +58,7 @@ class TrailerCtrl:
             else:
                 return jsonify({'error': 'Tráiler no encontrado', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     # ---------------------------------------------------------
 
@@ -68,7 +71,7 @@ class TrailerCtrl:
             else:
                 return jsonify({'error': 'Trailer not found or not deleted', 'status': not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def deleteTrailerForm(db: Collection):
@@ -106,7 +109,7 @@ class TrailerCtrl:
             change = {'$set': updateFields}
             return TrailerCtrl.updateTrailer(trailers, filterDict, change)
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
 # --------------------------------
 
@@ -122,7 +125,7 @@ class TrailerCtrl:
             else:
                 return jsonify({'error': 'No category was found', 'status': not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def deleteCategoryFromTrailer(trailers: Collection, idTrailer: int):
@@ -133,7 +136,7 @@ class TrailerCtrl:
             change = {'$pull': {'categories': idCategory}}
             return TrailerCtrl.updateTrailer(trailers, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': err_msg, 'status': '400 Bad Request'}), 400
 
     @staticmethod
     def updateTrailer(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
