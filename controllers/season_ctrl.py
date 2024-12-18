@@ -9,6 +9,7 @@ class SeasonCtrl:
 
     err_msg = 'Missing data or incorrect method';
     not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
 
     @staticmethod
     def render_template(db: Collection):
@@ -45,7 +46,7 @@ class SeasonCtrl:
             else:
                 return jsonify({'error': 'Season not found or not deleted', 'status': SeasonCtrl.not_found}), 404
         else:
-            return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -67,7 +68,7 @@ class SeasonCtrl:
             seasonNumber = request.form.get('seasonNumber')
 
             if not idSeason:
-                return jsonify({'error': 'Identificador de temporada requerido', 'status': '400 Bad Request'}), 400
+                return jsonify({'error': 'Identificador de temporada requerido', 'status': SeasonCtrl.bad_request}), 400
 
             filterDict = {'idSeason': idSeason}
 
@@ -88,7 +89,7 @@ class SeasonCtrl:
 
             return SeasonCtrl.updateSeason(db, filterDict, change)
 
-        return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+        return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # --------------------------------
 
@@ -115,7 +116,7 @@ class SeasonCtrl:
                 return jsonify(seasonFound), 200
             else:
                 return jsonify({'error': 'Season not found', 'status': SeasonCtrl.not_found}), 404
-        return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+        return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # --------------------------------------
 
@@ -158,7 +159,7 @@ class SeasonCtrl:
                 return jsonify({'error': 'Temporada no encontrada', 'status': SeasonCtrl.not_found}), 404
 
         else:
-            return jsonify({'error':SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error':SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # --------------------------------------
 
@@ -197,7 +198,7 @@ class SeasonCtrl:
                 return jsonify({'error': 'Temporada no encontrada', 'status': SeasonCtrl.not_found}), 404
 
         else:
-            return jsonify({'error':SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error':SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # --------------------------------------
 
@@ -236,7 +237,7 @@ class SeasonCtrl:
                 return jsonify({'error': 'Temporada no encontrada', 'status': SeasonCtrl.not_found}), 404
 
         else:
-            return jsonify({'error':SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error':SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
     def putTrailerIntoSeason(seasons: Collection, trailers: Collection, idSeason: int):
@@ -250,7 +251,7 @@ class SeasonCtrl:
             else:
                 return jsonify({'error': 'No trailer was found', 'status': SeasonCtrl.not_found}), 400
         else:
-            return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
     def deleteTrailerFromSeason(db: Collection, idSeason:int):
@@ -259,7 +260,7 @@ class SeasonCtrl:
             change = {'$set': {'trailer': None}}
             return SeasonCtrl.updateSeason(db, filterDict, change)
         else:
-            return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
     def putCategoryIntoSeason(seasons: Collection, categories: Collection, idSeason: int):
@@ -273,7 +274,7 @@ class SeasonCtrl:
             else:
                 return jsonify({'error': 'No category was found', 'status': SeasonCtrl.not_found}), 400
         else:
-            return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
     def deleteCategoryFromSeason(seasons: Collection, idSeason: int):
@@ -284,7 +285,7 @@ class SeasonCtrl:
             change = {'$pull': {'categories': idCategory}}
             return SeasonCtrl.updateSeason(seasons, filterDict, change)
         else:
-            return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
     def putChapterIntoSeason(seasons: Collection, chapters: Collection, idSeason: int):
@@ -298,7 +299,7 @@ class SeasonCtrl:
             else:
                 return jsonify({'error': 'No chapter was found', 'status': SeasonCtrl.not_found}), 400
         else:
-            return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
     def deleteChapterFromSeason(db: Collection, idSeason: int):
@@ -309,7 +310,7 @@ class SeasonCtrl:
             change = {'$pull': {'chapters': idChapter}}
             return SeasonCtrl.updateSeason(db, filterDict, change)
         else:
-            return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
 
     @staticmethod
@@ -329,4 +330,4 @@ class SeasonCtrl:
             change = {'$set': {'idSeries': int(idSeries)}}
             return SeasonCtrl.updateSeasonSeries(db, filterDict, change)
         else:
-            return jsonify({'error': SeasonCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400

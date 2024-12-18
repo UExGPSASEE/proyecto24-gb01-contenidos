@@ -4,6 +4,7 @@ from lang_client import LanguageClient
 class LanguageCtrl:
 
     err_msg = 'Missing data or incorrect method';
+    bad_request = '400 Bad Request';
 
     @staticmethod
     def getLanguageById(idLanguage):
@@ -11,4 +12,4 @@ class LanguageCtrl:
             idLanguage = int(idLanguage)
             return LanguageClient.getLanguage(idLanguage)
         else:
-            return jsonify({'error': LanguageCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': LanguageCtrl.err_msg, 'status': LanguageCtrl.bad_request}), 400

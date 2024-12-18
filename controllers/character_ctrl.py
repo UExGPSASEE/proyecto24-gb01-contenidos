@@ -9,6 +9,7 @@ class CharacterCtrl:
 
     err_msg = 'Missing data or incorrect method';
     not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
 
     @staticmethod
     def render_template(db: Collection):
@@ -56,7 +57,7 @@ class CharacterCtrl:
             else:
                 return jsonify({'error': 'Personajes no encontrados', 'status': CharacterCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Nombre no proporcionado', 'status': CharacterCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -83,7 +84,7 @@ class CharacterCtrl:
             else:
                 return jsonify({'error': 'Personajes no encontrados', 'status': CharacterCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Edad no proporcionada', 'status': CharacterCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -108,7 +109,7 @@ class CharacterCtrl:
 
 
         else:
-            return jsonify({'error': CharacterCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
     # --------------------------------------------------------
 
@@ -170,7 +171,7 @@ class CharacterCtrl:
             else:
                 return jsonify({'error': 'Personaje no encontrado', 'status': CharacterCtrl.not_found}), 404
         else:
-            return jsonify({'error': CharacterCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -202,7 +203,7 @@ class CharacterCtrl:
             else:
                 return jsonify({'error': 'Character not found or not deleted', 'status': CharacterCtrl.not_found}), 404
         else:
-            return jsonify({'error': CharacterCtrl.err_msg, 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
@@ -243,7 +244,7 @@ class CharacterCtrl:
 
             return redirect(url_for('characters'))
 
-        return jsonify({'error': CharacterCtrl.err_msg, 'status': '400 Bad Request'}), 400
+        return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
     @staticmethod
     def putCharacterForm(db: Collection):
