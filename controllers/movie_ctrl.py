@@ -21,7 +21,7 @@ class MovieCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addMovie(db: Collection):
+    def add_movie(db: Collection):
         idMovie = int(get_next_sequence_value(db, "idMovie"))
         movieTitle = request.form.get('title')
         duration = request.form.get('duration')
@@ -43,7 +43,7 @@ class MovieCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieById(db: Collection, idMovie: int):
+    def get_movie_by_id(db: Collection, idMovie: int):
         if idMovie:
             idMovie = int(idMovie)
             matchingMovie = db.find({'idMovie': idMovie})
@@ -79,7 +79,7 @@ class MovieCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieCharacters(movieCollection: Collection, characterCollection: Collection):
+    def get_movie_characters(movieCollection: Collection, characterCollection: Collection):
         idMovie = int(request.args.get('idMovie'))
 
         if idMovie:
@@ -117,7 +117,7 @@ class MovieCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieParticipants(movieCollection, participantsCollection):
+    def get_movie_participants(movieCollection, participantsCollection):
         idMovie = int(request.args.get('idMovie'))
 
         if idMovie:
@@ -153,7 +153,7 @@ class MovieCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieByTitle(db: Collection):
+    def get_movie_by_title(db: Collection):
         title = request.args.get('title')
 
         if title:
@@ -193,7 +193,7 @@ class MovieCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieByReleaseDate(db: Collection):
+    def get_movie_by_release_date(db: Collection):
         releaseDate_str = request.args.get('releaseDate')
 
         if releaseDate_str:
@@ -234,7 +234,7 @@ class MovieCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getAllMovies(db: Collection):
+    def get_all_movies(db: Collection):
         allMovies = db.find()
 
         if db.count_documents({}) > 0:
@@ -264,7 +264,7 @@ class MovieCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteMovie(db: Collection, idMovie: int):
+    def delete_movie(db: Collection, idMovie: int):
         if idMovie:
             idMovie = int(idMovie)
             if db.delete_one({'idMovie': idMovie}):
@@ -275,13 +275,13 @@ class MovieCtrl:
             return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteMovieForm(db: Collection):
+    def delete_movie_form(db: Collection):
         idMovie = int(request.form.get('idMovie'))
-        return MovieCtrl.deleteMovie(db, idMovie)
+        return MovieCtrl.delete_movie(db, idMovie)
     # ---------------------------------------------------------
 
     @staticmethod
-    def putMovie(db: Collection, idMovie: int):
+    def put_movie(db: Collection, idMovie: int):
         if idMovie:
             idMovie = int(idMovie)
             movieTitle = request.form.get('title')
@@ -315,67 +315,67 @@ class MovieCtrl:
                 updateFields['isSuscription'] = isSuscription
 
             change = {'$set': updateFields}
-            return MovieCtrl.updateMovie(db, filterDict, change)
+            return MovieCtrl.update_movie(db, filterDict, change)
 
         return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def putMovieForm(db: Collection):
+    def put_movie_form(db: Collection):
         idMovie = int(request.form.get('idMovie'))
-        return MovieCtrl.putMovie(db, idMovie)
+        return MovieCtrl.put_movie(db, idMovie)
 
 # --------------------------------
 
     @staticmethod
-    def putTrailerIntoMovie(movies: Collection, trailers: Collection, idMovie: int):
+    def put_trailer_into_movie(movies: Collection, trailers: Collection, idMovie: int):
         idTrailer = request.args.get('idTrailer')
         if idTrailer:
             idTrailer = int(idTrailer)
             if trailers.find({'idTrailer': idTrailer}):
                 filterDict = {'idMovie': int(idMovie)}
                 change = {'$set': {'trailer': idTrailer}}
-                return MovieCtrl.updateMovie(movies, filterDict, change)
+                return MovieCtrl.update_movie(movies, filterDict, change)
             else:
                 return jsonify({'error': 'No trailer was found', 'status': MovieCtrl.not_found}), 400
         else:
             return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteTrailerFromMovie(db: Collection, idMovie:int):
+    def delete_trailer_from_movie(db: Collection, idMovie:int):
         if idMovie:
             filterDict = {'idMovie': int(idMovie)}
             change = {'$set': {'trailer': None}}
-            return MovieCtrl.updateMovie(db, filterDict, change)
+            return MovieCtrl.update_movie(db, filterDict, change)
         else:
             return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def putCategoryIntoMovie(movies: Collection, categories: Collection, idMovie: int):
+    def put_category_into_movie(movies: Collection, categories: Collection, idMovie: int):
         idCategory = request.args.get('idCategory')
         if idCategory:
             idCategory = int(idCategory)
             if categories.find({'idCategory': idCategory}):
                 filterDict = {'idMovie': int(idMovie)}
                 change = {'$addToSet': {'categories': idCategory}}
-                return MovieCtrl.updateMovie(movies, filterDict, change)
+                return MovieCtrl.update_movie(movies, filterDict, change)
             else:
                 return jsonify({'error': 'No category was found', 'status': MovieCtrl.not_found}), 400
         else:
             return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteCategoryFromMovie(movies: Collection, idMovie: int):
+    def delete_category_from_movie(movies: Collection, idMovie: int):
         idCategory = request.args.get('idCategory')
         if idCategory:
             idCategory = int(idCategory)
             filterDict = {'idMovie': int(idMovie)}
             change = {'$pull': {'categories': idCategory}}
-            return MovieCtrl.updateMovie(movies, filterDict, change)
+            return MovieCtrl.update_movie(movies, filterDict, change)
         else:
             return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def updateMovie(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
+    def update_movie(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
         result = db.update_one(filterDict, changeDict)
         print(result)
         if result.matched_count == 0:

@@ -7,7 +7,7 @@ class LanguageCtrl:
     bad_request = '400 Bad Request';
 
     @staticmethod
-    def getLanguageById(idLanguage):
+    def get_language_by_id(idLanguage):
         if idLanguage:
             idLanguage = int(idLanguage)
             return LanguageClient.getLanguage(idLanguage)

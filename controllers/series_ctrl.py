@@ -20,7 +20,7 @@ class SeriesCtrl:
     # --------------------------------------------------------------
 
     @staticmethod
-    def addSeries(db: Collection):
+    def add_series(db: Collection):
         idSeries = int(get_next_sequence_value(db, "idSeries"))
         title = request.form.get('title')
         duration = request.form.get('duration')
@@ -41,7 +41,7 @@ class SeriesCtrl:
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesByTitle(db: Collection):
+    def get_series_by_title(db: Collection):
         title = request.args.get('title')
 
         if title:
@@ -78,7 +78,7 @@ class SeriesCtrl:
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesById(db: Collection, idSeries: int):
+    def get_series_by_id(db: Collection, idSeries: int):
         if idSeries:
             idSeries = int(idSeries)
             matching_series = db.find({'idSeries': idSeries})
@@ -112,7 +112,7 @@ class SeriesCtrl:
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesCharacters(seriesCollection: Collection, characterCollection: Collection):
+    def get_series_characters(seriesCollection: Collection, characterCollection: Collection):
         idSeries = int(request.args.get('idSeries'))
 
         if idSeries:
@@ -149,7 +149,7 @@ class SeriesCtrl:
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesChapters(seriesCollection: Collection, seasonCollection: Collection):
+    def get_series_chapters(seriesCollection: Collection, seasonCollection: Collection):
         idSeries = int(request.args.get('idSeries'))
         print(idSeries)
 
@@ -193,7 +193,7 @@ class SeriesCtrl:
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesParticipants(seriesCollection, participantsCollection):
+    def get_series_participants(seriesCollection, participantsCollection):
         idSeries = int(request.args.get('idSeries'))
 
         if idSeries:
@@ -230,7 +230,7 @@ class SeriesCtrl:
     # --------------------------------------------------------------
 
     @staticmethod
-    def getAllSeries(db: Collection):
+    def get_all_series(db: Collection):
         allSeries = db.find()
 
         if db.count_documents({}) > 0:
@@ -261,7 +261,7 @@ class SeriesCtrl:
     # --------------------------------------------------------------
 
     @staticmethod
-    def deleteSeries(db: Collection, idSeries: int):
+    def delete_series(db: Collection, idSeries: int):
         if idSeries:
             idSeries = int(idSeries)
             if db.delete_one({'idSeries': idSeries}):
@@ -274,17 +274,17 @@ class SeriesCtrl:
     # --------------------------------------------------------------
 
     @staticmethod
-    def deleteSeriesForm(db: Collection):
+    def delete_series_form(db: Collection):
         idSeries = int(request.form.get('idSeries'))
-        return SeriesCtrl.deleteSeries(db, idSeries)
+        return SeriesCtrl.delete_series(db, idSeries)
 
     @staticmethod
-    def putSeriesForm(db: Collection):
+    def put_series_form(db: Collection):
         idSeries = int(request.form.get('idSeries'))
-        return SeriesCtrl.putSeries(db, idSeries)
+        return SeriesCtrl.put_series(db, idSeries)
 
     @staticmethod
-    def putSeries(db: Collection, idSeries: int):
+    def put_series(db: Collection, idSeries: int):
         if idSeries:
             idSeries = int(idSeries)
             title = request.form.get('title')
@@ -322,86 +322,86 @@ class SeriesCtrl:
 
             change = {'$set': updateFields}
 
-            return SeriesCtrl.updateSeries(db, filterDict, change)
+            return SeriesCtrl.update_series(db, filterDict, change)
 
         return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def putTrailerIntoSeries(series: Collection, trailers: Collection, idSeries: int):
+    def put_trailer_into_series(series: Collection, trailers: Collection, idSeries: int):
         idTrailer = request.args.get('idTrailer')
         if idTrailer:
             idTrailer = int(idTrailer)
             if trailers.find({'idTrailer': idTrailer}):
                 filterDict = {'idSeries': int(idSeries)}
                 change = {'$set': {'trailer': idTrailer}}
-                return SeriesCtrl.updateSeries(series, filterDict, change)
+                return SeriesCtrl.update_series(series, filterDict, change)
             else:
                 return jsonify({'error': 'No trailer was found', 'status': SeriesCtrl.not_found}), 400
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteTrailerFromSeries(db: Collection, idSeries:int):
+    def delete_trailer_from_series(db: Collection, idSeries:int):
         if idSeries:
             filterDict = {'idSeries': int(idSeries)}
             change = {'$set': {'trailer': None}}
-            return SeriesCtrl.updateSeries(db, filterDict, change)
+            return SeriesCtrl.update_series(db, filterDict, change)
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def putCategoryIntoSeries(series: Collection, categories: Collection, idSeries: int):
+    def put_category_into_series(series: Collection, categories: Collection, idSeries: int):
         idCategory = request.args.get('idCategory')
         if idCategory:
             idCategory = int(idCategory)
             if categories.find({'idCategory': idCategory}):
                 filterDict = {'idSeries': int(idSeries)}
                 change = {'$addToSet': {'categories': idCategory}}
-                return SeriesCtrl.updateSeries(series, filterDict, change)
+                return SeriesCtrl.update_series(series, filterDict, change)
             else:
                 return jsonify({'error': 'No category was found', 'status': SeriesCtrl.not_found}), 400
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteCategoryFromSeries(series: Collection, idSeries: int):
+    def delete_category_from_series(series: Collection, idSeries: int):
         idCategory = request.args.get('idCategory')
         if idCategory:
             idCategory = int(idCategory)
             filterDict = {'idSeries': int(idSeries)}
             change = {'$pull': {'categories': idCategory}}
-            return SeriesCtrl.updateSeries(series, filterDict, change)
+            return SeriesCtrl.update_series(series, filterDict, change)
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def putSeasonIntoSeries(series: Collection, seasons: Collection, idSeries: int):
+    def put_season_into_series(series: Collection, seasons: Collection, idSeries: int):
         idSeason = request.args.get('idSeason')
         if idSeason:
             idSeason = int(idSeason)
             if seasons.find({'idSeason': idSeason}):
                 filterDict = {'idSeries': int(idSeries)}
                 change = {'$addToSet': {'seasons': idSeason}}
-                SeasonCtrl.updateSeasonSeries(seasons, idSeason, idSeries)
-                return SeriesCtrl.updateSeries(series, filterDict, change)
+                SeasonCtrl.update_season_series(seasons, idSeason, idSeries)
+                return SeriesCtrl.update_series(series, filterDict, change)
             else:
                 return jsonify({'error': 'No season was found', 'status': SeriesCtrl.not_found}), 400
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteSeasonFromSeries(series: Collection, idSeries: int):
+    def delete_season_from_series(series: Collection, idSeries: int):
         idSeason = request.args.get('idSeason')
         if idSeason:
             idSeason = int(idSeason)
             filterDict = {'idSeries': int(idSeries)}
             change = {'$pull': {'seasons': idSeason}}
-            return SeriesCtrl.updateSeries(series, filterDict, change)
+            return SeriesCtrl.update_series(series, filterDict, change)
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def updateSeries(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
+    def update_series(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
         result = db.update_one(filterDict, changeDict)
         print(result)
         if result.matched_count == 0:
