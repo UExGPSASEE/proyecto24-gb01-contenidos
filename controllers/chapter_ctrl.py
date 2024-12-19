@@ -19,7 +19,7 @@ class ChapterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addChapter(db: Collection):
+    def add_chapter(db: Collection):
         idChapter = int(get_next_sequence_value(db, "idChapter"))
         title = request.form.get('title')
         duration = request.form.get('duration')
@@ -34,7 +34,7 @@ class ChapterCtrl:
 
     # ---------------------------------------------------------
     @staticmethod
-    def deleteChapter(db: Collection, idChapter: int):
+    def delete_chapter(db: Collection, idChapter: int):
         if idChapter:
             idChapter = int(idChapter)
             if db.delete_one({'idChapter': idChapter}):
@@ -47,17 +47,17 @@ class ChapterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteChapterForm(db: Collection):
+    def delete_chapter_form(db: Collection):
         idChapter = int(request.form.get('idChapter'))
-        return ChapterCtrl.deleteChapter(db, idChapter)
+        return ChapterCtrl.delete_chapter(db, idChapter)
 
     @staticmethod
-    def putChapterForm(db: Collection):
+    def put_chapter_form(db: Collection):
         idChapter = int(request.form.get('idChapter'))
-        return ChapterCtrl.putChapter(db, idChapter)
+        return ChapterCtrl.put_chapter(db, idChapter)
 
     @staticmethod
-    def putChapter(db: Collection, idChapter):
+    def put_chapter(db: Collection, idChapter):
         if idChapter:
             idChapter = int(idChapter)
             title = request.form.get('title')
@@ -94,7 +94,7 @@ class ChapterCtrl:
     # --------------------------------
 
     @staticmethod
-    def getChapterById(db: Collection, idChapter):
+    def get_chapter_by_id(db: Collection, idChapter):
         if idChapter:
             idChapter = int(idChapter)
             matchingChapter = db.find({'idChapter': idChapter})

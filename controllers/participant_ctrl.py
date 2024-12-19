@@ -20,7 +20,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addParticipant(db: Collection):
+    def add_participant(db: Collection):
         idParticipant = int(get_next_sequence_value(db, "idParticipant"))
         name = request.form.get('name')
         surname = request.form.get('surname')
@@ -38,7 +38,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantByName(db: Collection):
+    def get_participant_by_name(db: Collection):
         name = request.args.get('name')
 
         if name:
@@ -63,7 +63,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantBySurname(db: Collection):
+    def get_participant_by_surname(db: Collection):
         surname = request.args.get('surname')
 
         if surname:
@@ -89,7 +89,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantByAge(db: Collection):
+    def get_participant_by_age(db: Collection):
         age = int(request.args.get('age'))
 
         if age:
@@ -115,7 +115,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantByNationality(db: Collection):
+    def get_participant_by_nationality(db: Collection):
         nationality = request.args.get('nationality')
         if nationality:
             matchingParticipants = db.find({'nationality': {'$regex': nationality, '$options': 'i'}})
@@ -140,7 +140,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantById(db: Collection, idParticipant: int):
+    def get_participant_by_id(db: Collection, idParticipant: int):
         if idParticipant:
             idParticipant = int(idParticipant)
             matchingParticipant = db.find({'idParticipant': idParticipant})
@@ -166,7 +166,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getContentByParticipant(participantCollection: Collection, movieCollection: Collection,
+    def get_content_by_participant(participantCollection: Collection, movieCollection: Collection,
                                 seriesCollection: Collection):
         idParticipant = int(request.args.get('idParticipant'))
 
@@ -228,7 +228,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getAllParticipants(db: Collection):
+    def get_all_participants(db: Collection):
         allParticipants = db.find()
         participants_list = [
             {
@@ -245,7 +245,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteParticipant(db: Collection, idParticipant: int):
+    def delete_participant(db: Collection, idParticipant: int):
 
         if idParticipant:
             idParticipant = int(idParticipant)
@@ -259,17 +259,17 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteParticipantForm(db: Collection):
+    def delete_participant_form(db: Collection):
         idParticipant = int(request.form.get('idParticipant'))
-        return ParticipantCtrl.deleteParticipant(db, idParticipant)
+        return ParticipantCtrl.delete_participant(db, idParticipant)
 
     @staticmethod
-    def putParticipantForm(db: Collection):
+    def put_participant_form(db: Collection):
         idParticipant = int(request.form.get('idParticipant'))
-        return ParticipantCtrl.putParticipant(db, idParticipant)
+        return ParticipantCtrl.put_participant(db, idParticipant)
 
     @staticmethod
-    def putParticipant(db: Collection, idParticipant: int):
+    def put_participant(db: Collection, idParticipant: int):
         if idParticipant:
             idParticipant = int(idParticipant)
             name = request.form.get('name')
@@ -303,6 +303,5 @@ class ParticipantCtrl:
                 return jsonify({'message': 'El participante ya está actualizado', 'status': '200 OK'}), 200
 
         return jsonify({'error': ParticipantCtrl.err_msg, 'status': ParticipantCtrl.bad_request}), 400
-
 
     # --------------------------------

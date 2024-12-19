@@ -20,7 +20,7 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addCharacter(db: Collection):
+    def add_character(db: Collection):
         idCharacter = int(get_next_sequence_value(db, "idCharacter"))
         name = request.form.get('name')
         participant = int(request.form.get('participant'))
@@ -37,7 +37,7 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCharacterByName(db: Collection):
+    def get_character_by_name(db: Collection):
         name = request.args.get('name')
         if name:
             matchingCharacters = db.find({'name': {'$regex': name, '$options': 'i'}})
@@ -62,7 +62,7 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCharacterByAge(db: Collection):
+    def get_character_by_age(db: Collection):
         age = int(request.args.get('age'))
 
         if age:
@@ -89,7 +89,7 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCharacterById(db: Collection, idCharacter: int):
+    def get_character_by_id(db: Collection, idCharacter: int):
         if idCharacter:
             idCharacter = int(idCharacter)
             matchingCharacter = db.find({'idCharacter': idCharacter})
@@ -114,7 +114,7 @@ class CharacterCtrl:
     # --------------------------------------------------------
 
     @staticmethod
-    def getContentByCharacter(characterCollection: Collection, movieCollection: Collection,
+    def get_content_by_character(characterCollection: Collection, movieCollection: Collection,
                               seriesCollection: Collection):
         idCharacter = int(request.args.get('idCharacter'))
 
@@ -176,7 +176,7 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getAllCharacters(db: Collection):
+    def get_all_characters(db: Collection):
         allCharacters = db.find()
         charactersList = [
             {
@@ -196,7 +196,7 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteCharacter(db: Collection, idCharacter: int):
+    def delete_character(db: Collection, idCharacter: int):
         if idCharacter:
             if db.delete_one({'idCharacter': idCharacter}):
                 return redirect(url_for('characters'))
@@ -208,12 +208,12 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteCharacterForm(db: Collection):
+    def delete_character_form(db: Collection):
         idCharacter = int(request.form.get('idCharacter'))
-        return CharacterCtrl.deleteCharacter(db, idCharacter)
+        return CharacterCtrl.delete_character(db, idCharacter)
 
     @staticmethod
-    def putCharacter(db: Collection, idCharacter: int):
+    def put_character(db: Collection, idCharacter: int):
         if idCharacter:
             name = request.form.get('name')
             participant = request.form.get('participant')
@@ -247,8 +247,8 @@ class CharacterCtrl:
         return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
     @staticmethod
-    def putCharacterForm(db: Collection):
+    def put_character_form(db: Collection):
         idCharacter = int(request.form.get('idCharacter'))
-        return CharacterCtrl.putCharacter(db, idCharacter)
+        return CharacterCtrl.put_character(db, idCharacter)
 
     # --------------------------------------------------------

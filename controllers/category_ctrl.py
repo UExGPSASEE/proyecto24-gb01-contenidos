@@ -18,7 +18,7 @@ class CategoryCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addCategory(db: Collection):
+    def add_category(db: Collection):
         idCategory = int(get_next_sequence_value(db, "idCategory"))
         name = request.form['name']
 
@@ -32,7 +32,7 @@ class CategoryCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getAllCategories(db: Collection):
+    def get_all_categories(db: Collection):
         allCategories = db.find()
         categoryList = [
             {
@@ -46,7 +46,7 @@ class CategoryCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCategoryById(db: Collection, idCategory: int):
+    def get_category_by_id(db: Collection, idCategory: int):
         if idCategory:
             idCategory = int(idCategory)
             matchingCategory = db.find({'idCategory': idCategory})
@@ -68,7 +68,7 @@ class CategoryCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getContentByCategory(categoryCollection: Collection, movieCollection: Collection, seriesCollection: Collection):
+    def get_content_by_category(categoryCollection: Collection, movieCollection: Collection, seriesCollection: Collection):
         idCategory = int(request.args.get('idCategory'))
         print(idCategory)
 
