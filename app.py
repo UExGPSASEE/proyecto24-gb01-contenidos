@@ -32,77 +32,77 @@ def movies():
 
 
 @app.route('/movies', methods=['POST'])
-def addMovie():
+def add_movie():
     return MovieCtrl.add_movie(db['movies'])
 
 
 @app.route('/movies', methods=['DELETE'])
-def deleteMovieForm():
+def delete_movie_form():
     return MovieCtrl.delete_movie_form(db['movies'])
 
 
 @app.route('/movies/<idMovie>', methods=['DELETE'])
-def deleteMovie(idMovie):
+def delete_movie(idMovie):
     return MovieCtrl.delete_movie(db['movies'], idMovie)
 
 
 @app.route('/movies', methods=['PUT'])
-def putMovieForm():
+def put_movie_form():
     return MovieCtrl.put_movie_form(db['movies'])
 
 
 @app.route('/movies/<idMovie>', methods=['PUT'])
-def putMovie(idMovie):
+def put_movie(idMovie):
     return MovieCtrl.put_movie(db['movies'], idMovie)
 
 
 @app.route('/movies/<idMovie>', methods=['GET'])
-def getMovieById(idMovie):
+def get_movie_by_id(idMovie):
     return MovieCtrl.get_movie_by_id(db['movies'], idMovie)
 
 
 @app.route('/movies/title', methods=['GET'])
-def getMovieByTitle():
+def get_movie_by_title():
     return MovieCtrl.get_movie_by_title(db['movies'])
 
 
 @app.route('/movies/release', methods=['GET'])
-def getMovieByReleaseDate():
+def get_movie_by_release_date():
     return MovieCtrl.get_movie_by_release_date(db['movies'])
 
 
 @app.route('/movies/all', methods=['GET'])
-def getAllMovies():
+def get_all_movies():
     return MovieCtrl.get_all_movies(db['movies'])
 
 
 @app.route('/movies/characters', methods=['GET'])
-def getMovieCharacters():
+def get_movie_characters():
     return MovieCtrl.get_movie_characters(db['movies'], db['characters'])
 
 
 @app.route('/movies/participants', methods=['GET'])
-def getMovieParticipants():
+def get_movie_participants():
     return MovieCtrl.get_movie_participants(db['movies'], db['participants'])
 
 
 @app.route('/movies/<idMovie>/trailer', methods=['PUT'])
-def putTrailerIntoMovie(idMovie):
+def put_trailer_into_movie(idMovie):
     return MovieCtrl.put_trailer_into_movie(db['movies'], db['trailers'], idMovie)
 
 
 @app.route('/movies/<idMovie>/trailer', methods=['DELETE'])
-def deleteTrailerFromMovie(idMovie):
+def delete_trailer_from_movie(idMovie):
     return MovieCtrl.delete_trailer_from_movie(db['movies'], idMovie)
 
 
 @app.route('/movies/<idMovie>/categories', methods=['PUT'])
-def putCategoryIntoMovie(idMovie):
+def put_category_into_movie(idMovie):
     return MovieCtrl.put_category_into_movie(db['movies'], db['categories'], idMovie)
 
 
 @app.route('/movies/<idMovie>/categories', methods=['DELETE'])
-def deleteCategoryFromMovie(idMovie):
+def delete_category_from_movie(idMovie):
     return MovieCtrl.delete_category_from_movie(db['movies'], idMovie)
 
 # -------------------------------------------------------------------------------------------------------
@@ -113,42 +113,42 @@ def trailers():
 
 
 @app.route('/trailers', methods=['POST'])
-def addTrailer():
+def add_trailer():
     return TrailerCtrl.add_trailer(db['trailers'])
 
 
 @app.route('/trailers', methods=['DELETE'])
-def deleteTrailerForm():
+def delete_trailer_form():
     return TrailerCtrl.delete_trailer_form(db['trailers'])
 
 
 @app.route('/trailers', methods=['PUT'])
-def putTrailerForm():
+def put_trailer_form():
     return TrailerCtrl.put_trailer_form(db['trailers'])
 
 
 @app.route('/trailers/<idTrailer>', methods=['DELETE'])
-def deleteTrailer(idTrailer):
+def delete_trailer(idTrailer):
     return TrailerCtrl.delete_trailer(db['trailers'], idTrailer)
 
 
 @app.route('/trailers/<idTrailer>', methods=['PUT'])
-def putTrailer(idTrailer):
+def put_trailer(idTrailer):
     return TrailerCtrl.put_trailer(db['trailers'], idTrailer)
 
 
 @app.route('/trailers/<idTrailer>', methods=['GET'])
-def getTrailerById(idTrailer):
+def get_trailer_by_id(idTrailer):
     return TrailerCtrl.get_trailer_by_id(db['trailers'], idTrailer)
 
 
 @app.route('/trailers/<idTrailer>/categories', methods=['PUT'])
-def putCategoryIntoTrailer(idTrailer):
+def put_category_into_trailer(idTrailer):
     return TrailerCtrl.put_category_into_trailer(db['trailers'], db['categories'], idTrailer)
 
 
 @app.route('/trailers/<idTrailer>/categories', methods=['DELETE'])
-def deleteCategoryFromTrailer(idTrailer):
+def delete_category_from_trailer(idTrailer):
     return TrailerCtrl.delete_category_from_trailer(db['trailers'], idTrailer)
 
 # -------------------------------------------------------------------------------------------------------
@@ -159,32 +159,32 @@ def chapters():
 
 
 @app.route('/chapters', methods=['POST'])
-def addChapter():
+def add_chapter():
     return ChapterCtrl.add_chapter(db['chapters'])
 
 
 @app.route('/chapters', methods=['DELETE'])
-def deleteChapterForm():
+def delete_chapter_form():
     return ChapterCtrl.delete_chapter_form(db['chapters'])
 
 
 @app.route('/chapters', methods=['PUT'])
-def putChapterForm():
+def put_chapter_form():
     return ChapterCtrl.put_chapter_form(db['chapters'])
 
 
 @app.route('/chapters/<idChapter>', methods=['DELETE'])
-def deleteChapter(idChapter):
+def delete_chapter(idChapter):
     return ChapterCtrl.delete_chapter(db['chapters'], idChapter)
 
 
 @app.route('/chapters/<idChapter>', methods=['PUT'])
-def putChapter(idChapter):
+def put_chapter(idChapter):
     return ChapterCtrl.put_chapter(db['chapters'], idChapter)
 
 
 @app.route('/chapters/<idChapter>', methods=['GET'])
-def getChapterById(idChapter):
+def get_chapter_by_id(idChapter):
     return ChapterCtrl.get_chapter_by_id(db['chapters'], idChapter)
 
 # -------------------------------------------------------------------------------------------------------
@@ -195,77 +195,77 @@ def seasons():
 
 
 @app.route('/seasons', methods=['POST'])
-def addSeason():
+def add_season():
     return SeasonCtrl.add_season(db['seasons'])
 
 
 @app.route('/seasons', methods=['PUT'])
-def putSeasonForm():
+def put_season_form():
     return SeasonCtrl.put_season_form(db['seasons'])
 
 
 @app.route('/seasons', methods=['DELETE'])
-def deleteSeasonForm():
+def delete_season_form():
     return SeasonCtrl.delete_season_form(db['seasons'])
 
 
 @app.route('/seasons/<idSeason>', methods=['PUT'])
-def putSeason(idSeason):
+def put_season(idSeason):
     return SeasonCtrl.put_season(db['seasons'], idSeason)
 
 
 @app.route('/seasons/<idSeason>', methods=['DELETE'])
-def deleteSeason(idSeason):
+def delete_season(idSeason):
     return SeasonCtrl.delete_season(db['seasons'], idSeason)
 
 
 @app.route('/seasons/<idSeason>', methods=['GET'])
-def getSeasonById(idSeason):
+def get_season_by_id(idSeason):
     return SeasonCtrl.get_season_by_id(db['seasons'], idSeason)
 
 
 @app.route('/seasons/chapters', methods=['GET'])
-def getSeasonChapters():
+def get_season_chapters():
     return SeasonCtrl.get_season_chapters(db['seasons'], db['chapters'])
 
 
 @app.route('/seasons/characters', methods=['GET'])
-def getSeasonCharacters():
+def get_season_characters():
     return SeasonCtrl.get_season_characters(db['seasons'], db['characters'])
 
 
 @app.route('/seasons/participants', methods=['GET'])
-def getSeasonParticipants():
+def get_season_participants():
     return SeasonCtrl.get_season_participants(db['seasons'], db['participants'])
 
 
 @app.route('/seasons/<idSeason>/trailer', methods=['PUT'])
-def putTrailerIntoSeasons(idSeason):
+def put_trailer_into_season(idSeason):
     return SeasonCtrl.put_trailer_into_season(db['seasons'], db['trailers'], idSeason)
 
 
 @app.route('/seasons/<idSeason>/trailer', methods=['DELETE'])
-def deleteTrailerFromSeason(idSeason):
+def delete_trailer_from_season(idSeason):
     return SeasonCtrl.delete_trailer_from_season(db['seasons'], idSeason)
 
 
 @app.route('/seasons/<idSeason>/categories', methods=['PUT'])
-def putCategoryIntoSeason(idSeason):
+def put_category_into_season(idSeason):
     return SeasonCtrl.put_category_into_season(db['seasons'], db['categories'], idSeason)
 
 
 @app.route('/seasons/<idSeason>/categories', methods=['DELETE'])
-def deleteCategoryFromSeason(idSeason):
+def delete_category_from_season(idSeason):
     return SeasonCtrl.delete_category_from_season(db['seasons'], idSeason)
 
 
 @app.route('/seasons/<idSeason>/chapters', methods=['PUT'])
-def putChapterIntoSeason(idSeason):
+def put_chapter_into_season(idSeason):
     return SeasonCtrl.put_chapter_into_season(db['seasons'], db['chapters'], idSeason)
 
 
 @app.route('/seasons/<idSeason>/chapters', methods=['DELETE'])
-def deleteChapterFromSeason(idSeason):
+def delete_chapter_from_season(idSeason):
     return SeasonCtrl.delete_chapter_from_season(db['seasons'], idSeason)
 
 # -------------------------------------------------------------------------------------------------------
@@ -276,23 +276,23 @@ def categories():
 
 
 @app.route('/categories', methods=['POST'])
-def addCategory():
+def add_category():
     return CategoryCtrl.add_category(db['categories'])
 
 
 @app.route('/categories/all', methods=['GET'])
-def getAllCategories():
+def get_all_categories():
     return CategoryCtrl.get_all_categories(db['categories'])
 
 
 @app.route('/categories/<idCategory>', methods=['GET'])
-def getCategoryById(idCategory):
+def get_category_by_id(idCategory):
     return CategoryCtrl.get_category_by_id(db['categories'], idCategory)
 
 # No se borran ni se modifican categorías.
 
 @app.route('/categories/content', methods=['GET'])
-def getContentByCategory():
+def get_content_by_category():
     return CategoryCtrl.get_content_by_category(db['categories'], db['movies'], db['series'])
 
 
@@ -304,56 +304,56 @@ def participants():
 
 
 @app.route('/participants', methods=['POST'])
-def addParticipant():
+def add_participant():
     return ParticipantCtrl.add_participant(db['participants'])
 
 
 @app.route('/participants', methods=['PUT'])
-def putParticipantForm():
+def put_participant_form():
     return ParticipantCtrl.put_participant_form(db['participants'])
 
 
 @app.route('/participants', methods=['DELETE'])
-def deleteParticipantForm():
+def delete_participant_form():
     return ParticipantCtrl.delete_participant_form(db['participants'])
 
 
 @app.route('/participants/<idParticipant>', methods=['PUT'])
-def putParticipant(idParticipant):
+def put_participant(idParticipant):
     return ParticipantCtrl.put_participant(db['participants'], idParticipant)
 
 
 @app.route('/participants/<idParticipant>', methods=['DELETE'])
-def deleteParticipant(idParticipant):
+def delete_participant(idParticipant):
     return ParticipantCtrl.delete_participant(db['participants'], idParticipant)
 
 
 @app.route('/participants/<idParticipant>', methods=['GET'])
-def getParticipantById(idParticipant):
+def get_participant_by_id(idParticipant):
     return ParticipantCtrl.get_participant_by_id(db['participants'], idParticipant)
 
 
 @app.route('/participants/name', methods=['GET'])
-def getParticipantByName():
+def get_participant_by_name():
     return ParticipantCtrl.get_participant_by_name(db['participants'])
 
 
 @app.route('/participants/surname', methods=['GET'])
-def getParticipantBySurname():
+def get_participant_by_surname():
     return ParticipantCtrl.get_participant_by_surname(db['participants'])
 
 
 @app.route('/participants/age', methods=['GET'])
-def getParticipantByAge():
+def get_participant_by_age():
     return ParticipantCtrl.get_participant_by_age(db['participants'])
 
 
 @app.route('/participants/content', methods=['GET'])
-def getContentByParticipant():
+def get_content_by_participant():
     return ParticipantCtrl.get_content_by_participant(db['participants'], db['movies'], db['series'])
 
 @app.route('/participants/all', methods=['GET'])
-def getAllParticipants():
+def get_all_participants():
     return ParticipantCtrl.get_all_participants(db['participants'])
 
 # -------------------------------------------------------------------------------------------------------
@@ -364,52 +364,52 @@ def characters():
 
 
 @app.route('/characters', methods=['POST'])
-def addCharacter():
+def add_character():
     return CharacterCtrl.add_character(db['characters'])
 
 
 @app.route('/characters', methods=['PUT'])
-def putCharacterForm():
+def put_character_form():
     return CharacterCtrl.put_character_form(db['characters'])
 
 
 @app.route('/characters', methods=['DELETE'])
-def deleteCharacterForm():
+def delete_character_form():
     return CharacterCtrl.delete_character_form(db['characters'])
 
 
 @app.route('/characters/<idCharacter>', methods=['PUT'])
-def putCharacter(idCharacter):
+def put_character(idCharacter):
     return CharacterCtrl.put_character(db['characters'], idCharacter)
 
 
 @app.route('/characters/<idCharacter>', methods=['DELETE'])
-def deleteCharacter(idCharacter):
+def delete_character(idCharacter):
     return CharacterCtrl.delete_character(db['characters'], idCharacter)
 
 
 @app.route('/characters/<idCharacter>', methods=['GET'])
-def getCharacterById(idCharacter):
+def get_character_by_id(idCharacter):
     return CharacterCtrl.get_character_by_id(db['characters'], idCharacter)
 
 
 @app.route('/characters/name', methods=['GET'])
-def getCharacterByName():
+def get_character_by_name():
     return CharacterCtrl.get_character_by_name(db['characters'])
 
 
 @app.route('/characters/age', methods=['GET'])
-def getCharacterByAge():
+def get_character_by_age():
     return CharacterCtrl.get_character_by_age(db['characters'])
 
 
 @app.route('/characters/all', methods=['GET'])
-def getAllCharacters():
+def get_all_characters():
     return CharacterCtrl.get_all_characters(db['characters'])
 
 
 @app.route('/characters/content', methods=['GET'])
-def getContentByCharacter():
+def get_content_by_character():
     return CharacterCtrl.get_content_by_character(db['characters'], db['movies'], db['series'])
 
 # -------------------------------------------------------------------------------------------------------
@@ -420,85 +420,85 @@ def series():
 
 
 @app.route('/series', methods=['POST'])
-def addSeries():
+def add_series():
     return SeriesCtrl.add_series(db['series'])
 
 
 @app.route('/series/all', methods=['GET'])
-def getAllSeries():
+def get_all_series():
     return SeriesCtrl.get_all_series(db['series'])
 
 
 @app.route('/series/title', methods=['GET'])
-def getSeriesByTitle():
+def get_series_by_title():
     return SeriesCtrl.get_series_by_title(db['series'])
 
 
 @app.route('/series/<idSeries>', methods=['GET'])
-def getSeriesById(idSeries):
+def get_series_by_id(idSeries):
     return SeriesCtrl.get_series_by_id(db['series'], idSeries)
 
 
 @app.route('/series', methods=['DELETE'])
-def deleteSeriesForm():
+def delete_series_form():
     return SeriesCtrl.delete_series_form(db['series'])
 
 
 @app.route('/series', methods=['PUT'])
-def putSeriesForm():
+def put_series_form():
     return SeriesCtrl.put_series_form(db['series'])
 
 
 @app.route('/series/<idSeries>', methods=['DELETE'])
-def deleteSeries(idSeries):
+def delete_series(idSeries):
     return SeriesCtrl.delete_series(db['series'], idSeries)
 
 
 @app.route('/series/<idSeries>', methods=['PUT'])
-def putSeries(idSeries):
+def put_series(idSeries):
     return SeriesCtrl.put_series(db['series'], idSeries)
 
 
 @app.route('/series/chapters', methods=['GET'])
-def getSeriesChapters():
+def get_series_chapters():
     return SeriesCtrl.get_series_chapters(db['series'], db['seasons'])
 
 
 @app.route('/series/characters', methods=['GET'])
-def getSeriesCharacters():
+def get_series_characters():
     return SeriesCtrl.get_series_characters(db['series'], db['characters'])
 
 
 @app.route('/series/participants', methods=['GET'])
-def getSeriesParticipants():
+def get_series_participants():
     return SeriesCtrl.get_series_participants(db['series'], db['participants'])
 
 
 @app.route('/series/<idSeries>/trailer', methods=['PUT'])
-def putTrailerIntoSeries(idSeries):
+def put_trailer_into_series(idSeries):
     return SeriesCtrl.put_trailer_into_series(db['series'], db['trailers'], idSeries)
 
 @app.route('/series/<idSeries>/trailer', methods=['DELETE'])
-def deleteTrailerFromSeries(idSeries):
+def delete_trailer_from_series(idSeries):
     return SeriesCtrl.delete_trailer_from_series(db['series'], idSeries)
 
 
 @app.route('/series/<idSeries>/categories', methods=['PUT'])
-def putCategoryIntoSeries(idSeries):
+def put_category_into_series(idSeries):
     return SeriesCtrl.put_category_into_series(db['series'], db['categories'], idSeries)
 
 @app.route('/series/<idSeries>/categories', methods=['DELETE'])
-def deleteCategoryFromSeries(idSeries):
+def delete_category_from_series(idSeries):
     return SeriesCtrl.delete_category_from_series(db['series'], idSeries)
 
 
 @app.route('/series/<idSeries>/seasons', methods=['PUT'])
-def putSeasonIntoSeries(idSeries):
+def put_season_into_series(idSeries):
     return SeriesCtrl.put_season_into_series(db['series'], db['seasons'], idSeries)
 
 
 @app.route('/series/<idSeries>/seasons', methods=['DELETE'])
-def deleteSeasonFromSeries(idSeries):
+def delete_season_from_series(idSeries):
     return SeriesCtrl.delete_season_from_series(db['series'], idSeries)
 
 
