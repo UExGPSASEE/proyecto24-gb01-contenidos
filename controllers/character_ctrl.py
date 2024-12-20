@@ -121,8 +121,6 @@ class CharacterCtrl:
         idCharacter = int(request.args.get('idCharacter'))
 
         if idCharacter:
-            matchingCharacter = characterCollection.find({'idCharacter': idCharacter})
-
             contentList = []
             matchingMovie = movieCollection.find({'character': {'$in': [str(idCharacter)]}})
 
