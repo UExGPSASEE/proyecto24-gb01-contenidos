@@ -8,6 +8,7 @@ from models.participant import Participant
 class ParticipantCtrl:
 
     err_msg = 'Missing data or incorrect method';
+    listparticipant_not_found_msg ='Participantes no encontrados';
     not_found = '404 Not Found';
     bad_request = '400 Bad Request';
 
@@ -56,7 +57,7 @@ class ParticipantCtrl:
             if participantsList.__len__()>0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
         return jsonify({'error': 'Nombre no proporcionado', 'status': ParticipantCtrl.bad_request}), 400
 
@@ -82,7 +83,7 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
         return jsonify({'error': 'Apellidos no proporcionados', 'status': ParticipantCtrl.bad_request}), 400
 
@@ -108,7 +109,7 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
         return jsonify({'error': 'Edad no proporcionada', 'status': ParticipantCtrl.bad_request}), 400
 
@@ -132,7 +133,7 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
         else:
             return jsonify({'error': 'Nacionalidad no proporcionada', 'status': ParticipantCtrl.bad_request}), 400
@@ -158,7 +159,7 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': ParticipantCtrl.not_found}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
         else:
             return jsonify({'error': 'Identificador no proporcionado', 'status': ParticipantCtrl.bad_request}), 400

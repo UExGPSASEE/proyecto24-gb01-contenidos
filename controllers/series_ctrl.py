@@ -9,6 +9,7 @@ from controllers.season_ctrl import SeasonCtrl
 class SeriesCtrl:
 
     err_msg = 'Missing data or incorrect method';
+    series_not_found_msg = 'Serie no encontrada';
     not_found = '404 Not Found';
     bad_request = '400 Bad Request';
 
@@ -104,7 +105,7 @@ class SeriesCtrl:
             if seriesFound.__len__()>0:
                 return jsonify(seriesFound), 200
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': SeriesCtrl.not_found}), 404
+                return jsonify({'error': SeriesCtrl.series_not_found_msg, 'status': SeriesCtrl.not_found}), 404
 
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
@@ -141,7 +142,7 @@ class SeriesCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': SeriesCtrl.not_found}), 404
+                return jsonify({'error': SeriesCtrl.series_not_found_msg, 'status': SeriesCtrl.not_found}), 404
 
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
@@ -185,7 +186,7 @@ class SeriesCtrl:
                 return jsonify(seasonsList), 200
 
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': SeriesCtrl.not_found}), 404
+                return jsonify({'error': SeriesCtrl.series_not_found_msg, 'status': SeriesCtrl.not_found}), 404
 
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
@@ -222,7 +223,7 @@ class SeriesCtrl:
                 return jsonify(participantsList), 200
 
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': SeriesCtrl.not_found}), 404
+                return jsonify({'error': SeriesCtrl.series_not_found_msg, 'status': SeriesCtrl.not_found}), 404
 
         else:
             return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400

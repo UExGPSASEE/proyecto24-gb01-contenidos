@@ -8,6 +8,8 @@ from models.character import Character
 class CharacterCtrl:
 
     err_msg = 'Missing data or incorrect method';
+    char_not_found_msg ='Personaje no encontrado';
+    listchar_not_found_msg ='Personajes no encontrados';
     not_found = '404 Not Found';
     bad_request = '400 Bad Request';
 
@@ -55,7 +57,7 @@ class CharacterCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Personajes no encontrados', 'status': CharacterCtrl.not_found}), 404
+                return jsonify({'error': CharacterCtrl.listchar_not_found_msg, 'status': CharacterCtrl.not_found}), 404
         else:
             return jsonify({'error': 'Nombre no proporcionado', 'status': CharacterCtrl.bad_request}), 400
 
@@ -82,7 +84,7 @@ class CharacterCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Personajes no encontrados', 'status': CharacterCtrl.not_found}), 404
+                return jsonify({'error': CharacterCtrl.listchar_not_found_msg, 'status': CharacterCtrl.not_found}), 404
         else:
             return jsonify({'error': 'Edad no proporcionada', 'status': CharacterCtrl.bad_request}), 400
 
@@ -105,7 +107,7 @@ class CharacterCtrl:
             if charactersList.__len__()>0:
                 return jsonify(charactersList)
             else:
-                return jsonify({'error': 'Personaje no encontrado', 'status': CharacterCtrl.not_found}), 404
+                return jsonify({'error': CharacterCtrl.char_not_found_msg, 'status': CharacterCtrl.not_found}), 404
 
 
         else:
@@ -169,7 +171,7 @@ class CharacterCtrl:
                 return jsonify(contentList), 200
 
             else:
-                return jsonify({'error': 'Personaje no encontrado', 'status': CharacterCtrl.not_found}), 404
+                return jsonify({'error': CharacterCtrl.char_not_found_msg, 'status': CharacterCtrl.not_found}), 404
         else:
             return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
@@ -191,7 +193,7 @@ class CharacterCtrl:
             return jsonify(charactersList), 200
 
         else:
-            return jsonify({'error': 'Personajes no encontrados', 'status': CharacterCtrl.not_found}), 404
+            return jsonify({'error': CharacterCtrl.listchar_not_found_msg, 'status': CharacterCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
@@ -238,7 +240,7 @@ class CharacterCtrl:
 
             result = db.update_one(character_filter, change)
             if result.matched_count == 0:
-                return jsonify({'error': 'Personaje no encontrado', 'status': CharacterCtrl.not_found}), 404
+                return jsonify({'error': CharacterCtrl.char_not_found_msg, 'status': CharacterCtrl.not_found}), 404
             elif result.modified_count == 0:
                 return jsonify({'message': 'El personaje ya está actualizado', 'status': '200 OK'}), 200
 

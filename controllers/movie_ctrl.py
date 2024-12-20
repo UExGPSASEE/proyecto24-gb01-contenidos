@@ -10,6 +10,8 @@ from models.movie import Movie
 class MovieCtrl:
 
     err_msg = 'Missing data or incorrect method';
+    movie_not_found_msg ='Película no encontrada';
+    listmovies_not_found_msg = 'Películas no encontradas';
     not_found = '404 Not Found';
     bad_request = '400 Bad Request';
 
@@ -71,7 +73,7 @@ class MovieCtrl:
                 return jsonify(movieFound), 200
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': MovieCtrl.not_found}), 404
+                return jsonify({'error': MovieCtrl.movie_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
         else:
             return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
@@ -182,10 +184,10 @@ class MovieCtrl:
                 if movieFound.__len__() > 0:
                     return jsonify(movieFound), 200
                 else:
-                    return jsonify({'error': 'Película no encontrada', 'status': MovieCtrl.not_found}), 404
+                    return jsonify({'error': MovieCtrl.movie_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
             else:
-                return jsonify({'error': 'No se han encontrado películas', 'status': MovieCtrl.not_found}), 404
+                return jsonify({'error': MovieCtrl.listmovies_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
         else:
             return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
@@ -223,10 +225,10 @@ class MovieCtrl:
                 if movieFound.__len__() > 0:
                     return jsonify(movieFound), 200
                 else:
-                    return jsonify({'error': 'Película no encontrada', 'status': MovieCtrl.not_found}), 404
+                    return jsonify({'error': MovieCtrl.listmovies_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': MovieCtrl.not_found}), 404
+                return jsonify({'error': MovieCtrl.listmovies_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
         else:
             return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
@@ -259,7 +261,7 @@ class MovieCtrl:
             ]
             if movies_list.__len__()>0:
                return jsonify(movies_list), 200
-        return jsonify({'error': 'No existen películas insertadas', 'status': MovieCtrl.not_found}), 404
+        return jsonify({'error': MovieCtrl.listmovies_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
