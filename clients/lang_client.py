@@ -5,8 +5,8 @@ class LanguageClient:
     BASE_URL = "http://127.0.0.1:8083"
 
     @staticmethod
-    def getLanguage(idLanguage):
-        url = f"{LanguageClient.BASE_URL}/languages/{idLanguage}"
+    def getLanguage(id_language):
+        url = f"{LanguageClient.BASE_URL}/languages/{id_language}"
         response = requests.get(url)
         return LanguageClient.handleResponse(response)
 
