@@ -8,6 +8,7 @@ from models.season import Season
 class SeasonCtrl:
 
     err_msg = 'Missing data or incorrect method';
+    season_not_found_msg = 'Temporada no encontrada';
     not_found = '404 Not Found';
     bad_request = '400 Bad Request';
 
@@ -156,7 +157,7 @@ class SeasonCtrl:
                 return jsonify(resultList), 200
 
             else:
-                return jsonify({'error': 'Temporada no encontrada', 'status': SeasonCtrl.not_found}), 404
+                return jsonify({'error': SeasonCtrl.season_not_found_msg, 'status': SeasonCtrl.not_found}), 404
 
         else:
             return jsonify({'error':SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
@@ -195,7 +196,7 @@ class SeasonCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Temporada no encontrada', 'status': SeasonCtrl.not_found}), 404
+                return jsonify({'error': SeasonCtrl.season_not_found_msg, 'status': SeasonCtrl.not_found}), 404
 
         else:
             return jsonify({'error':SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
@@ -234,7 +235,7 @@ class SeasonCtrl:
                 return jsonify(participantsList), 200
 
             else:
-                return jsonify({'error': 'Temporada no encontrada', 'status': SeasonCtrl.not_found}), 404
+                return jsonify({'error': SeasonCtrl.season_not_found_msg, 'status': SeasonCtrl.not_found}), 404
 
         else:
             return jsonify({'error':SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400

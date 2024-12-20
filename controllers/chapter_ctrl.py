@@ -8,6 +8,7 @@ from models.chapter import Chapter
 class ChapterCtrl:
 
     err_msg = 'Missing data or incorrect method';
+    chapter_not_found_msg = 'Capítulo no encontrado';
     not_found = '404 Not Found';
     bad_request = '400 Bad Request';
 
@@ -40,7 +41,7 @@ class ChapterCtrl:
             if db.delete_one({'idChapter': idChapter}):
                 return redirect(url_for('chapters'))
             else:
-                return jsonify({'error': 'Chapter not found or not deleted', 'status': ChapterCtrl.not_found}), 404
+                return jsonify({'error': ChapterCtrl.chapter_not_found_msg, 'status': ChapterCtrl.not_found}), 404
         else:
             return jsonify({'error': ChapterCtrl.err_msg, 'status': ChapterCtrl.bad_request}), 400
 
@@ -85,7 +86,7 @@ class ChapterCtrl:
 
             result = db.update_one(chapter_filter, change)
             if result.matched_count == 0:
-                return jsonify({'error': 'Capítulo no encontrado', 'status': ChapterCtrl.not_found}), 404
+                return jsonify({'error': ChapterCtrl.chapter_not_found_msg, 'status': ChapterCtrl.not_found}), 404
             elif result.modified_count == 0:
                 return jsonify({'message': 'El capítulo ya está actualizado', 'status': '200 OK'}), 200
 
@@ -111,7 +112,7 @@ class ChapterCtrl:
             if chapterFound.__len__() > 0:
                 return jsonify(chapterFound), 200
             else:
-                return jsonify({'error': 'Capítulo no encontrado', 'status': ChapterCtrl.not_found}), 404
+                return jsonify({'error': ChapterCtrl.chapter_not_found_msg, 'status': ChapterCtrl.not_found}), 404
 
         else:
             return jsonify({'error': ChapterCtrl.err_msg, 'status': ChapterCtrl.bad_request}), 400
