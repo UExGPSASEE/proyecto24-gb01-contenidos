@@ -1,15 +1,16 @@
 from pymongo import MongoClient
 from pymongo.collection import Collection
-
+import os
 
 def conexion_mongodb():
     try:
-        client = MongoClient('localhost', 27017)
+        mongo_host = os.getenv('MONGO_HOST', 'localhost')
+        mongo_port = int(os.getenv('MONGO_PORT', 27017))
+        client = MongoClient(f"mongodb://{mongo_host}:{mongo_port}/")
         database = client['MedifliContent']
     except Exception as ex:
         print("Error durante la conexión: {}".format(ex))
     return database
-
 
 def get_next_sequence_value(db: Collection, sequence_name):
     counter = db.find_one({"_id": sequence_name})

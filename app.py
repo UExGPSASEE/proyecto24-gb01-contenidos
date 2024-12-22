@@ -503,4 +503,4 @@ def delete_season_from_series(id_series):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8082)
+    app.run(debug=True, host="0.0.0.0", port=8082)
