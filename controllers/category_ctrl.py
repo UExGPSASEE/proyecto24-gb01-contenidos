@@ -3,92 +3,96 @@ from pymongo.collection import Collection
 
 from database import get_next_sequence_value as get_next_sequence_value
 from models.category import Category
-
+from controllers.ok_ctrl import OkCtrl
 
 class CategoryCtrl:
 
+    err_msg = 'Missing data or incorrect method';
+    not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
+
     @staticmethod
     def render_template(db: Collection):
-        categoriesReceived = db.find()
-        return render_template('Category.html', categories=categoriesReceived)
+        categories_received = db.find()
+        return render_template('Category.html', categories=categories_received)
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def addCategory(db: Collection):
-        idCategory = int(get_next_sequence_value(db, "idCategory"))
+    def add_category(db: Collection):
+        id_category = int(get_next_sequence_value(db, "id_category"))
         name = request.form['name']
 
-        if idCategory:
-            category = Category(idCategory, name)
-            db.insert_one(category.toDBCollection())
-            return redirect(url_for('categories'))
+        if id_category:
+            category = Category(id_category, name)
+            db.insert_one(category.to_db_collection())
+            return OkCtrl.added('Category')
         else:
-            return jsonify({'error': 'Categoría no insertada', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Categoría no insertada', 'status': CategoryCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getAllCategories(db: Collection):
-        allCategories = db.find()
-        categoryList = [
+    def get_all_categories(db: Collection):
+        all_categories = db.find()
+        category_list = [
             {
-                'idCategory': category.get('idCategory'),
+                'id_category': category.get('id_category'),
                 'name': category.get('name')
             }
-            for category in allCategories
+            for category in all_categories
         ]
-        return jsonify(categoryList), 200
+        return jsonify(category_list), 200
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCategoryById(db: Collection, idCategory: int):
-        if idCategory:
-            idCategory = int(idCategory)
-            matchingCategory = db.find({'idCategory': idCategory})
-            categoryFound = [
+    def get_category_by_id(db: Collection, id_category: int):
+        if id_category:
+            id_category = int(id_category)
+            matching_category = db.find({'id_category': id_category})
+            category_found = [
                 {
-                    'idCategory': category.get('idCategory'),
+                    'id_category': category.get('id_category'),
                     'name': category.get('name')
                 }
-                for category in matchingCategory
+                for category in matching_category
             ]
-            if categoryFound.__len__() > 0:
-                return jsonify(categoryFound), 200
+            if category_found.__len__() > 0:
+                return jsonify(category_found), 200
             else:
-                return jsonify({'error': 'Categoría no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Categoría no encontrada', 'status': CategoryCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CategoryCtrl.err_msg, 'status': CategoryCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getContentByCategory(categoryCollection: Collection, movieCollection: Collection, seriesCollection: Collection):
-        idCategory = int(request.args.get('idCategory'))
-        print(idCategory)
+    def get_content_by_category(category_collection: Collection, movie_collection: Collection, series_collection: Collection):
+        id_category = int(request.args.get('id_category'))
+        print(id_category)
 
-        if idCategory:
-            matchingCategory = categoryCollection.find({'idCategory': idCategory})
-            print(matchingCategory)
+        if id_category:
+            matching_category = category_collection.find({'id_category': id_category})
+            print(matching_category)
 
-            if matchingCategory:
-                contentList = []
-                matchingMovie = movieCollection.find({'category': {'$in': [str(idCategory)]}})
+            if matching_category:
+                content_list = []
+                matching_movie = movie_collection.find({'category': {'$in': [str(id_category)]}})
 
-                contentList.append({'Content': 'Movies'})
+                content_list.append({'Content': 'Movies'})
 
-                for movie in matchingMovie:
-                    contentList.append({
-                        'idMovie': movie.get('idMovie'),
+                for movie in matching_movie:
+                    content_list.append({
+                        'id_movie': movie.get('id_movie'),
                         'title': movie.get('title'),
-                        'urlVideo': movie.get('urlVideo'),
-                        'urlTitlePage': movie.get('urlTitlePage'),
-                        'releaseDate': movie.get('releaseDate'),
+                        'url_video': movie.get('url_video'),
+                        'url_title_page': movie.get('url_title_page'),
+                        'release_date': movie.get('release_date'),
                         'synopsis': movie.get('synopsis'),
                         'description': movie.get('description'),
-                        'isSuscription': movie.get('isSuscription'),
+                        'is_subscription': movie.get('is_subscription'),
                         'duration': movie.get('duration'),
                         'languages': movie.get('languages'),
                         'categories': movie.get('categories'),
@@ -97,19 +101,19 @@ class CategoryCtrl:
                         'trailer': movie.get('trailer'),
                     })
 
-                contentList.append({'Content': 'Series'})
-                matchingSerie = seriesCollection.find({'category': {'$in': [str(idCategory)]}})
+                content_list.append({'Content': 'Series'})
+                matching_serie = series_collection.find({'category': {'$in': [str(id_category)]}})
 
-                for series in matchingSerie:
-                    contentList.append({
-                        'idSeries': series.get('idSeries'),
+                for series in matching_serie:
+                    content_list.append({
+                        'id_series': series.get('id_series'),
                         'title': series.get('title'),
                         'duration': series.get('duration'),
-                        'urlTitlePage': series.get('urlTitlePage'),
-                        'releaseDate': series.get('releaseDate'),
+                        'url_title_page': series.get('url_title_page'),
+                        'release_date': series.get('release_date'),
                         'synopsis': series.get('synopsis'),
                         'description': series.get('description'),
-                        'isSuscription': series.get('isSuscription'),
+                        'is_subscription': series.get('is_subscription'),
                         'seasons': series.get('seasons'),
                         'languages': series.get('languages'),
                         'categories': series.get('categories'),
@@ -118,9 +122,9 @@ class CategoryCtrl:
                         'trailer': series.get('trailer')
                     })
 
-                return jsonify(contentList), 200
+                return jsonify(content_list), 200
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Películas y/o series no encontradas', 'status': CategoryCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CategoryCtrl.err_msg, 'status': CategoryCtrl.bad_request}), 400

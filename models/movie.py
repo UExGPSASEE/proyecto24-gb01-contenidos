@@ -1,14 +1,14 @@
 class Movie:
-    def __init__(self, idMovie, title, urlVideo, urlTitlePage, releaseDate, synopsis, description, 
-                 isSuscription, duration, languages, categories, characters, participants, trailer):
-        self.idMovie = idMovie
+    def __init__(self, id_movie, title, url_video, url_title_page, release_date, synopsis, description, 
+                 is_subscription, duration, languages, categories, characters, participants, trailer):
+        self.id_movie = id_movie
         self.title = title
-        self.urlVideo = urlVideo
-        self.urlTitlePage = urlTitlePage
-        self.releaseDate = releaseDate
+        self.url_video = url_video
+        self.url_title_page = url_title_page
+        self.release_date = release_date
         self.synopsis = synopsis
         self.description = description
-        self.isSuscription = isSuscription
+        self.is_subscription = is_subscription
         self.duration = duration
         self.languages = languages
         self.categories = categories
@@ -16,16 +16,16 @@ class Movie:
         self.participants = participants
         self.trailer = trailer
 
-    def toDBCollection(self):
+    def to_db_collection(self):
         return{
-            'idMovie' : self.idMovie,
+            'id_movie' : self.id_movie,
             'title' : self.title,
-            'urlVideo' : self.urlVideo,
-            'urlTitlePage' : self.urlTitlePage,
-            'releaseDate' : self.releaseDate,
+            'url_video' : self.url_video,
+            'url_title_page' : self.url_title_page,
+            'release_date' : self.release_date,
             'synopsis' : self.synopsis,
             'description' : self.description,
-            'isSuscription' : self.isSuscription,
+            'is_subscription' : self.is_subscription,
             'duration' : self.duration,
             'languages': self.languages,
             'categories': self.categories,

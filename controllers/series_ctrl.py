@@ -4,55 +4,62 @@ from pymongo.collection import Collection
 from database import get_next_sequence_value as get_next_sequence_value
 from models.series import Series
 from controllers.season_ctrl import SeasonCtrl
+from controllers.ok_ctrl import OkCtrl
 
 
 class SeriesCtrl:
+
+    err_msg = 'Missing data or incorrect method';
+    series_not_found_msg = 'Serie no encontrada';
+    not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
+
     @staticmethod
     def render_template(db: Collection):
-        seriesReceived = db.find()
-        return render_template('Series.html', series=seriesReceived)
+        series_received = db.find()
+        return render_template('Series.html', series=series_received)
 
     # --------------------------------------------------------------
 
     @staticmethod
-    def addSeries(db: Collection):
-        idSeries = int(get_next_sequence_value(db, "idSeries"))
+    def add_series(db: Collection):
+        id_series = int(get_next_sequence_value(db, "id_series"))
         title = request.form.get('title')
         duration = request.form.get('duration')
-        urlTitlePage = request.form.get('urlTitlePage')
-        releaseDate = request.form.get('releaseDate')
+        url_title_page = request.form.get('url_title_page')
+        release_date = request.form.get('release_date')
         synopsis = request.form.get('synopsis')
         description = request.form.get('description')
-        isSuscription = request.form.get('isSuscription')
+        is_subscription = request.form.get('is_subscription')
 
-        if idSeries:
-            series = Series(idSeries, title, None, urlTitlePage, releaseDate, synopsis, description,
-                            isSuscription, duration, None, None, None, None, None)
-            db.insert_one(series.toDBCollection())
-            return redirect(url_for('series'))
+        if id_series:
+            series = Series(id_series, title, None, url_title_page, release_date, synopsis, description,
+                            is_subscription, duration, None, None, None, None, None)
+            db.insert_one(series.to_db_collection())
+            return OkCtrl.added('Series')
         else:
-            return jsonify({'error': 'Serie no añadida', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Serie no añadida', 'status': SeriesCtrl.not_found}), 404
 
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesByTitle(db: Collection):
+    def get_series_by_title(db: Collection):
         title = request.args.get('title')
 
         if title:
             matching_series = db.find({'title': {'$regex': title, '$options': 'i'}})
 
             if db.count_documents({'title': {'$regex': title, '$options': 'i'}}) > 0:
-                seriesFound = [
+                series_found = [
                     {
-                        'idSeries': series.get('idSeries'),
+                        'id_series': series.get('id_series'),
                         'title': series.get('title'),
                         'duration': series.get('duration'),
-                        'urlTitlePage': series.get('urlTitlePage'),
-                        'releaseDate': series.get('releaseDate'),
+                        'url_title_page': series.get('url_title_page'),
+                        'release_date': series.get('release_date'),
                         'synopsis': series.get('synopsis'),
                         'description': series.get('description'),
-                        'isSuscription': series.get('isSuscription'),  # OJO
+                        'is_subscription': series.get('is_subscription'),  # OJO
                         'seasons': series.get('seasons'),
                         'languages': series.get('languages'),
                         'categories': series.get('categories'),
@@ -62,31 +69,31 @@ class SeriesCtrl:
                     }
                     for series in matching_series
                 ]
-                return jsonify(seriesFound), 200
+                return jsonify(series_found), 200
 
             else:
-                return jsonify({'error': 'No se han encontrado series', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'No se han encontrado series', 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesById(db: Collection, idSeries: int):
-        if idSeries:
-            idSeries = int(idSeries)
-            matching_series = db.find({'idSeries': idSeries})
-            seriesFound = [
+    def get_series_by_id(db: Collection, id_series: int):
+        if id_series:
+            id_series = int(id_series)
+            matching_series = db.find({'id_series': id_series})
+            series_found = [
                 {
-                    'idSeries': series.get('idSeries'),
+                    'id_series': series.get('id_series'),
                     'title': series.get('title'),
                     'duration': series.get('duration'),
-                    'urlTitlePage': series.get('urlTitlePage'),
-                    'releaseDate': series.get('releaseDate'),
+                    'url_title_page': series.get('url_title_page'),
+                    'release_date': series.get('release_date'),
                     'synopsis': series.get('synopsis'),
                     'description': series.get('description'),
-                    'isSuscription': series.get('isSuscription'),
+                    'is_subscription': series.get('is_subscription'),
                     'seasons': series.get('seasons'),
                     'languages': series.get('languages'),
                     'categories': series.get('categories'),
@@ -96,149 +103,149 @@ class SeriesCtrl:
                 }
                 for series in matching_series
             ]
-            if seriesFound.__len__()>0:
-                return jsonify(seriesFound), 200
+            if series_found.__len__()>0:
+                return jsonify(series_found), 200
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': SeriesCtrl.series_not_found_msg, 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesCharacters(seriesCollection: Collection, characterCollection: Collection):
-        idSeries = int(request.args.get('idSeries'))
+    def get_series_characters(series_collection: Collection, character_collection: Collection):
+        id_series = int(request.args.get('id_series'))
 
-        if idSeries:
-            matchingSeries = seriesCollection.find({'idSeries': idSeries})
+        if id_series:
+            matching_series = series_collection.find({'id_series': id_series})
 
-            if matchingSeries:
-                charactersList = []
+            if matching_series:
+                characters_list = []
 
-                for series in matchingSeries:
+                for series in matching_series:
                     characterIds = series.get('character', [])
 
-                    for idCharacter in characterIds:
+                    for id_character in characterIds:
 
-                        if idCharacter and idCharacter.strip().isdigit():
-                            matchingCharacter = characterCollection.find({'idCharacter': int(idCharacter)})
+                        if id_character and id_character.strip().isdigit():
+                            matching_character = character_collection.find({'id_character': int(id_character)})
 
-                            for character in matchingCharacter:
-                                charactersList.append({
-                                    'idCharacter': character.get('idCharacter'),
+                            for character in matching_character:
+                                characters_list.append({
+                                    'id_character': character.get('id_character'),
                                     'name': character.get('name'),
                                     'participant': character.get('participant'),
                                     'age': character.get('age')
                                 })
                         else:
-                            print(f"idCharacter inválido encontrado: {idCharacter}")
-                return jsonify(charactersList), 200
+                            print(f"id_character inválido encontrado: {id_character}")
+                return jsonify(characters_list), 200
 
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': SeriesCtrl.series_not_found_msg, 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesChapters(seriesCollection: Collection, seasonCollection: Collection):
-        idSeries = int(request.args.get('idSeries'))
-        print(idSeries)
+    def get_series_chapters(series_collection: Collection, season_collection: Collection):
+        id_series = int(request.args.get('id_series'))
+        print(id_series)
 
-        if idSeries:
-            matchingSeries = seriesCollection.find({'idSeries': idSeries})
+        if id_series:
+            matching_series = series_collection.find({'id_series': id_series})
 
-            if matchingSeries:
-                seasonsList = []
+            if matching_series:
+                seasons_list = []
 
-                for series in matchingSeries:
-                    seasonsIds = series.get('seasons', [])
-                    print(seasonsIds)
+                for series in matching_series:
+                    seasons_ids = series.get('seasons', [])
+                    print(seasons_ids)
 
-                    for idSeason in seasonsIds:
+                    for id_season in seasons_ids:
 
-                        if idSeason and idSeason.strip().isdigit():
-                            matchingSeason = seasonCollection.find(
-                                {'idSeason': int(idSeason), 'idSeries': int(idSeries)})
+                        if id_season and id_season.strip().isdigit():
+                            matching_season = season_collection.find(
+                                {'id_season': int(id_season), 'id_series': int(id_series)})
 
-                            for season in matchingSeason:
-                                seasonsList.append({
-                                    'idSeason': season.get('idSeason'),
-                                    'idSeries': season.get('idSeries'),
+                            for season in matching_season:
+                                seasons_list.append({
+                                    'id_season': season.get('id_season'),
+                                    'id_series': season.get('id_series'),
                                     'title': season.get('title'),
-                                    'seasonNumber': season.get('seasonNumber'),
-                                    'totalChapters': season.get('totalChapters'),
+                                    'season_number': season.get('season_number'),
+                                    'total_chapters': season.get('total_chapters'),
                                     'chapters': season.get('chapters'),
                                     'characters': season.get('characters'),
                                     'participants': season.get('participants'),
                                     'trailer': season.get('trailer')
                                 })
 
-                return jsonify(seasonsList), 200
+                return jsonify(seasons_list), 200
 
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': SeriesCtrl.series_not_found_msg, 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     # --------------------------------------------------------------
 
     @staticmethod
-    def getSeriesParticipants(seriesCollection, participantsCollection):
-        idSeries = int(request.args.get('idSeries'))
+    def get_series_participants(series_collection, participants_collection):
+        id_series = int(request.args.get('id_series'))
 
-        if idSeries:
-            matchingSeries = seriesCollection.find({'idSeries': idSeries})
+        if id_series:
+            matching_series = series_collection.find({'id_series': id_series})
 
-            if matchingSeries:
-                participantsList = []
+            if matching_series:
+                participants_list = []
 
-                for series in matchingSeries:
-                    participantsIds = series.get('participant', [])
+                for series in matching_series:
+                    participants_ids = series.get('participant', [])
 
-                    for idParticipant in participantsIds:
+                    for id_participant in participants_ids:
 
-                        if idParticipant and idParticipant.strip().isdigit():
-                            matchingParticipant = participantsCollection.find({'idParticipant': int(idParticipant)})
+                        if id_participant and id_participant.strip().isdigit():
+                            matching_participant = participants_collection.find({'id_participant': int(id_participant)})
 
-                            for participant in matchingParticipant:
-                                participantsList.append({
+                            for participant in matching_participant:
+                                participants_list.append({
                                     'name': participant.get('name'),
                                     'surname': participant.get('surname'),
                                     'age': participant.get('age'),
                                     'nationality': participant.get('nationality')
                                 })
                         else:
-                            print(f"idParticipant inválido encontrado: {idParticipant}")
-                return jsonify(participantsList), 200
+                            print(f"id_participant inválido encontrado: {id_participant}")
+                return jsonify(participants_list), 200
 
             else:
-                return jsonify({'error': 'Serie no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': SeriesCtrl.series_not_found_msg, 'status': SeriesCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     # --------------------------------------------------------------
 
     @staticmethod
-    def getAllSeries(db: Collection):
-        allSeries = db.find()
+    def get_all_series(db: Collection):
+        all_series = db.find()
 
         if db.count_documents({}) > 0:
             series_list = [
                 {
-                    'idSeries': series.get('idSeries'),
+                    'id_series': series.get('id_series'),
                     'title': series.get('title'),
                     'duration': series.get('duration'),
-                    'urlTitlePage': series.get('urlTitlePage'),
-                    'releaseDate': series.get('releaseDate'),
+                    'url_title_page': series.get('url_title_page'),
+                    'release_date': series.get('release_date'),
                     'synopsis': series.get('synopsis'),
                     'description': series.get('description'),
-                    'isSuscription': series.get('isSuscription'),
+                    'is_subscription': series.get('is_subscription'),
                     'seasons': series.get('seasons'),
                     'languages': series.get('languages'),
                     'categories': series.get('categories'),
@@ -246,162 +253,162 @@ class SeriesCtrl:
                     'participants': series.get('participants'),
                     'trailer': series.get('trailer')
                 }
-                for series in allSeries
+                for series in all_series
             ]
             return jsonify(series_list), 200
 
         else:
-            return jsonify({'error': 'No existen películas insertadas', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'No existen películas insertadas', 'status': SeriesCtrl.not_found}), 404
 
     # --------------------------------------------------------------
 
     @staticmethod
-    def deleteSeries(db: Collection, idSeries: int):
-        if idSeries:
-            idSeries = int(idSeries)
-            if db.delete_one({'idSeries': idSeries}):
-                return redirect(url_for('series'))
+    def delete_series(db: Collection, id_series: int):
+        if id_series:
+            id_series = int(id_series)
+            if db.delete_one({'id_series': id_series}):
+                return OkCtrl.deleted('Series')
             else:
-                return jsonify({'error': 'Series not found or not deleted', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Series not found or not deleted', 'status': SeriesCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     # --------------------------------------------------------------
 
     @staticmethod
-    def deleteSeriesForm(db: Collection):
-        idSeries = int(request.form.get('idSeries'))
-        return SeriesCtrl.deleteSeries(db, idSeries)
+    def delete_series_form(db: Collection):
+        id_series = int(request.form.get('id_series'))
+        return SeriesCtrl.delete_series(db, id_series)
 
     @staticmethod
-    def putSeriesForm(db: Collection):
-        idSeries = int(request.form.get('idSeries'))
-        return SeriesCtrl.putSeries(db, idSeries)
+    def put_series_form(db: Collection):
+        id_series = int(request.form.get('id_series'))
+        return SeriesCtrl.put_series(db, id_series)
 
     @staticmethod
-    def putSeries(db: Collection, idSeries: int):
-        if idSeries:
-            idSeries = int(idSeries)
+    def put_series(db: Collection, id_series: int):
+        if id_series:
+            id_series = int(id_series)
             title = request.form.get('title')
             duration = request.form.get('duration')
             seasons = request.form.get('seasons[]')
-            urlTitlePage = request.form.get('urlTitlePage')
-            releaseDate = request.form.get('releaseDate')
+            url_title_page = request.form.get('url_title_page')
+            release_date = request.form.get('release_date')
             synopsis = request.form.get('synopsis')
             description = request.form.get('description')
-            isSuscription = request.form.get('isSuscription')
+            is_subscription = request.form.get('is_subscription')
 
-            if not idSeries:
-                return jsonify({'error': 'Identificador de serie requerido', 'status': '400 Bad Request'}), 400
+            if not id_series:
+                return jsonify({'error': 'Identificador de serie requerido', 'status': SeriesCtrl.bad_request}), 400
 
-            filterDict = {'idSeries': idSeries}
+            filter_dict = {'id_series': id_series}
 
-            updateFields = {}
+            update_fields = {}
 
             if title:
-                updateFields['title'] = title
+                update_fields['title'] = title
             if duration:
-                updateFields['duration'] = int(duration)
+                update_fields['duration'] = int(duration)
             if seasons:
-                updateFields['seasons'] = seasons
-            if urlTitlePage:
-                updateFields['urlTitlePage'] = urlTitlePage
-            if releaseDate:
-                updateFields['releaseDate'] = releaseDate
+                update_fields['seasons'] = seasons
+            if url_title_page:
+                update_fields['url_title_page'] = url_title_page
+            if release_date:
+                update_fields['release_date'] = release_date
             if synopsis:
-                updateFields['synopsis'] = synopsis
+                update_fields['synopsis'] = synopsis
             if description:
-                updateFields['description'] = description
-            if isSuscription:
-                updateFields['isSuscription'] = isSuscription
+                update_fields['description'] = description
+            if is_subscription:
+                update_fields['is_subscription'] = is_subscription
 
-            change = {'$set': updateFields}
+            change = {'$set': update_fields}
 
-            return SeriesCtrl.updateSeries(db, filterDict, change)
+            return SeriesCtrl.update_series(db, filter_dict, change)
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def putTrailerIntoSeries(series: Collection, trailers: Collection, idSeries: int):
-        idTrailer = request.args.get('idTrailer')
-        if idTrailer:
-            idTrailer = int(idTrailer)
-            if trailers.find({'idTrailer': idTrailer}):
-                filterDict = {'idSeries': int(idSeries)}
-                change = {'$set': {'trailer': idTrailer}}
-                return SeriesCtrl.updateSeries(series, filterDict, change)
+    def put_trailer_into_series(series: Collection, trailers: Collection, id_series: int):
+        id_trailer = request.args.get('id_trailer')
+        if id_trailer:
+            id_trailer = int(id_trailer)
+            if trailers.find({'id_trailer': id_trailer}):
+                filter_dict = {'id_series': int(id_series)}
+                change = {'$set': {'trailer': id_trailer}}
+                return SeriesCtrl.update_series(series, filter_dict, change)
             else:
-                return jsonify({'error': 'No trailer was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No trailer was found', 'status': SeriesCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteTrailerFromSeries(db: Collection, idSeries:int):
-        if idSeries:
-            filterDict = {'idSeries': int(idSeries)}
+    def delete_trailer_from_series(db: Collection, id_series:int):
+        if id_series:
+            filter_dict = {'id_series': int(id_series)}
             change = {'$set': {'trailer': None}}
-            return SeriesCtrl.updateSeries(db, filterDict, change)
+            return SeriesCtrl.update_series(db, filter_dict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def putCategoryIntoSeries(series: Collection, categories: Collection, idSeries: int):
-        idCategory = request.args.get('idCategory')
-        if idCategory:
-            idCategory = int(idCategory)
-            if categories.find({'idCategory': idCategory}):
-                filterDict = {'idSeries': int(idSeries)}
-                change = {'$addToSet': {'categories': idCategory}}
-                return SeriesCtrl.updateSeries(series, filterDict, change)
+    def put_category_into_series(series: Collection, categories: Collection, id_series: int):
+        id_category = request.args.get('id_category')
+        if id_category:
+            id_category = int(id_category)
+            if categories.find({'id_category': id_category}):
+                filter_dict = {'id_series': int(id_series)}
+                change = {'$addToSet': {'categories': id_category}}
+                return SeriesCtrl.update_series(series, filter_dict, change)
             else:
-                return jsonify({'error': 'No category was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No category was found', 'status': SeriesCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteCategoryFromSeries(series: Collection, idSeries: int):
-        idCategory = request.args.get('idCategory')
-        if idCategory:
-            idCategory = int(idCategory)
-            filterDict = {'idSeries': int(idSeries)}
-            change = {'$pull': {'categories': idCategory}}
-            return SeriesCtrl.updateSeries(series, filterDict, change)
+    def delete_category_from_series(series: Collection, id_series: int):
+        id_category = request.args.get('id_category')
+        if id_category:
+            id_category = int(id_category)
+            filter_dict = {'id_series': int(id_series)}
+            change = {'$pull': {'categories': id_category}}
+            return SeriesCtrl.update_series(series, filter_dict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def putSeasonIntoSeries(series: Collection, seasons: Collection, idSeries: int):
-        idSeason = request.args.get('idSeason')
-        if idSeason:
-            idSeason = int(idSeason)
-            if seasons.find({'idSeason': idSeason}):
-                filterDict = {'idSeries': int(idSeries)}
-                change = {'$addToSet': {'seasons': idSeason}}
-                SeasonCtrl.updateSeasonSeries(seasons, idSeason, idSeries)
-                return SeriesCtrl.updateSeries(series, filterDict, change)
+    def put_season_into_series(series: Collection, seasons: Collection, id_series: int):
+        id_season = request.args.get('id_season')
+        if id_season:
+            id_season = int(id_season)
+            if seasons.find({'id_season': id_season}):
+                filter_dict = {'id_series': int(id_series)}
+                change = {'$addToSet': {'seasons': id_season}}
+                SeasonCtrl.update_season_series(seasons, id_season, id_series)
+                return SeriesCtrl.update_series(series, filter_dict, change)
             else:
-                return jsonify({'error': 'No season was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No season was found', 'status': SeriesCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteSeasonFromSeries(series: Collection, idSeries: int):
-        idSeason = request.args.get('idSeason')
-        if idSeason:
-            idSeason = int(idSeason)
-            filterDict = {'idSeries': int(idSeries)}
-            change = {'$pull': {'seasons': idSeason}}
-            return SeriesCtrl.updateSeries(series, filterDict, change)
+    def delete_season_from_series(series: Collection, id_series: int):
+        id_season = request.args.get('id_season')
+        if id_season:
+            id_season = int(id_season)
+            filter_dict = {'id_series': int(id_series)}
+            change = {'$pull': {'seasons': id_season}}
+            return SeriesCtrl.update_series(series, filter_dict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeriesCtrl.err_msg, 'status': SeriesCtrl.bad_request}), 400
 
     @staticmethod
-    def updateSeries(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
-        result = db.update_one(filterDict, changeDict)
+    def update_series(db: Collection, filter_dict: dict[str, int], change_dict: dict[str, dict]):
+        result = db.update_one(filter_dict, change_dict)
         print(result)
         if result.matched_count == 0:
-            return jsonify({'error': 'Series not found or not updated', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Series not found or not updated', 'status': SeriesCtrl.not_found}), 404
         elif result.modified_count == 0:
             return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
-        return redirect(url_for('series'))
+        return OkCtrl.updated('Series')
 

@@ -1,14 +1,14 @@
 class Participant:
-    def __init__(self, idParticipant, name, surname, age, nationality):
-        self.idParticipant = idParticipant
+    def __init__(self, id_participant, name, surname, age, nationality):
+        self.id_participant = id_participant
         self.name = name
         self.surname = surname
         self.age = age
         self.nationality = nationality
 
-    def toDBCollection(self):
+    def to_db_collection(self):
         return {
-            'idParticipant': self.idParticipant,
+            'id_participant': self.id_participant,
             'name': self.name,
             'surname': self.surname,
             'age': self.age,

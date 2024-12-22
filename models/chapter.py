@@ -1,17 +1,17 @@
 class Chapter:
-    def __init__(self, idChapter, title, urlVideo,
-                 duration, chapterNumber):
-        self.idChapter = idChapter
+    def __init__(self, id_chapter, title, url_video,
+                 duration, chapter_number):
+        self.id_chapter = id_chapter
         self.title = title
-        self.urlVideo = urlVideo
+        self.url_video = url_video
         self.duration = duration
-        self.chapterNumber = chapterNumber
+        self.chapter_number = chapter_number
 
-    def toDBCollection(self):
+    def to_db_collection(self):
         return {
-            'idChapter': self.idChapter,
+            'id_chapter': self.id_chapter,
             'title': self.title,
-            'urlVideo': self.urlVideo,
+            'url_video': self.url_video,
             'duration': self.duration,
-            'chapterNumber': self.chapterNumber
+            'chapter_number': self.chapter_number
         }
