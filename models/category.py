@@ -1,10 +1,10 @@
 class Category:
-    def __init__(self, idCategory, name):
-        self.idCategory = idCategory
+    def __init__(self, id_category, name):
+        self.id_category = id_category
         self.name = name
 
-    def toDBCollection(self):
+    def to_db_collection(self):
         return {
-            'idCategory': self.idCategory,
+            'id_category': self.id_category,
             'name': self.name
         }

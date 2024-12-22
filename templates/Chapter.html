@@ -14,16 +14,6 @@
     <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
         <div class="col-md-6 mb-3">
 
-            <div class="card-body">
-                <h3 class="text-center">Obtener capítulo por identificador</h3>
-                <form action="/chapters/chapterFound" method="GET">
-                    <p>¿Qué capítulo deseas buscar?</p>
-                    <span>ID</span>
-                    <input type="number" class="form-control mb-3" name="idChapter" required placeholder="idChapter 1">
-                    <button class="btn btn-primary" type="submit"> Buscar</button>
-                </form>
-            </div>
-
             <div class="card">
                 <h3 class="text-center">Añadir capítulo</h3>
                 <div class="card-body">
@@ -36,7 +26,7 @@
                         <br></br>
 
                         <span>¿Cuál es el número del capítulo en la temporada?*</span>
-                        <input type="number" class="form-control mb-3" name="chapterNumber" required>
+                        <input type="number" class="form-control mb-3" name="chapter_number" required>
                         <br></br>
 
                         <span>¿Cuál es la duración (en minutos) del capítulo?*</span>
@@ -44,57 +34,10 @@
                         <br></br>
 
                         <span>¿Cuál es la URL del capítulo?</span>
-                        <input type="url" class="form-control mb-3" name="urlVideo">
+                        <input type="url" class="form-control mb-3" name="url_video">
                         <br></br>
 
                         <button class="btn btn-primary" type="submit"> Añadir</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 class="text-center">Modificar capítulo</h3>
-                <div class="card-body">
-                    <form action="/chapters/updateChapter" method="POST">
-                        <input type="hidden" name="_method" value="PUT">
-
-                        <p>Nota: Los parámetros con * son obligatorios</p>
-
-                        <span>ID*</span>
-                        <input type="number" min=1 class="form-control mb-3" required name="idChapter"
-                               placeholder="idChapter 1">
-                        <br></br>
-
-                        <span>¿Cuál es el título del capítulo?</span>
-                        <input type="text" class="form-control mb-3" name="title">
-                        <br></br>
-
-                        <span>¿Cuál es el número del capítulo en la temporada?</span>
-                        <input type="number" class="form-control mb-3" name="chapterNumber">
-                        <br></br>
-
-                        <span>¿Cuál es la duración (en minutos) del capítulo?</span>
-                        <input type="number" min=0 class="form-control mb-3" name="duration">
-                        <br></br>
-
-                        <span>¿Cuál es la URL del capítulo?</span>
-                        <input type="url" class="form-control mb-3" name="urlVideo">
-                        <br></br>
-
-                        <button class="btn btn-primary" type="submit">Modificar</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 class="text-center">Eliminar capítulo</h3>
-                <div class="card-body">
-                    <form action="/chapters/deleteChapter" method="POST">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <span>ID</span>
-                        <input type="number" min=1 class="form-control mb-3" name="idChapter" required
-                               placeholder="idChapter 1">
-                        <button class="btn btn-primary" type="submit">Eliminar</button>
                     </form>
                 </div>
             </div>

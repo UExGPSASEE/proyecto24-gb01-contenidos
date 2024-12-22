@@ -1,14 +1,14 @@
 class Series:
-    def __init__(self, idSeries, title, seasons, urlTitlePage, releaseDate, synopsis, description,
-                 isSuscription, duration, languages, categories, characters, participants, trailer):
-        self.idSeries = idSeries
+    def __init__(self, id_series, title, seasons, url_title_page, release_date, synopsis, description,
+                 is_subscription, duration, languages, categories, characters, participants, trailer):
+        self.id_series = id_series
         self.title = title
         self.seasons = seasons
-        self.urlTitlePage = urlTitlePage
-        self.releaseDate = releaseDate
+        self.url_title_page = url_title_page
+        self.release_date = release_date
         self.synopsis = synopsis
         self.description = description
-        self.isSuscription = isSuscription
+        self.is_subscription = is_subscription
         self.duration = duration
         self.languages = languages
         self.categories = categories
@@ -16,16 +16,16 @@ class Series:
         self.participants = participants
         self.trailer = trailer
 
-    def toDBCollection(self):
+    def to_db_collection(self):
         return {
-            'idSeries': self.idSeries,
+            'id_series': self.id_series,
             'title': self.title,
             'seasons': self.seasons,
-            'urlTitlePage': self.urlTitlePage,
-            'releaseDate': self.releaseDate,
+            'url_title_page': self.url_title_page,
+            'release_date': self.release_date,
             'synopsis': self.synopsis,
             'description': self.description,
-            'isSuscription': self.isSuscription,
+            'is_subscription': self.is_subscription,
             'duration': self.duration,
             'languages': self.languages,
             'categories': self.categories,

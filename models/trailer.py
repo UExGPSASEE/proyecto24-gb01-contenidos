@@ -1,20 +1,20 @@
 class Trailer:
-    def __init__(self, idTrailer, title, urlVideo,
+    def __init__(self, id_trailer, title, url_video,
                  duration, languages, categories, characters, participants):
-        self.idTrailer = idTrailer
+        self.id_trailer = id_trailer
         self.title = title
-        self.urlVideo = urlVideo
+        self.url_video = url_video
         self.duration = duration
         self.languages = languages
         self.categories = categories
         self.characters = characters
         self.participants = participants
 
-    def toDBCollection(self):
+    def to_db_collection(self):
         return {
-            'idTrailer': self.idTrailer,
+            'id_trailer': self.id_trailer,
             'title': self.title,
-            'urlVideo': self.urlVideo,
+            'url_video': self.url_video,
             'duration': self.duration,
             'languages': self.languages,
             'categories': self.categories,

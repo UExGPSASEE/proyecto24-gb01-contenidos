@@ -14,16 +14,7 @@
     <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
         <div class="col-md-6 mb-3">
             <div class="card">
-                <div class="card-header">
-                    <h3 class="text-center">Obtener categoría por identificador</h3>
-                    <form action="/categories/categoryFound" method="GET">
-                        <p>¿Qué categoría deseas buscar?</p>
-                        <span>ID</span>
-                        <input type="number" class="form-control mb-3" min=1 name="idCategory" required
-                               placeholder="idCategory 1">
-                        <button class="btn btn-primary" type="submit"> Buscar</button>
-                    </form>
-                </div>
+
                 <div class="card-header">
                     <h3 class="text-center">Añadir categoría</h3>
                     <form action="/categories" method="POST">
@@ -43,8 +34,8 @@
                     <h3 class="text-center">Obtener contenido por categorías</h3>
                     <form action="/categories/content" method="GET">
                         <span>ID</span>
-                        <input type="number" class="form-control mb-3" min=1 name="idCategory" required
-                               placeholder="idCategory 1">
+                        <input type="number" class="form-control mb-3" min=1 name="id_category" required
+                               placeholder="id_category 1">
                         <button class="btn btn-primary" type="submit"> Buscar</button>
                     </form>
                 </div>

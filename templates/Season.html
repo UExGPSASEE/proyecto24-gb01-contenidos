@@ -13,16 +13,6 @@
 <div class="container">
     <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
         <div class="col-md-6 mb-3">
-            <div class="card-body">
-                <h3 class="text-center">Obtener temporada por identificador</h3>
-                <form action="/seasons/seasonFound" method="GET">
-                    <p>¿Qué temporada deseas buscar?</p>
-                    <span>ID</span>
-                    <input type="number" min=1 class="form-control mb-3" name="idSeason" required
-                           placeholder="idSeason 1">
-                    <button class="btn btn-primary" type="submit"> Buscar</button>
-                </form>
-            </div>
 
             <div class="card">
                 <h3 class="text-center">Añadir temporada</h3>
@@ -32,7 +22,7 @@
                         <p>Nota: Los parámetros con * son obligatorios</p>
 
                         <span>¿A qué serie pertenece?*</span>
-                        <input type="number" min=1 name="idSeries" required placeholder="idSeries 1">
+                        <input type="number" min=1 name="id_series" required placeholder="id_series 1">
                         <br></br>
 
                         <span>¿Cuál es el título de la temporada?*</span>
@@ -40,7 +30,7 @@
                         <br></br>
 
                         <span>¿Cuál es el número de la temporada en la serie?*</span>
-                        <input type="number" min=0 class="form-control mb-3" name="seasonNumber" required>
+                        <input type="number" min=0 class="form-control mb-3" name="season_number" required>
                         <br>
 
                         <button class="btn btn-primary" type="submit"> Añadir</button>
@@ -53,8 +43,8 @@
                 <div class="card-body">
                     <form action="/seasons/chapters" method="GET">
                         <span>ID</span>
-                        <input type="text" min=1 class="form-control mb-3" name="idSeason" required
-                               placeholder="idSeason 1">
+                        <input type="text" min=1 class="form-control mb-3" name="id_season" required
+                               placeholder="id_season 1">
                         <button class="btn btn-primary" type="submit">Buscar</button>
                     </form>
                 </div>
@@ -65,8 +55,8 @@
                 <div class="card-body">
                     <form action="/seasons/characters" method="GET">
                         <span>ID</span>
-                        <input type="text" min=1 class="form-control mb-3" name="idSeason" required
-                               placeholder="idSeason 1">
+                        <input type="text" min=1 class="form-control mb-3" name="id_season" required
+                               placeholder="id_season 1">
                         <button class="btn btn-primary" type="submit">Buscar</button>
                     </form>
                 </div>
@@ -77,51 +67,9 @@
                 <div class="card-body">
                     <form action="/seasons/participants" method="GET">
                         <span>ID</span>
-                        <input type="text" min=1 class="form-control mb-3" name="idSeason" required
-                               placeholder="idSeason 1">
+                        <input type="text" min=1 class="form-control mb-3" name="id_season" required
+                               placeholder="id_season 1">
                         <button class="btn btn-primary" type="submit">Buscar</button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3 class="text-center">Modificar temporada</h3>
-                <div class="card-body">
-                    <form action="/seasons/updateSeason" method="POST">
-                        <input type="hidden" name="_method" value="PUT">
-                        <p>Nota: Los parámetros con * son obligatorios</p>
-
-                        <span>ID*</span>
-                        <input type="text" class="form-control mb-3" required name="idSeason" placeholder="idSeason 1">
-                        <br></br>
-
-                        <span>¿A qué serie pertenece?</span>
-                        <input type="number" name="idSeries" placeholder="idSeries 1">
-                        <br></br>
-
-                        <span>¿Cuál es el título de la temporada?</span>
-                        <input type="text" class="form-control mb-3" name="title">
-                        <br></br>
-
-                        <span>¿Cuál es el número de la temporada en la serie?</span>
-                        <input type="number" min=0 class="form-control mb-3" name="seasonNumber">
-                        <br>
-
-                        <button class="btn btn-primary" type="submit">Modificar</button>
-                    </form>
-                </div>
-            </div>
-
-
-            <div class="card">
-                <h3 class="text-center">Eliminar temporada</h3>
-                <div class="card-body">
-                    <form action="/seasons/deleteSeason" method="POST">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <span>ID</span>
-                        <input type="text" min=1 class="form-control mb-3" name="idSeason" required
-                               placeholder="idSeason 1">
-                        <button class="btn btn-primary" type="submit">Eliminar</button>
                     </form>
                 </div>
             </div>

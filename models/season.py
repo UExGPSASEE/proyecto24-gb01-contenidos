@@ -1,23 +1,23 @@
 class Season:
-    def __init__(self, idSeason, idSeries, title, seasonNumber, totalChapters,
+    def __init__(self, id_season, id_series, title, season_number, total_chapters,
                  chapters, characters, participants, trailer):
-        self.idSeason = idSeason
-        self.idSeries = idSeries
+        self.id_season = id_season
+        self.id_series = id_series
         self.title = title
-        self.seasonNumber = seasonNumber
-        self.totalChapters = totalChapters
+        self.season_number = season_number
+        self.total_chapters = total_chapters
         self.chapters = chapters
         self.characters = characters
         self.participants = participants
         self.trailer = trailer
 
-    def toDBCollection(self):
+    def to_db_collection(self):
         return {
-            'idSeason': self.idSeason,
-            'idSeries': self.idSeries,
+            'id_season': self.id_season,
+            'id_series': self.id_series,
             'title': self.title,
-            'seasonNumber': self.seasonNumber,
-            'totalChapters': self.totalChapters,
+            'season_number': self.season_number,
+            'total_chapters': self.total_chapters,
             'chapters': self.chapters,
             'characters': self.characters,
             'participants': self.participants,
