@@ -6,6 +6,12 @@ from models.season import Season
 
 
 class SeasonCtrl:
+
+    err_msg = 'Missing data or incorrect method';
+    season_not_found_msg = 'Temporada no encontrada';
+    not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
+
     @staticmethod
     def render_template(db: Collection):
         seasonsReceived = db.find()
@@ -14,7 +20,7 @@ class SeasonCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addSeason(db: Collection):
+    def add_season(db: Collection):
         idSeason = int(get_next_sequence_value(db, "idSeason"))
         idSeries = request.form.get('idSeries')
         title = request.form.get('title')
@@ -28,42 +34,42 @@ class SeasonCtrl:
             db.insert_one(season.toDBCollection())
             return redirect(url_for('seasons'))
         else:
-            return jsonify({'error': 'Temporada no añadida', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Temporada no añadida', 'status': SeasonCtrl.not_found}), 404
 
     # ---------------------------------------------------------
     @staticmethod
-    def deleteSeason(db: Collection, idSeason: int):
+    def delete_season(db: Collection, idSeason: int):
         if idSeason:
             idSeason = int(idSeason)
             if db.delete_one({'idSeason': idSeason}):
                 print("Delete ok")
                 return redirect(url_for('seasons'))
             else:
-                return jsonify({'error': 'Season not found or not deleted', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Season not found or not deleted', 'status': SeasonCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteSeasonForm(db: Collection):
+    def delete_season_form(db: Collection):
         idSeason = int(request.form.get('idSeason'))
-        return SeasonCtrl.deleteSeason(db, idSeason)
+        return SeasonCtrl.delete_season(db, idSeason)
 
     @staticmethod
-    def putSeasonForm(db: Collection):
+    def put_season_form(db: Collection):
         idSeason = int(request.form.get('idSeason'))
-        return SeasonCtrl.putSeason(db, idSeason)
+        return SeasonCtrl.put_season(db, idSeason)
 
     @staticmethod
-    def putSeason(db: Collection, idSeason: int):
+    def put_season(db: Collection, idSeason: int):
         if idSeason:
             idSeries = request.form.get('idSeries')
             title = request.form.get('title')
             seasonNumber = request.form.get('seasonNumber')
 
             if not idSeason:
-                return jsonify({'error': 'Identificador de temporada requerido', 'status': '400 Bad Request'}), 400
+                return jsonify({'error': 'Identificador de temporada requerido', 'status': SeasonCtrl.bad_request}), 400
 
             filterDict = {'idSeason': idSeason}
 
@@ -82,14 +88,14 @@ class SeasonCtrl:
 
             change = {'$set': updateFields}
 
-            return SeasonCtrl.updateSeason(db, filterDict, change)
+            return SeasonCtrl.update_season(db, filterDict, change)
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # --------------------------------
 
     @staticmethod
-    def getSeasonById(db: Collection, idSeason: int):
+    def get_season_by_id(db: Collection, idSeason: int):
         if idSeason:
             idSeason = int(idSeason)
             matchingSeason = db.find({'idSeason': idSeason})
@@ -110,13 +116,13 @@ class SeasonCtrl:
             if seasonFound.__len__()>0:
                 return jsonify(seasonFound), 200
             else:
-                return jsonify({'error': 'Season not found', 'status': '404 Not Found'}), 404
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+                return jsonify({'error': 'Season not found', 'status': SeasonCtrl.not_found}), 404
+        return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # --------------------------------------
 
     @staticmethod
-    def getSeasonChapters(seasonCollection: Collection, chapterCollection: Collection):
+    def get_season_chapters(seasonCollection: Collection, chapterCollection: Collection):
         idSeason = int(request.args.get('idSeason'))
 
         if idSeason:
@@ -151,15 +157,15 @@ class SeasonCtrl:
                 return jsonify(resultList), 200
 
             else:
-                return jsonify({'error': 'Temporada no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': SeasonCtrl.season_not_found_msg, 'status': SeasonCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error':SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # --------------------------------------
 
     @staticmethod
-    def getSeasonCharacters(seasonCollection: Collection, characterCollection: Collection):
+    def get_season_characters(seasonCollection: Collection, characterCollection: Collection):
         idSeason = int(request.args.get('idSeason'))
 
         if idSeason:
@@ -190,15 +196,15 @@ class SeasonCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Temporada no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': SeasonCtrl.season_not_found_msg, 'status': SeasonCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error':SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     # --------------------------------------
 
     @staticmethod
-    def getSeasonParticipants(seasonCollection: Collection, participantCollection: Collection):
+    def get_season_participants(seasonCollection: Collection, participantCollection: Collection):
         idSeason = int(request.args.get('idSeason'))
 
         if idSeason:
@@ -229,100 +235,100 @@ class SeasonCtrl:
                 return jsonify(participantsList), 200
 
             else:
-                return jsonify({'error': 'Temporada no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': SeasonCtrl.season_not_found_msg, 'status': SeasonCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error':SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
-    def putTrailerIntoSeason(seasons: Collection, trailers: Collection, idSeason: int):
+    def put_trailer_into_season(seasons: Collection, trailers: Collection, idSeason: int):
         idTrailer = request.args.get('idTrailer')
         if idTrailer:
             idTrailer = int(idTrailer)
             if trailers.find({'idTrailer': idTrailer}):
                 filterDict = {'idSeason': int(idSeason)}
                 change = {'$set': {'trailer': idTrailer}}
-                return SeasonCtrl.updateSeason(seasons, filterDict, change)
+                return SeasonCtrl.update_season(seasons, filterDict, change)
             else:
-                return jsonify({'error': 'No trailer was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No trailer was found', 'status': SeasonCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteTrailerFromSeason(db: Collection, idSeason:int):
+    def delete_trailer_from_season(db: Collection, idSeason:int):
         if idSeason:
             filterDict = {'idSeason': int(idSeason)}
             change = {'$set': {'trailer': None}}
-            return SeasonCtrl.updateSeason(db, filterDict, change)
+            return SeasonCtrl.update_season(db, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
-    def putCategoryIntoSeason(seasons: Collection, categories: Collection, idSeason: int):
+    def put_category_into_season(seasons: Collection, categories: Collection, idSeason: int):
         idCategory = request.args.get('idCategory')
         if idCategory:
             idCategory = int(idCategory)
             if categories.find({'idCategory': idCategory}):
                 filterDict = {'idSeason': int(idSeason)}
                 change = {'$addToSet': {'categories': idCategory}}
-                return SeasonCtrl.updateSeason(seasons, filterDict, change)
+                return SeasonCtrl.update_season(seasons, filterDict, change)
             else:
-                return jsonify({'error': 'No category was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No category was found', 'status': SeasonCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteCategoryFromSeason(seasons: Collection, idSeason: int):
+    def delete_category_from_season(seasons: Collection, idSeason: int):
         idCategory = request.args.get('idCategory')
         if idCategory:
             idCategory = int(idCategory)
             filterDict = {'idSeason': int(idSeason)}
             change = {'$pull': {'categories': idCategory}}
-            return SeasonCtrl.updateSeason(seasons, filterDict, change)
+            return SeasonCtrl.update_season(seasons, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
-    def putChapterIntoSeason(seasons: Collection, chapters: Collection, idSeason: int):
+    def put_chapter_into_season(seasons: Collection, chapters: Collection, idSeason: int):
         idChapter = request.args.get('idChapter')
         if idChapter:
             idChapter = int(idChapter)
             if chapters.find({'idChapter': idChapter}):
                 filterDict = {'idSeason': int(idSeason)}
                 change = {'$addToSet': {'chapters': idChapter}}
-                return SeasonCtrl.updateSeason(seasons, filterDict, change)
+                return SeasonCtrl.update_season(seasons, filterDict, change)
             else:
-                return jsonify({'error': 'No chapter was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No chapter was found', 'status': SeasonCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteChapterFromSeason(db: Collection, idSeason: int):
+    def delete_chapter_from_season(db: Collection, idSeason: int):
         idChapter = request.args.get('idChapter')
         if idChapter:
             idChapter = int(idChapter)
             filterDict = {'idSeason': int(idSeason)}
             change = {'$pull': {'chapters': idChapter}}
-            return SeasonCtrl.updateSeason(db, filterDict, change)
+            return SeasonCtrl.update_season(db, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400
 
 
     @staticmethod
-    def updateSeason(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
+    def update_season(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
         result = db.update_one(filterDict, changeDict)
         print(result)
         if result.matched_count == 0:
-            return jsonify({'error': 'Season not found or not updated', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Season not found or not updated', 'status': SeasonCtrl.not_found}), 404
         elif result.modified_count == 0:
             return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
         return redirect(url_for('seasons'))
 
     @staticmethod
-    def updateSeasonSeries(db: Collection, idSeason:int, idSeries:int):
+    def update_season_series(db: Collection, idSeason:int, idSeries:int):
         if idSeries and idSeason:
             filterDict = {'idSeason': int(idSeason)}
             change = {'$set': {'idSeries': int(idSeries)}}
-            return SeasonCtrl.updateSeasonSeries(db, filterDict, change)
+            return SeasonCtrl.update_season_series(db, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': SeasonCtrl.err_msg, 'status': SeasonCtrl.bad_request}), 400

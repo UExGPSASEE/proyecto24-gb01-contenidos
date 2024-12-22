@@ -4,8 +4,11 @@ from pymongo.collection import Collection
 from database import get_next_sequence_value as get_next_sequence_value
 from models.category import Category
 
-
 class CategoryCtrl:
+
+    err_msg = 'Missing data or incorrect method';
+    not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
 
     @staticmethod
     def render_template(db: Collection):
@@ -15,7 +18,7 @@ class CategoryCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addCategory(db: Collection):
+    def add_category(db: Collection):
         idCategory = int(get_next_sequence_value(db, "idCategory"))
         name = request.form['name']
 
@@ -24,12 +27,12 @@ class CategoryCtrl:
             db.insert_one(category.toDBCollection())
             return redirect(url_for('categories'))
         else:
-            return jsonify({'error': 'Categoría no insertada', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Categoría no insertada', 'status': CategoryCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getAllCategories(db: Collection):
+    def get_all_categories(db: Collection):
         allCategories = db.find()
         categoryList = [
             {
@@ -43,7 +46,7 @@ class CategoryCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCategoryById(db: Collection, idCategory: int):
+    def get_category_by_id(db: Collection, idCategory: int):
         if idCategory:
             idCategory = int(idCategory)
             matchingCategory = db.find({'idCategory': idCategory})
@@ -57,15 +60,15 @@ class CategoryCtrl:
             if categoryFound.__len__() > 0:
                 return jsonify(categoryFound), 200
             else:
-                return jsonify({'error': 'Categoría no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Categoría no encontrada', 'status': CategoryCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CategoryCtrl.err_msg, 'status': CategoryCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getContentByCategory(categoryCollection: Collection, movieCollection: Collection, seriesCollection: Collection):
+    def get_content_by_category(categoryCollection: Collection, movieCollection: Collection, seriesCollection: Collection):
         idCategory = int(request.args.get('idCategory'))
         print(idCategory)
 
@@ -121,6 +124,6 @@ class CategoryCtrl:
                 return jsonify(contentList), 200
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Películas y/o series no encontradas', 'status': CategoryCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CategoryCtrl.err_msg, 'status': CategoryCtrl.bad_request}), 400
