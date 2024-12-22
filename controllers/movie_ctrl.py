@@ -8,6 +8,13 @@ from models.movie import Movie
 
 
 class MovieCtrl:
+
+    err_msg = 'Missing data or incorrect method';
+    movie_not_found_msg ='Película no encontrada';
+    listmovies_not_found_msg = 'Películas no encontradas';
+    not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
+
     @staticmethod
     def render_template(db: Collection):
         moviesReceived = db.find()
@@ -16,7 +23,7 @@ class MovieCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addMovie(db: Collection):
+    def add_movie(db: Collection):
         idMovie = int(get_next_sequence_value(db, "idMovie"))
         movieTitle = request.form.get('title')
         duration = request.form.get('duration')
@@ -33,12 +40,12 @@ class MovieCtrl:
             db.insert_one(movie.toDBCollection())
             return redirect(url_for('movies'))
         else:
-            return jsonify({'error': 'Película no añadida', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Película no añadida', 'status': MovieCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieById(db: Collection, idMovie: int):
+    def get_movie_by_id(db: Collection, idMovie: int):
         if idMovie:
             idMovie = int(idMovie)
             matchingMovie = db.find({'idMovie': idMovie})
@@ -66,15 +73,15 @@ class MovieCtrl:
                 return jsonify(movieFound), 200
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': MovieCtrl.movie_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieCharacters(movieCollection: Collection, characterCollection: Collection):
+    def get_movie_characters(movieCollection: Collection, characterCollection: Collection):
         idMovie = int(request.args.get('idMovie'))
 
         if idMovie:
@@ -104,15 +111,15 @@ class MovieCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Personajes no encontrados', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Personajes no encontrados', 'status': MovieCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieParticipants(movieCollection, participantsCollection):
+    def get_movie_participants(movieCollection, participantsCollection):
         idMovie = int(request.args.get('idMovie'))
 
         if idMovie:
@@ -141,14 +148,14 @@ class MovieCtrl:
             if participantsList.__len__()>0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'Participantes no encontrados', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Participantes no encontrados', 'status': MovieCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieByTitle(db: Collection):
+    def get_movie_by_title(db: Collection):
         title = request.args.get('title')
 
         if title:
@@ -177,18 +184,18 @@ class MovieCtrl:
                 if movieFound.__len__() > 0:
                     return jsonify(movieFound), 200
                 else:
-                    return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                    return jsonify({'error': MovieCtrl.movie_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
             else:
-                return jsonify({'error': 'No se han encontrado películas', 'status': '404 Not Found'}), 404
+                return jsonify({'error': MovieCtrl.listmovies_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getMovieByReleaseDate(db: Collection):
+    def get_movie_by_release_date(db: Collection):
         releaseDate_str = request.args.get('releaseDate')
 
         if releaseDate_str:
@@ -218,18 +225,18 @@ class MovieCtrl:
                 if movieFound.__len__() > 0:
                     return jsonify(movieFound), 200
                 else:
-                    return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                    return jsonify({'error': MovieCtrl.listmovies_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
             else:
-                return jsonify({'error': 'Película no encontrada', 'status': '404 Not Found'}), 404
+                return jsonify({'error': MovieCtrl.listmovies_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getAllMovies(db: Collection):
+    def get_all_movies(db: Collection):
         allMovies = db.find()
 
         if db.count_documents({}) > 0:
@@ -254,29 +261,29 @@ class MovieCtrl:
             ]
             if movies_list.__len__()>0:
                return jsonify(movies_list), 200
-        return jsonify({'error': 'No existen películas insertadas', 'status': '404 Not Found'}), 404
+        return jsonify({'error': MovieCtrl.listmovies_not_found_msg, 'status': MovieCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteMovie(db: Collection, idMovie: int):
+    def delete_movie(db: Collection, idMovie: int):
         if idMovie:
             idMovie = int(idMovie)
             if db.delete_one({'idMovie': idMovie}):
                 return redirect(url_for('movies'))
             else:
-                return jsonify({'error': 'Movie not found or not deleted', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Movie not found or not deleted', 'status': MovieCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteMovieForm(db: Collection):
+    def delete_movie_form(db: Collection):
         idMovie = int(request.form.get('idMovie'))
-        return MovieCtrl.deleteMovie(db, idMovie)
+        return MovieCtrl.delete_movie(db, idMovie)
     # ---------------------------------------------------------
 
     @staticmethod
-    def putMovie(db: Collection, idMovie: int):
+    def put_movie(db: Collection, idMovie: int):
         if idMovie:
             idMovie = int(idMovie)
             movieTitle = request.form.get('title')
@@ -310,71 +317,71 @@ class MovieCtrl:
                 updateFields['isSuscription'] = isSuscription
 
             change = {'$set': updateFields}
-            return MovieCtrl.updateMovie(db, filterDict, change)
+            return MovieCtrl.update_movie(db, filterDict, change)
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def putMovieForm(db: Collection):
+    def put_movie_form(db: Collection):
         idMovie = int(request.form.get('idMovie'))
-        return MovieCtrl.putMovie(db, idMovie)
+        return MovieCtrl.put_movie(db, idMovie)
 
 # --------------------------------
 
     @staticmethod
-    def putTrailerIntoMovie(movies: Collection, trailers: Collection, idMovie: int):
+    def put_trailer_into_movie(movies: Collection, trailers: Collection, idMovie: int):
         idTrailer = request.args.get('idTrailer')
         if idTrailer:
             idTrailer = int(idTrailer)
             if trailers.find({'idTrailer': idTrailer}):
                 filterDict = {'idMovie': int(idMovie)}
                 change = {'$set': {'trailer': idTrailer}}
-                return MovieCtrl.updateMovie(movies, filterDict, change)
+                return MovieCtrl.update_movie(movies, filterDict, change)
             else:
-                return jsonify({'error': 'No trailer was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No trailer was found', 'status': MovieCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteTrailerFromMovie(db: Collection, idMovie:int):
+    def delete_trailer_from_movie(db: Collection, idMovie:int):
         if idMovie:
             filterDict = {'idMovie': int(idMovie)}
             change = {'$set': {'trailer': None}}
-            return MovieCtrl.updateMovie(db, filterDict, change)
+            return MovieCtrl.update_movie(db, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
-        
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
+
     @staticmethod
-    def putCategoryIntoMovie(movies: Collection, categories: Collection, idMovie: int):
+    def put_category_into_movie(movies: Collection, categories: Collection, idMovie: int):
         idCategory = request.args.get('idCategory')
         if idCategory:
             idCategory = int(idCategory)
             if categories.find({'idCategory': idCategory}):
                 filterDict = {'idMovie': int(idMovie)}
                 change = {'$addToSet': {'categories': idCategory}}
-                return MovieCtrl.updateMovie(movies, filterDict, change)
+                return MovieCtrl.update_movie(movies, filterDict, change)
             else:
-                return jsonify({'error': 'No category was found', 'status': '404 Not Found'}), 400
+                return jsonify({'error': 'No category was found', 'status': MovieCtrl.not_found}), 400
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def deleteCategoryFromMovie(movies: Collection, idMovie: int):
+    def delete_category_from_movie(movies: Collection, idMovie: int):
         idCategory = request.args.get('idCategory')
         if idCategory:
             idCategory = int(idCategory)
             filterDict = {'idMovie': int(idMovie)}
             change = {'$pull': {'categories': idCategory}}
-            return MovieCtrl.updateMovie(movies, filterDict, change)
+            return MovieCtrl.update_movie(movies, filterDict, change)
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': MovieCtrl.err_msg, 'status': MovieCtrl.bad_request}), 400
 
     @staticmethod
-    def updateMovie(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
+    def update_movie(db: Collection, filterDict: dict[str, int], changeDict: dict[str, dict]):
         result = db.update_one(filterDict, changeDict)
         print(result)
         if result.matched_count == 0:
-            return jsonify({'error': 'Movie not found or not updated', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Movie not found or not updated', 'status': MovieCtrl.not_found}), 404
         elif result.modified_count == 0:
             return jsonify({'message': 'There was no nothing to be updated or deleted', 'status': '200 OK'}), 200
         return redirect(url_for('movies'))

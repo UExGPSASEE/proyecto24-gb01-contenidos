@@ -7,6 +7,12 @@ from models.character import Character
 
 class CharacterCtrl:
 
+    err_msg = 'Missing data or incorrect method';
+    char_not_found_msg ='Personaje no encontrado';
+    listchar_not_found_msg ='Personajes no encontrados';
+    not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
+
     @staticmethod
     def render_template(db: Collection):
         characters = db['characters']
@@ -16,7 +22,7 @@ class CharacterCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addCharacter(db: Collection):
+    def add_character(db: Collection):
         idCharacter = int(get_next_sequence_value(db, "idCharacter"))
         name = request.form.get('name')
         participant = int(request.form.get('participant'))
@@ -28,12 +34,12 @@ class CharacterCtrl:
 
             return redirect(url_for('characters'))
         else:
-            return jsonify({'error': 'Personaje no añadido', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Personaje no añadido', 'status': CharacterCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCharacterByName(db: Collection):
+    def get_character_by_name(db: Collection):
         name = request.args.get('name')
         if name:
             matchingCharacters = db.find({'name': {'$regex': name, '$options': 'i'}})
@@ -51,14 +57,14 @@ class CharacterCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Personajes no encontrados', 'status': '404 Not Found'}), 404
+                return jsonify({'error': CharacterCtrl.listchar_not_found_msg, 'status': CharacterCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Nombre no proporcionado', 'status': CharacterCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCharacterByAge(db: Collection):
+    def get_character_by_age(db: Collection):
         age = int(request.args.get('age'))
 
         if age:
@@ -78,14 +84,14 @@ class CharacterCtrl:
                 return jsonify(charactersList), 200
 
             else:
-                return jsonify({'error': 'Personajes no encontrados', 'status': '404 Not Found'}), 404
+                return jsonify({'error': CharacterCtrl.listchar_not_found_msg, 'status': CharacterCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Edad no proporcionada', 'status': CharacterCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getCharacterById(db: Collection, idCharacter: int):
+    def get_character_by_id(db: Collection, idCharacter: int):
         if idCharacter:
             idCharacter = int(idCharacter)
             matchingCharacter = db.find({'idCharacter': idCharacter})
@@ -101,22 +107,20 @@ class CharacterCtrl:
             if charactersList.__len__()>0:
                 return jsonify(charactersList)
             else:
-                return jsonify({'error': 'Personaje no encontrado', 'status': '404 Not Found'}), 404
+                return jsonify({'error': CharacterCtrl.char_not_found_msg, 'status': CharacterCtrl.not_found}), 404
 
 
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
     # --------------------------------------------------------
 
     @staticmethod
-    def getContentByCharacter(characterCollection: Collection, movieCollection: Collection,
+    def get_content_by_character(characterCollection: Collection, movieCollection: Collection,
                               seriesCollection: Collection):
         idCharacter = int(request.args.get('idCharacter'))
 
         if idCharacter:
-            matchingCharacter = characterCollection.find({'idCharacter': idCharacter})
-
             contentList = []
             matchingMovie = movieCollection.find({'character': {'$in': [str(idCharacter)]}})
 
@@ -165,14 +169,14 @@ class CharacterCtrl:
                 return jsonify(contentList), 200
 
             else:
-                return jsonify({'error': 'Personaje no encontrado', 'status': '404 Not Found'}), 404
+                return jsonify({'error': CharacterCtrl.char_not_found_msg, 'status': CharacterCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getAllCharacters(db: Collection):
+    def get_all_characters(db: Collection):
         allCharacters = db.find()
         charactersList = [
             {
@@ -187,29 +191,29 @@ class CharacterCtrl:
             return jsonify(charactersList), 200
 
         else:
-            return jsonify({'error': 'Personajes no encontrados', 'status': '404 Not Found'}), 404
+            return jsonify({'error': CharacterCtrl.listchar_not_found_msg, 'status': CharacterCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteCharacter(db: Collection, idCharacter: int):
+    def delete_character(db: Collection, idCharacter: int):
         if idCharacter:
             if db.delete_one({'idCharacter': idCharacter}):
                 return redirect(url_for('characters'))
             else:
-                return jsonify({'error': 'Character not found or not deleted', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Character not found or not deleted', 'status': CharacterCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteCharacterForm(db: Collection):
+    def delete_character_form(db: Collection):
         idCharacter = int(request.form.get('idCharacter'))
-        return CharacterCtrl.deleteCharacter(db, idCharacter)
+        return CharacterCtrl.delete_character(db, idCharacter)
 
     @staticmethod
-    def putCharacter(db: Collection, idCharacter: int):
+    def put_character(db: Collection, idCharacter: int):
         if idCharacter:
             name = request.form.get('name')
             participant = request.form.get('participant')
@@ -219,7 +223,7 @@ class CharacterCtrl:
             if participant:
                 participant = int(participant)
 
-            filter = {'idCharacter': idCharacter}
+            character_filter = {'idCharacter': idCharacter}
 
             updateFields = {}
 
@@ -232,19 +236,19 @@ class CharacterCtrl:
 
             change = {'$set': updateFields}
 
-            result = db.update_one(filter, change)
+            result = db.update_one(character_filter, change)
             if result.matched_count == 0:
-                return jsonify({'error': 'Personaje no encontrado', 'status': '404 Not Found'}), 404
+                return jsonify({'error': CharacterCtrl.char_not_found_msg, 'status': CharacterCtrl.not_found}), 404
             elif result.modified_count == 0:
                 return jsonify({'message': 'El personaje ya está actualizado', 'status': '200 OK'}), 200
 
             return redirect(url_for('characters'))
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': CharacterCtrl.err_msg, 'status': CharacterCtrl.bad_request}), 400
 
     @staticmethod
-    def putCharacterForm(db: Collection):
+    def put_character_form(db: Collection):
         idCharacter = int(request.form.get('idCharacter'))
-        return CharacterCtrl.putCharacter(db, idCharacter)
+        return CharacterCtrl.put_character(db, idCharacter)
 
     # --------------------------------------------------------
