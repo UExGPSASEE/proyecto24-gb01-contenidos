@@ -89,6 +89,8 @@ class ChapterCtrl:
                 return jsonify({'error': ChapterCtrl.chapter_not_found_msg, 'status': ChapterCtrl.not_found}), 404
             elif result.modified_count == 0:
                 return jsonify({'message': 'El capítulo ya está actualizado', 'status': '200 OK'}), 200
+            else:
+                return jsonify({'message': 'Capítulo actualizado', 'status': '200 OK'}), 200
 
         return jsonify({'error': ChapterCtrl.err_msg, 'status': ChapterCtrl.bad_request}), 400
 
