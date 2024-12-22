@@ -14,18 +14,6 @@
     <div class="row row-col-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-2">
         <div class="col-md-6 mb-3">
             <div class="card">
-
-                <div class="card-header">
-                    <h3 class="text-center">Obtener participante por identificador</h3>
-                    <form action="/participants/getParticipantById" method="GET">
-                        <p>¿Qué participante deseas buscar?</p>
-                        <span>ID</span>
-                        <input type="number" min=1 class="form-control mb-3" name="idParticipant" required
-                               placeholder="idParticipant 1">
-                        <button class="btn btn-primary" type="submit"> Buscar</button>
-                    </form>
-                </div>
-
                 <div class="card-header">
                     <h3 class="text-center">Añadir participante</h3>
                     <form action="/participants" method="POST">
@@ -99,57 +87,11 @@
                     <h3 class="text-center">Obtener contenido por participante</h3>
                     <form action="/participants/content" method="GET">
                         <span>ID</span>
-                        <input type="number" min=1 class="form-control mb-3" name="idParticipant" required
-                               placeholder="idParticipant 1">
+                        <input type="number" min=1 class="form-control mb-3" name="id_participant" required
+                               placeholder="id_participant 1">
                         <button class="btn btn-primary" type="submit"> Buscar</button>
                     </form>
                 </div>
-
-                <div class="card-header">
-                    <h3 class="text-center">Modificar participante</h3>
-                    <form action="/participants/updateParticipant" method="POST">
-
-                        <input type="hidden" name="_method" value="PUT">
-
-                        <p>Nota: Los parámetros con * son obligatorios</p>
-
-                        <span>Identificador*</span>
-                        <input type="number" min=1 class="form-control mb-3" name="idParticipant" required
-                               placeholder="idParticipant 1"><br>
-                        <br>
-
-                        <span>Nombre</span>
-                        <input type="text" class="form-control mb-3" name="name"><br>
-                        <br>
-
-                        <span>Apellidos</span>
-                        <input type="text" class="form-control mb-3" name="surname"><br>
-                        <br>
-
-                        <span>Edad</span>
-                        <input type="number" min=0 class="form-control mb-3" name="age"><br>
-                        <br>
-
-                        <span>Nacionalidad</span>
-                        <input type="text" class="form-control mb-3" name="nationality" placeholder="España"><br>
-                        <br>
-
-                        <button class="btn btn-primary" type="submit"> Guardar</button>
-                    </form>
-                </div>
-
-                <div class="card-header">
-                    <h3 class="text-center">Borrar participante</h3>
-                    <form action="/participants/deleteParticipant" method="POST">
-                        <input type="hidden" name="_method" value="DELETE">
-
-                        <span>Identificador</span>
-                        <input type="number" min=1 class="form-control mb-3" name="idParticipant" required
-                               placeholder="idParticipant 1">
-                        <button class="btn btn-primary" type="submit"> Borrar</button>
-                    </form>
-                </div>
-
             </div>
         </div>
     </div>
