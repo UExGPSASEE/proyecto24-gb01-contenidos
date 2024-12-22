@@ -19,7 +19,7 @@
                     <h3 class="text-center">Obtener personaje por identificador</h3>
                     <form action="/characters/getCharacterById" method="GET">
                         <p>¿Qué personaje deseas buscar?</p>
-                        <label>ID</label>
+                        <span>ID</span>
                         <input type="number" min=1 class="form-control mb-3" name="idCharacter" required
                                placeholder="idCharacter 1">
                         <button class="btn btn-primary" type="submit"> Buscar</button>
@@ -59,7 +59,7 @@
                 <div class="card-body">
                     <h3 class="text-center">Obtener personajes por nombre</h3>
                     <form action="/characters/getCharacterByName" method="GET">
-                        <label>Nombre</label>
+                        <span>Nombre</span>
                         <input type="text" class="form-control mb-3" name="name">
                         <button class="btn btn-primary" type="submit"> Buscar</button>
                     </form>
@@ -68,7 +68,7 @@
                 <div class="card-body">
                     <h3 class="text-center">Obtener contenido por personaje</h3>
                     <form action="/characters/content" method="GET">
-                        <label>ID</label>
+                        <span>ID</span>
                         <input type="number" min=1 class="form-control mb-3" name="idCharacter" required
                                placeholder="idCharacter 1">
                         <button class="btn btn-primary" type="submit"> Buscar</button>
@@ -108,7 +108,7 @@
                     <h3 class="text-center">Borrar personaje</h3>
                     <form action="/characters/deleteCharacter" method="POST">
                         <input type="hidden" name="_method" value="DELETE">
-                        <label>Identificador</label>
+                        <span>Identificador</span>
                         <input type="number" min=1 class="form-control mb-3" name="idCharacter" required
                                placeholder="idCharacter 1">
                         <button class="btn btn-primary" type="submit"> Borrar</button>

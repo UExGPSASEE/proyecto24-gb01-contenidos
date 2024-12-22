@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from pymongo.collection import Collection
 
 
-def conexionMongoDB():
+def conexion_mongodb():
     try:
         client = MongoClient('localhost', 27017)
         database = client['MedifliContent']

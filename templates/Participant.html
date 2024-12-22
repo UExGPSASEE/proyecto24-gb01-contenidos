@@ -62,7 +62,7 @@
                 <div class="card-header">
                     <h3 class="text-center">Obtener participantes por nombre</h3>
                     <form action="/participants/getParticipantByName" method="GET">
-                        <label>Nombre</label>
+                        <span>Nombre</span>
                         <input type="text" class="form-control mb-3" name="name" required>
                         <button class="btn btn-primary" type="submit"> Buscar</button>
                     </form>
@@ -71,7 +71,7 @@
                 <div class="card-header">
                     <h3 class="text-center">Obtener participantes por apellidos</h3>
                     <form action="/participants/getParticipantBySurname" method="GET">
-                        <label>Apellidos</label>
+                        <span>Apellidos</span>
                         <input type="text" class="form-control mb-3" name="surname" required>
                         <button class="btn btn-primary" type="submit"> Buscar</button>
                     </form>
@@ -80,7 +80,7 @@
                 <div class="card-header">
                     <h3 class="text-center">Obtener participantes por edad</h3>
                     <form action="/participants/getParticipantByAge" method="GET">
-                        <label>Edad</label>
+                        <span>Edad</span>
                         <input type="number" class="form-control mb-3" min=0 name="age" required>
                         <button class="btn btn-primary" type="submit"> Buscar</button>
                     </form>
@@ -89,7 +89,7 @@
                 <div class="card-header">
                     <h3 class="text-center">Obtener participantes por nacionalidad</h3>
                     <form action="/participants/getParticipantByNationality" method="GET">
-                        <label>Nacionalidad</label>
+                        <span>Nacionalidad</span>
                         <input type="text" class="form-control mb-3" name="nationality" required>
                         <button class="btn btn-primary" type="submit"> Buscar</button>
                     </form>
@@ -98,7 +98,7 @@
                 <div class="card-body">
                     <h3 class="text-center">Obtener contenido por participante</h3>
                     <form action="/participants/content" method="GET">
-                        <label>ID</label>
+                        <span>ID</span>
                         <input type="number" min=1 class="form-control mb-3" name="idParticipant" required
                                placeholder="idParticipant 1">
                         <button class="btn btn-primary" type="submit"> Buscar</button>

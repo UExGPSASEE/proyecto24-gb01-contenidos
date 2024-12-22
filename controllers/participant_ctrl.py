@@ -7,6 +7,11 @@ from models.participant import Participant
 
 class ParticipantCtrl:
 
+    err_msg = 'Missing data or incorrect method';
+    listparticipant_not_found_msg ='Participantes no encontrados';
+    not_found = '404 Not Found';
+    bad_request = '400 Bad Request';
+
     @staticmethod
     def render_template(db: Collection):
         participants = db['participants']
@@ -16,7 +21,7 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def addParticipant(db: Collection):
+    def add_participant(db: Collection):
         idParticipant = int(get_next_sequence_value(db, "idParticipant"))
         name = request.form.get('name')
         surname = request.form.get('surname')
@@ -29,12 +34,12 @@ class ParticipantCtrl:
 
             return redirect(url_for('participants'))
         else:
-            return jsonify({'error': 'Participante no añadido', 'status': '404 Not Found'}), 404
+            return jsonify({'error': 'Participante no añadido', 'status': ParticipantCtrl.not_found}), 404
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantByName(db: Collection):
+    def get_participant_by_name(db: Collection):
         name = request.args.get('name')
 
         if name:
@@ -52,14 +57,14 @@ class ParticipantCtrl:
             if participantsList.__len__()>0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
-        return jsonify({'error': 'Nombre no proporcionado', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Nombre no proporcionado', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantBySurname(db: Collection):
+    def get_participant_by_surname(db: Collection):
         surname = request.args.get('surname')
 
         if surname:
@@ -78,14 +83,14 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
-        return jsonify({'error': 'Apellidos no proporcionados', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Apellidos no proporcionados', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantByAge(db: Collection):
+    def get_participant_by_age(db: Collection):
         age = int(request.args.get('age'))
 
         if age:
@@ -104,14 +109,14 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
-        return jsonify({'error': 'Edad no proporcionada', 'status': '400 Bad Request'}), 400
+        return jsonify({'error': 'Edad no proporcionada', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantByNationality(db: Collection):
+    def get_participant_by_nationality(db: Collection):
         nationality = request.args.get('nationality')
         if nationality:
             matchingParticipants = db.find({'nationality': {'$regex': nationality, '$options': 'i'}})
@@ -128,15 +133,15 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Nacionalidad no proporcionada', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Nacionalidad no proporcionada', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getParticipantById(db: Collection, idParticipant: int):
+    def get_participant_by_id(db: Collection, idParticipant: int):
         if idParticipant:
             idParticipant = int(idParticipant)
             matchingParticipant = db.find({'idParticipant': idParticipant})
@@ -154,15 +159,15 @@ class ParticipantCtrl:
             if participantsList.__len__() > 0:
                 return jsonify(participantsList), 200
             else:
-                return jsonify({'error': 'No participants found', 'status': '404 Not Found'}), 404
+                return jsonify({'error': ParticipantCtrl.listparticipant_not_found_msg, 'status': ParticipantCtrl.not_found}), 404
 
         else:
-            return jsonify({'error': 'Identificador no proporcionado', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': 'Identificador no proporcionado', 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getContentByParticipant(participantCollection: Collection, movieCollection: Collection,
+    def get_content_by_participant(participantCollection: Collection, movieCollection: Collection,
                                 seriesCollection: Collection):
         idParticipant = int(request.args.get('idParticipant'))
 
@@ -217,14 +222,14 @@ class ParticipantCtrl:
                 return jsonify(contentList), 200
 
             else:
-                return jsonify({'error': 'Participante no encontrado', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Participante no encontrado', 'status': ParticipantCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Falta de datos o método incorrecto', 'status': '400 Bad Request'}), 400
+            return jsonify({'error':ParticipantCtrl.err_msg, 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def getAllParticipants(db: Collection):
+    def get_all_participants(db: Collection):
         allParticipants = db.find()
         participants_list = [
             {
@@ -241,31 +246,31 @@ class ParticipantCtrl:
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteParticipant(db: Collection, idParticipant: int):
+    def delete_participant(db: Collection, idParticipant: int):
 
         if idParticipant:
             idParticipant = int(idParticipant)
             if db.delete_one({'idParticipant': idParticipant}):
                 return redirect(url_for('participants'))
             else:
-                return jsonify({'error': 'Participant not found or not deleted', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Participant not found or not deleted', 'status': ParticipantCtrl.not_found}), 404
         else:
-            return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
+            return jsonify({'error': ParticipantCtrl.err_msg, 'status': ParticipantCtrl.bad_request}), 400
 
     # ---------------------------------------------------------
 
     @staticmethod
-    def deleteParticipantForm(db: Collection):
+    def delete_participant_form(db: Collection):
         idParticipant = int(request.form.get('idParticipant'))
-        return ParticipantCtrl.deleteParticipant(db, idParticipant)
+        return ParticipantCtrl.delete_participant(db, idParticipant)
 
     @staticmethod
-    def putParticipantForm(db: Collection):
+    def put_participant_form(db: Collection):
         idParticipant = int(request.form.get('idParticipant'))
-        return ParticipantCtrl.putParticipant(db, idParticipant)
+        return ParticipantCtrl.put_participant(db, idParticipant)
 
     @staticmethod
-    def putParticipant(db: Collection, idParticipant: int):
+    def put_participant(db: Collection, idParticipant: int):
         if idParticipant:
             idParticipant = int(idParticipant)
             name = request.form.get('name')
@@ -275,9 +280,9 @@ class ParticipantCtrl:
             if age:
                 age = int(age)
             if not idParticipant:
-                return jsonify({'error': 'ID de participante requerido', 'status': '400 Bad Request'}), 400
+                return jsonify({'error': 'ID de participante requerido', 'status': ParticipantCtrl.bad_request}), 400
 
-            filter = {'idParticipant': idParticipant}
+            participant_filter = {'idParticipant': idParticipant}
 
             updateFields = {}
 
@@ -292,13 +297,12 @@ class ParticipantCtrl:
 
             change = {'$set': updateFields}
 
-            result = db.update_one(filter, change)
+            result = db.update_one(participant_filter, change)
             if result.matched_count == 0:
-                return jsonify({'error': 'Participante no encontrado', 'status': '404 Not Found'}), 404
+                return jsonify({'error': 'Participante no encontrado', 'status': ParticipantCtrl.not_found}), 404
             elif result.modified_count == 0:
                 return jsonify({'message': 'El participante ya está actualizado', 'status': '200 OK'}), 200
 
-        return jsonify({'error': 'Missing data or incorrect method', 'status': '400 Bad Request'}), 400
-
+        return jsonify({'error': ParticipantCtrl.err_msg, 'status': ParticipantCtrl.bad_request}), 400
 
     # --------------------------------
